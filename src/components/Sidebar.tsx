@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from 'react';
-
 import { FaBell, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaChevronLeft, FaBars } from 'react-icons/fa';
 
 const menuItems = [

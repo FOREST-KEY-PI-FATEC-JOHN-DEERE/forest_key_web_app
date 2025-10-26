@@ -1,18 +1,17 @@
+"use client"
+
 import React from 'react';
 import MainLayout from '@/components/MainLayout';
-import { FaArrowUp, FaExclamationTriangle, FaShieldAlt, FaLockOpen, FaCalendarAlt, FaChartLine, FaUsersSlash, FaUserClock, FaSkullCrossbones, FaCheckCircle } from 'react-icons/fa';
+import { FaExclamationTriangle, FaShieldAlt, FaCalendarAlt, FaChartLine, FaUsersSlash, FaUserClock, FaSkullCrossbones, FaCheckCircle } from 'react-icons/fa';
 import KpiCard from '@/components/KPICard';
+import { useTranslation } from 'react-i18next';
 
 const DashboardPage: React.FC = () => {
-  return (
-    <MainLayout>
-      <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-8">
-        Painel de Gestão de Senhas
-      </h1>
+    const { t } = useTranslation();
 
-      {/* ============================================== */}
-      {/* IV. TOPO: Visão Rápida/Estratégica (3 Colunas)  */}
-      {/* ============================================== */}
+  return (
+    <MainLayout pageTitle={t('dashboard')}>
+
       <section className="mb-10">
         <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
           Visão Estratégica
@@ -48,16 +47,12 @@ const DashboardPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ======================================= */}
-      {/* V. MEIO: Visão Tática/Risco (2 Colunas)  */}
-      {/* ======================================= */}
       <section className="mb-10">
         <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
           Visão Tática e Risco
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          {/* 1. Força Média da Senha */}
           <KpiCard
             title="Força Média da Senha"
             value="Forte"
@@ -66,7 +61,6 @@ const DashboardPage: React.FC = () => {
             description="75% das senhas classificadas como Forte/Excelente."
           />
           
-          {/* 2. Usuários Próximos do Vencimento (Alerta) */}
           <KpiCard
             title="Vencimento Próximo (< 7 dias)"
             value="45 Usuários"
@@ -75,7 +69,6 @@ const DashboardPage: React.FC = () => {
             description="Alerta de proatividade. Notificação enviada."
           />
 
-          {/* 3. Senhas Vazadas/Comuns (Alerta Crítico) */}
           <KpiCard
             title="Senhas Vazadas/Críticas"
             value="5 Senhas"
@@ -86,9 +79,6 @@ const DashboardPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ================================================= */}
-      {/* VI. RODAPÉ: Detalhes e Tendências (Gráfico e Tabela) */}
-      {/* ================================================= */}
       <section>
         <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
           Detalhes e Ações
@@ -96,27 +86,22 @@ const DashboardPage: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           
-          {/* 1. Gráfico de Tendência de Renovação (3/5 colunas) */}
           <div className="lg:col-span-3 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
               <FaChartLine className="h-5 w-5 mr-2 text-blue-500" />
               Tendência de Conformidade Mensal
             </h3>
-            {/* Placeholder para o Gráfico (Ex: Recharts, Chart.js) */}
             <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500">
               [Gráfico de Linha: Taxa de Conformidade vs. Tempo]
             </div>
           </div>
 
-          {/* 2. Tabela de Riscos (2/5 colunas) */}
           <div className="lg:col-span-2 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
               <FaExclamationTriangle className="h-5 w-5 mr-2 text-red-500" />
               Top 5 Usuários de Alto Risco
             </h3>
-            {/* Placeholder para a Tabela */}
             <div className="h-64 overflow-y-auto">
-              {/* Estrutura básica de tabela (simulação) */}
               <table className="min-w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
