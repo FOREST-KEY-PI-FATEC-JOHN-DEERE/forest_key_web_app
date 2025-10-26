@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FaUniversalAccess } from 'react-icons/fa'; // Ícone de acessibilidade
-import LanguageSwitcher from './LanguageSwiter';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface HeaderProps {
   pageTitle: string; // Título da página (ex: "Lista de Usuários de Aplicação")
