@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next'; 
-import { FaGlobe } from 'react-icons/fa'; // Importe o ícone novamente
 
 const LANGUAGES = [
   { code: 'pt', name: 'Português', flagPath: '/images/flag-pt.png' },
@@ -15,16 +14,13 @@ const LanguageSwitcher: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   
-  // 🚨 NOVO ESTADO: Para forçar a renderização após a hidratação
   const [isClient, setIsClient] = useState(false);
 
-  // 🚨 EFEITO: Garante que o estado seja atualizado SOMENTE no lado do Cliente (após montagem)
   useEffect(() => {
     setIsClient(true);
   }, []); 
 
-  // Se o i18n não estiver pronto OU se ainda não estamos no lado do cliente, 
-  // usamos o padrão (pt) para renderização inicial e retornamos um placeholder.
+  
   const currentLangCode = (ready && isClient) 
     ? i18n.language.substring(0, 2) 
     : 'pt';
@@ -36,7 +32,6 @@ const LanguageSwitcher: React.FC = () => {
     setIsMenuOpen(false); 
   };
   
-  // (Restante do useEffect para fechar o menu ao clicar fora...)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -49,7 +44,6 @@ const LanguageSwitcher: React.FC = () => {
     };
   }, [menuRef]);
 
-  // Se o i18n não estiver pronto ou ainda estiver no SSR, retorna o loader para evitar hydration
   if (!ready || !isClient) {
       return <div className="p-2 h-10 w-24 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />;
   }
@@ -57,7 +51,6 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* O restante do seu componente de botão e dropdown */}
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 focus:outline-none focus:ring-2 focus:ring-principal-azul"
