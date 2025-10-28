@@ -1,18 +1,8 @@
 "use client"
 
 import React, { useState } from 'react';
-import { FaBell, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaChevronLeft, FaBars } from 'react-icons/fa';
-
-const menuItems = [
-  { name: 'Usuários de Aplicação', icon: FaUsers, href: '/users', current: false },
-  { name: 'Notificações', icon: FaBell, href: '/notifications', current: false },
-  { name: 'Dashboard', icon: FaChartBar, href: '/dashboard', current: true }, 
-];
-
-const footerItems = [
-  { name: 'Configurações', icon: FaCog, href: '/settings' },
-  { name: 'Sair', icon: FaSignOutAlt, href: '/logout' },
-];
+import { FaBell, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaChevronLeft, FaBars, FaHistory } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 const SIDEBAR_WIDTH_OPEN = 'w-64';
 const SIDEBAR_WIDTH_CLOSED = 'w-24'; 
@@ -22,6 +12,12 @@ const JOHN_DEERE_GREEN = '#367c39';
 const AVATAR_SIZE_OPEN = 'w-28 h-28';
 const AVATAR_SIZE_CLOSED = 'w-12 h-12';
 
+interface MenuItemType {
+  nameKey: string;
+  icon: React.ElementType;
+  href: string;
+  current?: boolean;
+}
 
 interface SidebarLinkProps {
   name: string;
@@ -51,7 +47,20 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ name, Icon, href, current = f
 };
 
 const Sidebar: React.FC = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(true);
+
+  const menuItems: MenuItemType[] = [
+    { nameKey: 'app_users', icon: FaUsers, href: '/appusers', current: false },
+    { nameKey: 'notifications', icon: FaBell, href: '/notification', current: false },
+    { nameKey: 'dashboard', icon: FaChartBar, href: '/dashboard', current: true },
+    { nameKey: 'history', icon: FaHistory, href: '/history', current: false },
+  ];
+
+  const footerItems: MenuItemType[] = [
+    { nameKey: 'settings', icon: FaCog, href: '/settings' },
+    { nameKey: 'logout', icon: FaSignOutAlt, href: '/logout' },
+  ];
 
   const sidebarWidth = isOpen ? SIDEBAR_WIDTH_OPEN : SIDEBAR_WIDTH_CLOSED;
   
@@ -100,12 +109,12 @@ const Sidebar: React.FC = () => {
 
       <nav className="flex-1 pt-2 space-y-2 overflow-y-auto">
         <p className={`text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 mb-2 transition-opacity duration-200 ${isOpen ? 'opacity-100 px-3' : 'opacity-0 w-0'}`}>
-            Menu
+            {t('menu')}
         </p>
         {menuItems.map((item) => (
           <SidebarLink
-            key={item.name}
-            name={item.name}
+            key={item.nameKey}
+            name={t(item.nameKey)}
             Icon={item.icon}
             href={item.href}
             current={item.current}
@@ -117,8 +126,8 @@ const Sidebar: React.FC = () => {
       <div className="pt-4 border-t border-gray-300 dark:border-gray-600 space-y-2">
         {footerItems.map((item) => (
           <SidebarLink
-            key={item.name}
-            name={item.name}
+            key={item.nameKey}
+            name={t(item.nameKey)}
             Icon={item.icon}
             href={item.href}
             isOpen={isOpen}

@@ -9,6 +9,8 @@ import {
   KeyRound,
   Info,
 } from "lucide-react";
+import MainLayout from '@/components/MainLayout';
+import { useTranslation } from 'react-i18next';
 
 type AppUser = {
   id: string;
@@ -22,6 +24,7 @@ type AppUser = {
 };
 
 export default function AppUsersPage() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<AppUser[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -117,17 +120,15 @@ export default function AppUsersPage() {
       "bg-green-700",
     ];
 
-    const labels = [
-      "Fraca",
-      "Razoável",
-      "Boa",
-      "Forte",
-      "Muito Forte",
-    ];
+    const getLabel = () => {
+      if (passwordScore === 0) return t('weak');
+      const labels = [t('weak'), t('fair'), t('good'), t('strong'), t('very_strong')];
+      return labels[passwordScore - 1];
+    };
 
     return (
       <div className="flex items-center gap-2">
-        <div className="flex flex-1 h-2 rounded bg-gray-200 overflow-hidden">
+        <div className="flex flex-1 h-2 rounded bg-gray-200 dark:bg-gray-600 overflow-hidden">
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
@@ -139,8 +140,8 @@ export default function AppUsersPage() {
             />
           ))}
         </div>
-        <span className="text-[10px] uppercase text-gray-500 tracking-wide">
-          {passwordScore === 0 ? "Fraca" : labels[passwordScore - 1]}
+        <span className="text-xs uppercase text-gray-500 dark:text-gray-400 tracking-wide">
+          {getLabel()}
         </span>
       </div>
     );
@@ -270,56 +271,51 @@ export default function AppUsersPage() {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div
-          className="absolute inset-0 bg-black/40"
+          className="absolute inset-0 bg-black/50 dark:bg-black/60"
           onClick={() => !submitting && setIsModalOpen(false)}
         />
 
-        <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-md border border-gray-300 bg-white shadow-xl">
-          <header className="flex items-start justify-between px-6 pt-4 pb-3 border-b border-gray-200">
+        <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-xl">
+          <header className="flex items-start justify-between px-6 pt-4 pb-3 border-b border-gray-200 dark:border-gray-600">
             <div>
               <button
-                className="flex items-center text-sm text-gray-600 hover:text-gray-900"
+                className="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
                 disabled={submitting}
                 onClick={() => setIsModalOpen(false)}
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
-                Voltar para a Lista
+                {t('back_to_list')}
               </button>
 
-              <h2 className="text-[16px] font-semibold leading-tight text-[#0f1a2c] mt-1">
-                Novo Usuário de Aplicação
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mt-2">
+                {t('new_app_user')}
               </h2>
-              <p className="text-[11px] text-gray-500">
-                Cadastro interno de credenciais de serviço.
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t('internal_credentials')}
               </p>
             </div>
 
             <div className="flex items-center gap-4">
               <button
-                className="text-gray-700 hover:text-gray-900"
-                title="Acessibilidade"
+                className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                title={t('accessibility')}
                 disabled={submitting}
               >
                 <Shield className="w-5 h-5" />
               </button>
-
-              <div
-                className="w-6 h-6 rounded-full border border-gray-400 bg-[url('/br-flag.svg')] bg-cover bg-center"
-                title="PT-BR"
-              />
             </div>
           </header>
 
-          <section className="px-6 py-6">
+          <section className="px-6 py-6 bg-white dark:bg-gray-800">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className={labelClass}>
-                    Nome do Usuário de Aplicação
+                  <label className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('app_user_name')}
                     <Info className="w-4 h-4 text-gray-400" />
                   </label>
                   <input
-                    className={inputClass}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="ex: SAP_PRODUCAO_BOT"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
@@ -327,9 +323,11 @@ export default function AppUsersPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className={labelClass}>Sistema / Aplicação</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('system_application')}
+                  </label>
                   <input
-                    className={inputClass}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="ex: SAP Produção / Portal Florestal"
                     value={systemName}
                     onChange={(e) => setSystemName(e.target.value)}
@@ -339,9 +337,11 @@ export default function AppUsersPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className={labelClass}>Grupo Responsável</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('responsible_group')}
+                  </label>
                   <input
-                    className={inputClass}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="ex: TI Florestal"
                     value={ownerGroup}
                     onChange={(e) => setOwnerGroup(e.target.value)}
@@ -349,46 +349,52 @@ export default function AppUsersPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className={labelClass}>Nível de Acesso</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('access_level')}
+                  </label>
                   <select
-                    className={inputClass}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={accessLevel}
                     onChange={(e) => setAccessLevel(e.target.value)}
                   >
-                    <option value="read_only">Somente Leitura</option>
-                    <option value="read_write">Leitura e Escrita</option>
-                    <option value="admin">Administrador</option>
+                    <option value="read_only">{t('read_only')}</option>
+                    <option value="read_write">{t('read_write')}</option>
+                    <option value="admin">{t('administrator')}</option>
                   </select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className={labelClass}>Status</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('status')}
+                  </label>
                   <select
-                    className={inputClass}
+                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={status}
                     onChange={(e) =>
                       setStatus(e.target.value as "active" | "suspended")
                     }
                   >
-                    <option value="active">Ativo</option>
-                    <option value="suspended">Suspenso</option>
+                    <option value="active">{t('active')}</option>
+                    <option value="suspended">{t('suspended')}</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className={labelClass}>Credenciais de Acesso</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {t('access_credentials')}
+                </label>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-400 flex items-center gap-1">
                         <KeyRound className="w-4 h-4 text-gray-500" />
-                        Login / Username
+                        {t('login_username')}
                       </span>
                     </div>
                     <input
-                      className={inputClass + " font-mono"}
+                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
                       placeholder="usuario.conta"
                       value={loginUser}
                       onChange={(e) => setLoginUser(e.target.value)}
@@ -397,23 +403,23 @@ export default function AppUsersPage() {
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-400 flex items-center gap-1">
                         <KeyRound className="w-4 h-4 text-gray-500" />
-                        Senha / Token
+                        {t('password_token')}
                       </span>
 
                       <button
                         type="button"
                         onClick={generateSecret}
                         disabled={submitting}
-                        className="text-[11px] font-semibold text-[#2F5F1F] hover:text-[#244c19] underline"
+                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline transition-colors"
                       >
-                        Gerar senha segura
+                        {t('generate_secure_password')}
                       </button>
                     </div>
 
                     <input
-                      className={inputClass + " font-mono"}
+                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
                       placeholder="********"
                       type="text"
                       value={secret}
@@ -425,17 +431,19 @@ export default function AppUsersPage() {
 
                     <PasswordStrengthBar />
 
-                    <p className="text-[11px] text-gray-500">
-                      Essa senha será criptografada e NÃO ficará visível após o cadastro.
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {t('encrypted_password_notice')}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className={labelClass}>Observações Internas</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {t('internal_notes')}
+                </label>
                 <textarea
-                  className={inputClass + " min-h-[80px] resize-none"}
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-h-[80px] resize-none"
                   placeholder="ex: Conta usada pelo robô de integração logística noturna. Responsável: Joaquim Serrano."
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
@@ -444,33 +452,33 @@ export default function AppUsersPage() {
 
               {feedback && (
                 <div
-                  className={`text-sm rounded border px-3 py-2 ${
+                  className={`text-sm rounded-lg border px-4 py-3 ${
                     feedback.ok
-                      ? "border-green-600 bg-green-50 text-green-700"
-                      : "border-red-600 bg-red-50 text-red-700"
+                      ? "border-green-300 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/20 dark:text-green-400"
+                      : "border-red-300 bg-red-50 text-red-700 dark:border-red-600 dark:bg-red-900/20 dark:text-red-400"
                   }`}
                 >
                   {feedback.msg}
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
                 <button
                   type="button"
                   disabled={submitting}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-md bg-white"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                   onClick={() => setIsModalOpen(false)}
                 >
-                  Cancelar
+                  {t('cancel')}
                 </button>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white rounded-md bg-[#2F5F1F] hover:bg-[#244c19] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                  Salvar Usuário de Aplicação
+                  {t('save_app_user')}
                 </button>
               </div>
             </form>
@@ -481,116 +489,93 @@ export default function AppUsersPage() {
   }
 
   return (
-    <main className="flex flex-col flex-1 bg-white min-h-screen">
- 
-      <header className="flex items-start justify-between px-4 sm:px-6 pt-4 pb-2 border-b border-gray-200 bg-white">
-        <div>
-          <h1 className="text-[16px] font-semibold leading-tight text-[#0f1a2c]">
-            Lista de Usuários de Aplicação
-          </h1>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <button
-            className="text-gray-700 hover:text-gray-900"
-            title="Acessibilidade"
-          >
-            <Shield className="w-5 h-5" />
-          </button>
-
-          <div
-            className="w-7 h-7 rounded-full border-2 border-[#2F5F1F] bg-[url('/br-flag.svg')] bg-cover bg-center"
-            title="PT-BR"
-          />
-        </div>
-      </header>
-
-      <section className="px-4 sm:px-6 py-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-gray-700">
-                Usuários de Aplicação Registrados
-              </span>
-              <span className="text-[11px] text-gray-500">
-                Contas técnicas utilizadas por sistemas, integrações e robôs de processo.
-              </span>
-            </div>
-
-            <button
-              onClick={() => {
-                setDisplayName("");
-                setSystemName("");
-                setOwnerGroup("");
-                setAccessLevel("read_only");
-                setStatus("active");
-                setLoginUser("");
-                setSecret("");
-                setNotes("");
-                setPasswordScore(0);
-                setFeedback(null);
-                setIsModalOpen(true);
-              }}
-              className="inline-flex items-center gap-2 rounded-md bg-[#2F5F1F] text-white text-sm font-semibold px-3 py-2 hover:bg-[#244c19]"
-            >
-              <PlusCircle className="w-4 h-4" />
-              Novo Usuário de Aplicação
-            </button>
+    <MainLayout pageTitle={t('app_users')}>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+              {t('registered_app_users')}
+            </h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {t('technical_accounts_description')}
+            </p>
           </div>
 
-          {error && (
-            <div className="text-sm rounded border border-red-600 bg-red-50 text-red-700 px-3 py-2 mb-4">
-              {error}
-            </div>
-          )}
+          <button
+            onClick={() => {
+              setDisplayName("");
+              setSystemName("");
+              setOwnerGroup("");
+              setAccessLevel("read_only");
+              setStatus("active");
+              setLoginUser("");
+              setSecret("");
+              setNotes("");
+              setPasswordScore(0);
+              setFeedback(null);
+              setIsModalOpen(true);
+            }}
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 transition-colors"
+          >
+            <PlusCircle className="w-4 h-4" />
+            {t('new_app_user')}
+          </button>
+        </div>
 
-          <div className={sectionCardClass + " overflow-x-auto"}>
-            <table className="min-w-full text-sm text-left">
-              <thead className="bg-gray-50 border-b border-gray-200 text-gray-700">
+        {/* Error Message */}
+        {error && (
+          <div className="rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 dark:border-red-700 p-4">
+            <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+          </div>
+        )}
+
+        {/* Users Table */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Nome
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('name')}
                   </th>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Sistema
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('system')}
                   </th>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Grupo
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('group')}
                   </th>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Login
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('login')}
                   </th>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Acesso
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('access_level')}
                   </th>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Status
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('status')}
                   </th>
-                  <th className="py-2 px-4 font-medium text-[#0f1a2c]">
-                    Criado em
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    {t('created_at')}
                   </th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-gray-200 text-gray-800">
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {loading && (
                   <tr>
-                    <td
-                      colSpan={7}
-                      className="py-6 px-4 text-center text-gray-500 text-sm"
-                    >
-                      Carregando...
+                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {t('loading')}
+                      </div>
                     </td>
                   </tr>
                 )}
 
                 {!loading && users.length === 0 && (
                   <tr>
-                    <td
-                      colSpan={7}
-                      className="py-10 px-4 text-center text-gray-400 text-sm"
-                    >
-                      Nenhum usuário de aplicação cadastrado ainda.
+                    <td colSpan={7} className="px-6 py-12 text-center text-gray-400 dark:text-gray-500">
+                      {t('no_users_registered')}
                     </td>
                   </tr>
                 )}
@@ -599,58 +584,66 @@ export default function AppUsersPage() {
                   users.map((u) => (
                     <tr
                       key={u.id}
-                      className="hover:bg-gray-50 transition-colors"
+                      onClick={() => window.location.href = '/history'}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                      title={t('click_to_view_history')}
                     >
-                      <td className="py-3 px-4 font-medium text-[#0f1a2c]">
-                        {u.display_name}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {u.display_name}
+                        </div>
                       </td>
 
-                      <td className="py-3 px-4 text-gray-700">
-                        {u.system_name}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-700 dark:text-gray-300">
+                          {u.system_name}
+                        </div>
                       </td>
 
-                      <td className="py-3 px-4 text-gray-700">
-                        {u.owner_group || "-"}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-700 dark:text-gray-300">
+                          {u.owner_group || "-"}
+                        </div>
                       </td>
 
-                      <td className="py-3 px-4 font-mono text-[12px] text-gray-800">
-                        {u.login}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-mono text-gray-800 dark:text-gray-200">
+                          {u.login}
+                        </div>
                       </td>
 
-                      <td className="py-3 px-4">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={
-                            "inline-block rounded px-2 py-[2px] text-[11px] font-semibold " +
-                            (u.access_level === "admin"
-                              ? "bg-red-100 text-red-700 border border-red-300"
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            u.access_level === "admin"
+                              ? "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400"
                               : u.access_level === "read_write"
-                              ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
-                              : "bg-gray-100 text-gray-700 border border-gray-300")
-                          }
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400"
+                              : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
+                          }`}
                         >
                           {u.access_level === "admin"
-                            ? "Administrador"
+                            ? t('administrator')
                             : u.access_level === "read_write"
-                            ? "Leitura e Escrita"
-                            : "Somente Leitura"}
+                            ? t('read_write')
+                            : t('read_only')}
                         </span>
                       </td>
 
-                      <td className="py-3 px-4">
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={
-                            "inline-block rounded px-2 py-[2px] text-[11px] font-semibold " +
-                            (u.status === "active"
-                              ? "bg-green-100 text-green-700 border border-green-300"
-                              : "bg-gray-200 text-gray-700 border border-gray-400")
-                          }
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                            u.status === "active"
+                              ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+                              : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
+                          }`}
                         >
-                          {u.status === "active" ? "Ativo" : "Suspenso"}
+                          {u.status === "active" ? t('active') : t('suspended')}
                         </span>
                       </td>
 
-                      <td className="py-3 px-4 text-[12px] text-gray-500">
-                        {new Date(u.created_at).toLocaleString("pt-BR", {
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                        {new Date(u.created_at).toLocaleDateString(undefined, {
                           day: "2-digit",
                           month: "2-digit",
                           year: "numeric",
@@ -664,9 +657,9 @@ export default function AppUsersPage() {
             </table>
           </div>
         </div>
-      </section>
 
-      <CreateUserModal />
-    </main>
+        <CreateUserModal />
+      </div>
+    </MainLayout>
   );
 }
