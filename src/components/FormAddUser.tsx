@@ -51,7 +51,7 @@ export default function FormAddUser() {
 
   return (
     <>
-      <div className="min-h-screen flex justify-center items-center bg-gray-100 p-4 font-sans">
+      <div className="flex justify-center items-center p-4 font-sans">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-10
         ">
           <h1 className="text-2xl font-extrabold text-gray-900 border-b pb-3 mb-6">

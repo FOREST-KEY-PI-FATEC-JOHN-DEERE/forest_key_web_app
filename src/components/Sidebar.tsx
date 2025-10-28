@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { FaBell, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaChevronLeft, FaBars, FaHistory } from 'react-icons/fa';
+import { FaBell, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaChevronLeft, FaBars, FaHistory, FaUserCheck } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 
 const SIDEBAR_WIDTH_OPEN = 'w-64';
@@ -53,8 +53,9 @@ const Sidebar: React.FC = () => {
   const menuItems: MenuItemType[] = [
     { nameKey: 'app_users', icon: FaUsers, href: '/appusers', current: false },
     { nameKey: 'notifications', icon: FaBell, href: '/notification', current: false },
-    { nameKey: 'dashboard', icon: FaChartBar, href: '/dashboard', current: true },
+    { nameKey: 'dashboard', icon: FaChartBar, href: '/dashboard', current: false },
     { nameKey: 'history', icon: FaHistory, href: '/history', current: false },
+    { nameKey: 'groups', icon: FaUserCheck , href: '/groups/create', current: false },
   ];
 
   const footerItems: MenuItemType[] = [
