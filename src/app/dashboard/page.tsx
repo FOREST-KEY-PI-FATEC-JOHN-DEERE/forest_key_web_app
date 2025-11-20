@@ -29,7 +29,7 @@ const DashboardPage: React.FC = () => {
 
           {/* 2. Usuários com Senha Expirada/Bloqueada */}
           <KpiCard
-            title="Usuários Bloqueados"
+            title="Usuários Expirados"
             value="12 Usuários"
             icon={FaUsersSlash}
             theme="warning"
@@ -110,11 +110,11 @@ const DashboardPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">J. Silva</td><td className="p-2 text-red-500 font-semibold">Crítico</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">M. Santos</td><td className="p-2 text-red-500 font-semibold">Crítico</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">A. Costa</td><td className="p-2 text-yellow-600 font-semibold">Alto</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">P. Oliveira</td><td className="p-2 text-yellow-600 font-semibold">Alto</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">L. Souza</td><td className="p-2 text-orange-500 font-semibold">Médio</td></tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 1</td><td className="p-2 text-red-500 font-semibold">Crítico</td></tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 2</td><td className="p-2 text-red-500 font-semibold">Crítico</td></tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 3</td><td className="p-2 text-yellow-600 font-semibold">Alto</td></tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 4</td><td className="p-2 text-yellow-600 font-semibold">Alto</td></tr>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 5</td><td className="p-2 text-orange-500 font-semibold">Médio</td></tr>
                 </tbody>
               </table>
             </div>
