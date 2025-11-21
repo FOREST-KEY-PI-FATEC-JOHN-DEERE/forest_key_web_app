@@ -1,8 +1,9 @@
 "use client";
 
+import LoginForm from "@/components/login/LoginForm";
+import RegisterForm from "@/components/login/RegisterForm";
 import { useState } from "react";
-import LoginForm from "@/components/LoginForm";
-import RegisterForm from "@/components/RegisterForm";
+
 
 export default function Home() {
   const [isLoginView, setIsLoginView] = useState(true);

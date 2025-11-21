@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import SuccessModal from './SuccessModal';
+import SuccessModal from '../SuccessModal';
 
 export default function FormCreateGroup() {
   const [title, setTitle] = useState('');

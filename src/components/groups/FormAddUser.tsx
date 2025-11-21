@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import SuccessModal from './SuccessModal';
+import SuccessModal from '../SuccessModal';
 
 interface Option {
   label: string;

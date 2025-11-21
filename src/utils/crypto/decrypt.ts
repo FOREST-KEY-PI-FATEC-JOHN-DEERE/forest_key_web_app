@@ -1,16 +1,11 @@
 import crypto from "crypto";
 
-const key = Buffer.from(process.env.ENCRYPTION_KEY!, "hex");
+const key = Buffer.from(process.env.ENCRYPTION_KEY!, "hex"); // 32 bytes
 
-export function decrypt(encrypted: string, ivHex: string, tagHex: string) {
-  const iv = Buffer.from(ivHex, "hex");
-  const tag = Buffer.from(tagHex, "hex");
+export function decrypt(encrypted: string) {
+  const decipher = crypto.createDecipheriv("aes-256-ecb", key, null);
+  const encryptedBuffer = Buffer.from(encrypted, "base64");
+  const decrypted = Buffer.concat([decipher.update(encryptedBuffer), decipher.final()]);
+  return decrypted.toString("utf8");
 
-  const decipher = crypto.createDecipheriv("aes-256-gcm", key, iv);
-  decipher.setAuthTag(tag);
-
-  let decrypted = decipher.update(encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-
-  return decrypted;
 }

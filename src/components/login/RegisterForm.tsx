@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Input from "./ui/Input";
-import Button from "./ui/Button";
+
 import { Mail, User, Lock } from "lucide-react";
 import toast from "react-hot-toast";
+import Input from "../ui/Input";
+import Button from "../ui/Button";
 
 interface AuthFormProps {
   onSwitchToLogin: () => void;

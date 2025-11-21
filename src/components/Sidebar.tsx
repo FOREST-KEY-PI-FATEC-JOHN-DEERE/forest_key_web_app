@@ -64,7 +64,7 @@ const Sidebar: React.FC = () => {
   }
 
   const menuItems: MenuItemType[] = [
-    { nameKey: 'app_users', icon: FaUsers, href: '/appusers', current: false },
+    { nameKey: 'app_users', icon: FaUsers, href: '/app_users', current: false },
     { nameKey: 'notifications', icon: FaBell, href: '/notification', current: false },
     { nameKey: 'dashboard', icon: FaChartBar, href: '/dashboard', current: false },
     { nameKey: 'history', icon: FaHistory, href: '/history', current: false },

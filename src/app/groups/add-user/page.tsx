@@ -1,6 +1,7 @@
 "use client"
 
-import FormAddUser from '@/components/FormAddUser';
+
+import FormAddUser from '@/components/groups/FormAddUser';
 import MainLayout from '@/components/MainLayout';
 import { useTranslation } from 'react-i18next';
 

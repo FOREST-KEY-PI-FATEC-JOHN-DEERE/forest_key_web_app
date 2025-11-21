@@ -13,7 +13,7 @@ export function middleware(req: NextRequest) {
 
   // Se tiver token e tentar ir pra /login → manda pro dashboard
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/home", req.url));
   }
 
   return NextResponse.next();

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Input from "./ui/Input";
-import Button from "./ui/Button";
+
 import { Mail, Lock } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Input from "../ui/Input";
+import Button from "../ui/Button";
 
 interface AuthFormProps {
   onSwitchToRegister: () => void;
