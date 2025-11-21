@@ -110,15 +110,6 @@ const footerItems: MenuItemType[] = [
             : <FaBars className="h-5 w-5" />}
         </button>
       </div>
-
-      <div className={`text-center pt-4 pb-6 ${isOpen ? 'mx-0' : 'mx-auto'} transition-all duration-300`}>
-        <div className={avatarClasses} role="img" aria-label="Avatar do Usuário">
-        </div>
-        <p className={`text-base font-medium text-gray-900 dark:text-white transition-opacity duration-200 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-            João Deere
-        </p>
-      </div>
-      
       <div className="h-px bg-gray-300 dark:bg-gray-600 my-4" />
 
       <nav className="flex-1 pt-2 space-y-2 overflow-y-auto">
