@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { FaBell, FaUsers, FaChartBar, FaCog, FaSignOutAlt, FaChevronLeft, FaBars, FaHistory, FaUserCheck } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from "next/navigation";
+
 
 const SIDEBAR_WIDTH_OPEN = 'w-64';
 const SIDEBAR_WIDTH_CLOSED = 'w-24'; 
@@ -49,6 +51,17 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ name, Icon, href, current = f
 const Sidebar: React.FC = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(true);
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("profile");
+    localStorage.removeItem("user");
+
+    router.push("/");
+  }
 
   const menuItems: MenuItemType[] = [
     { nameKey: 'app_users', icon: FaUsers, href: '/appusers', current: false },
@@ -58,10 +71,10 @@ const Sidebar: React.FC = () => {
     { nameKey: 'groups', icon: FaUserCheck , href: '/groups/create', current: false },
   ];
 
-  const footerItems: MenuItemType[] = [
-    { nameKey: 'settings', icon: FaCog, href: '/settings' },
-    { nameKey: 'logout', icon: FaSignOutAlt, href: '/logout' },
-  ];
+const footerItems: MenuItemType[] = [
+  { nameKey: 'settings', icon: FaCog, href: '/settings' },
+];
+
 
   const sidebarWidth = isOpen ? SIDEBAR_WIDTH_OPEN : SIDEBAR_WIDTH_CLOSED;
   
@@ -135,6 +148,20 @@ const Sidebar: React.FC = () => {
           />
         ))}
       </div>
+
+      <button
+        onClick={handleLogout}
+        className={`flex items-center py-2.5 transition duration-150 w-full
+          ${isOpen ? 'px-3 justify-start' : 'justify-center'} 
+          text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg`}
+      >
+        <FaSignOutAlt className="h-5 w-5" />
+        <span className={`text-sm whitespace-nowrap overflow-hidden transition-all duration-300 
+          ${isOpen ? 'opacity-100 w-auto ml-3' : 'opacity-0 w-0'}`}>
+          {t("logout")}
+        </span>
+      </button>
+
     </div>
   );
 };

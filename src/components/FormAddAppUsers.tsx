@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Shield, ArrowLeft, KeyRound, Info, Loader2 } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { supabase } from "@/utils/supabase/client";
 
 export type AppUser = {
   id: number;
@@ -23,7 +23,7 @@ export default function FormAddAppUsers({
   onClose,
   onCreated,
 }: FormAddAppUsersProps) {
-  const supabase = createClient();
+
   const [applicationName, setApplicationName] = useState("");
   const [secret, setSecret] = useState("");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);

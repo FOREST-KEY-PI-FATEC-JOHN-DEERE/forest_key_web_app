@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -46,13 +46,13 @@ const Button: React.FC<ButtonProps> = ({
 
   const finalClasses = `${baseStyles} ${sizeMap[size]} ${colorStyles} ${className}`;
 
+  const [loading, setLoading] = useState(false);
+
   return (
-    <button
-      className={finalClasses}
-      {...props}
-    >
-      {children}
+    <button className={finalClasses} disabled={props.disabled || loading} {...props}>
+      {loading ? "Carregando..." : children}
     </button>
+
   );
 };
 

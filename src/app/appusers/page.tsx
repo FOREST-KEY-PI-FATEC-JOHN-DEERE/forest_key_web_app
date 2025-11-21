@@ -2,13 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Shield, PlusCircle, Loader2 } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
 import FormAddAppUsers, { AppUser } from "@/components/FormAddAppUsers";
 import MainLayout from "@/components/MainLayout";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
-
-const supabase = createClient();
+import { supabase } from "@/utils/supabase/client";
 
 export default function AppUsersPage() {
   const { t } = useTranslation();
