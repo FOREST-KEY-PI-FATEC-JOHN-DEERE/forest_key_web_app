@@ -12,19 +12,65 @@ import TableAppUsers from "@/components/app_users/Table";
 import SearchAndActions from "@/components/app_users/AppUsersToolBar";
 import Pagination from "@/components/app_users/Pagination";
 import { generateStrongSecret } from "@/components/app_users/utils";
+import { supabase } from "@/utils/supabase/client";
+
+import EditAppUserModal from "@/components/app_users/EditAppUserModal";
+import ConfirmDeleteAppUser from "@/components/app_users/ConfirmDeleteAppUser";
 
 export default function AppUsersPage() {
   const { t } = useTranslation();
+
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<AppUser[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<AppUser | null>(null);
+  const [deletingUser, setDeletingUser] = useState<AppUser | null>(null);
+
   const [massUpdating, setMassUpdating] = useState(false);
   const [massUpdateMessage, setMassUpdateMessage] =
     useState<string | null>(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadCurrentUser() {
+      try {
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) return;
+
+        const authUser = JSON.parse(storedUser);
+        const userId: string | undefined = authUser.id;
+        if (!userId) return;
+
+        const { data: profile, error } = await supabase
+          .from("User_Profile")
+          .select("first_name, last_name")
+          .eq("id_user", userId)
+          .maybeSingle();
+
+        if (error || !profile) return;
+
+        const fullName = [profile.first_name, profile.last_name]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+
+        if (!fullName) return;
+
+        setCurrentUserName(fullName);
+      } catch (err) {
+        console.error("Erro ao carregar usuário logado:", err);
+      }
+    }
+
+    loadCurrentUser();
+  }, []);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -52,21 +98,26 @@ export default function AppUsersPage() {
     setMassUpdateMessage(null);
 
     try {
-      if (users.length === 0) {
+      const activeUsers = users.filter((u) => u.status !== false);
+
+      if (activeUsers.length === 0) {
         setMassUpdateMessage(
-          t("no_users_to_update") || "No users to update."
+          t("no_users_to_update") || "Nenhum usuário ativo para atualizar."
         );
         return;
       }
 
-      for (const u of users) {
+      for (const u of activeUsers) {
         const newPass = generateStrongSecret();
         const res = await fetch(`/api/app_users/${u.id_app_user}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ password: newPass }),
+          body: JSON.stringify({
+            password: newPass,
+            changed_by: currentUserName ?? "Sistema",
+          }),
         });
 
         const json = await res.json();
@@ -78,12 +129,13 @@ export default function AppUsersPage() {
       await fetchUsers();
 
       setMassUpdateMessage(
-        t("mass_update_success") || "Passwords updated successfully!"
+        t("mass_update_success") || "Senhas atualizadas com sucesso!"
       );
     } catch (err: any) {
       setMassUpdateMessage(
-        (t("mass_update_error_prefix") || "Error updating passwords: ") +
-          (err.message || t("unknown_error") || "Unknown error")
+        (t("mass_update_error_prefix") ||
+          "Erro ao atualizar senhas: ") +
+          (err.message || t("unknown_error") || "Erro desconhecido")
       );
     } finally {
       setMassUpdating(false);
@@ -97,16 +149,16 @@ export default function AppUsersPage() {
     return users.filter((u) => {
       const app = u.application_name?.toLowerCase() ?? "";
       const createdBy = u.created_by?.toLowerCase() ?? "";
+      const changedBy = u.changed_by?.toLowerCase() ?? "";
+      const statusLabel = u.status === false ? "inativo" : "ativo";
       const createdAtStr = new Date(u.created_at).toLocaleDateString("pt-BR");
-      const responsible = (u as any).responsible_user_id
-        ? (u as any).responsible_user_id.toLowerCase()
-        : "";
 
       return (
         app.includes(term) ||
         createdBy.includes(term) ||
-        createdAtStr.includes(term) ||
-        responsible.includes(term)
+        changedBy.includes(term) ||
+        statusLabel.includes(term) ||
+        createdAtStr.includes(term)
       );
     });
   }, [users, searchTerm]);
@@ -122,6 +174,31 @@ export default function AppUsersPage() {
 
   const goToPage = (page: number) =>
     setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+  async function handleConfirmDelete() {
+    if (!deletingUser) return;
+
+    try {
+      const res = await fetch(`/api/app_users/${deletingUser.id_app_user}`, {
+        method: "DELETE",
+      });
+
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Erro ao desativar");
+      await fetchUsers();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setDeletingUser(null);
+    }
+  }
+
+  function handleEditSaved(updated: AppUser) {
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id_app_user === updated.id_app_user ? updated : u
+      )
+    );
+  }
 
   return (
     <MainLayout pageTitle={t("app_users") || "Application Users"}>
@@ -132,7 +209,7 @@ export default function AppUsersPage() {
             setSearchTerm(v);
             setCurrentPage(1);
           }}
-          setIsModalOpen={setIsModalOpen}
+          setIsModalOpen={setIsCreateModalOpen}
           handleMassPasswordUpdate={handleMassPasswordUpdate}
           massUpdating={massUpdating}
           usersLength={users.length}
@@ -142,6 +219,7 @@ export default function AppUsersPage() {
           <div
             className={`relative text-sm rounded-lg border px-4 py-3 pr-10
               ${
+                massUpdateMessage.toLowerCase().includes("sucesso") ||
                 massUpdateMessage.toLowerCase().includes("success")
                   ? "border-green-300 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/20 dark:text-green-400"
                   : "border-yellow-300 bg-yellow-50 text-yellow-700 dark:border-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400"
@@ -169,6 +247,8 @@ export default function AppUsersPage() {
           users={users}
           loading={loading}
           paginatedUsers={paginatedUsers}
+          onEdit={(user) => setEditingUser(user)}
+          onDelete={(user) => setDeletingUser(user)}
         />
 
         {totalPages > 1 && (
@@ -183,10 +263,38 @@ export default function AppUsersPage() {
         )}
       </div>
 
+      {/* Modal de criação */}
       <FormAddAppUsers
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
         onCreated={(user) => setUsers((prev) => [user, ...prev])}
+      />
+
+      <EditAppUserModal
+        open={!!editingUser}
+        user={editingUser}
+        onClose={() => setEditingUser(null)}
+        onSubmit={async (payload) => {
+          if (!editingUser) return;
+
+          const res = await fetch(`/api/app_users/${editingUser.id_app_user}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          const json = await res.json();
+          if (!json.success) throw new Error(json.error || "Erro ao atualizar");
+
+          handleEditSaved(json.data as AppUser);
+        }}
+      />
+
+      <ConfirmDeleteAppUser
+        open={!!deletingUser}
+        appName={deletingUser?.application_name ?? ""}
+        onCancel={() => setDeletingUser(null)}
+        onConfirm={handleConfirmDelete}
       />
     </MainLayout>
   );

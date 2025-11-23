@@ -8,30 +8,40 @@ export interface IApplicationUser {
   password: string;
   created_at: string;
   created_by: string | null;
-  responsible_user_id?: string | null;
+
+  expire_at?: string | null;
+  last_update?: string | null;
+  changed_by?: string | null;
+  status?: boolean | null;
 }
 
-const sensitiveFields: (keyof IApplicationUser)[] = ["password"];
+const sensitiveFields: Array<keyof Pick<IApplicationUser, "password">> = [
+  "password",
+];
 
 function encryptSensitive(payload: Partial<IApplicationUser>) {
   const result: Partial<IApplicationUser> = { ...payload };
-  sensitiveFields.forEach((field) => {
+
+  for (const field of sensitiveFields) {
     const value = payload[field];
-    if (value) {
-      result[field] = encrypt(value);
+    if (typeof value === "string" && value) {
+      (result as any)[field] = encrypt(value);
     }
-  });
+  }
+
   return result;
 }
 
 function decryptSensitive(user: IApplicationUser): IApplicationUser {
   const result: IApplicationUser = { ...user };
-  sensitiveFields.forEach((field) => {
+
+  for (const field of sensitiveFields) {
     const value = user[field];
-    if (value) {
-      result[field] = decrypt(value);
+    if (typeof value === "string" && value) {
+      (result as any)[field] = decrypt(value);
     }
-  });
+  }
+
   return result;
 }
 
@@ -62,7 +72,18 @@ export async function getAppUserByID(
 }
 
 export async function createAppUser(newUser: Partial<IApplicationUser>) {
-  const encryptedUser = encryptSensitive(newUser);
+  const now = new Date();
+  const expire = new Date(now);
+  expire.setDate(expire.getDate() + 45);
+
+  const baseUser: Partial<IApplicationUser> = {
+    ...newUser,
+    created_at: now.toISOString(),
+    expire_at: expire.toISOString(),
+    status: newUser.status ?? true, 
+  };
+
+  const encryptedUser = encryptSensitive(baseUser);
 
   const { data, error } = await supabase
     .from("Application_User")
@@ -79,10 +100,19 @@ export async function updateAppUser(
   id: string,
   payload: Partial<IApplicationUser>
 ) {
+  const now = new Date();
   const toUpdate: Partial<IApplicationUser> = { ...payload };
 
   if (payload.password) {
-    toUpdate.created_at = new Date().toISOString();
+    toUpdate.last_update = now.toISOString();
+
+    const expire = new Date(now);
+    expire.setDate(expire.getDate() + 45);
+    toUpdate.expire_at = expire.toISOString();
+
+    if (!payload.changed_by) {
+      toUpdate.changed_by = "Sistema";
+    }
   }
 
   const encryptedPayload = encryptSensitive(toUpdate);
@@ -100,12 +130,22 @@ export async function updateAppUser(
 }
 
 export async function deleteAppUser(id: string) {
-  const { error } = await supabase
+  const now = new Date();
+
+  const softDeletePayload: Partial<IApplicationUser> = {
+    status: false,
+    last_update: now.toISOString(),
+    changed_by: "Sistema",
+  };
+
+  const { data, error } = await supabase
     .from("Application_User")
-    .delete()
-    .eq("id_app_user", id);
+    .update(softDeletePayload)
+    .eq("id_app_user", id)
+    .select()
+    .single();
 
   if (error) throw new Error(error.message);
 
-  return { success: true };
+  return decryptSensitive(data as IApplicationUser);
 }

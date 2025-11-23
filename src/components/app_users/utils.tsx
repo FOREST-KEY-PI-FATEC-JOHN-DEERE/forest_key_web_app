@@ -14,7 +14,9 @@ export function generateStrongSecret() {
   return newSecret;
 }
 
-export function getExpirationDate(createdAt: string) {
+export function getExpirationDate(createdAt: string, expireAt?: string | null) {
+  if (expireAt) return new Date(expireAt);
+
   const base = new Date(createdAt);
   base.setDate(base.getDate() + 45);
   return base;

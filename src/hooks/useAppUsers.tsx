@@ -25,23 +25,26 @@ export function useAppUsers() {
       setLoading(false);
     }
   }
+    async function remove(id: string) {
+      try {
+        const res = await fetch(`/api/app_users/${id}`, {
+          method: "DELETE",
+        });
 
-  async function remove(id: string) {
-    try {
-      const res = await fetch(`/api/app_users/${id}`, {
-        method: "DELETE",
-      });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || "Erro ao deletar");
+        const updated = json.data as IApplicationUser;
 
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || "Erro ao deletar");
+        setUsers((prev) =>
+          prev.map((u) => (u.id_app_user === id ? updated : u))
+        );
 
-      setUsers((prev) => prev.filter((u) => u.id_app_user !== id));
-      toast.success("Usuário deletado!");
-    } catch (e: any) {
-      console.error(e);
-      toast.error("Erro ao deletar");
+        toast.success("Usuário marcado como inativo!");
+      } catch (e: any) {
+        console.error(e);
+        toast.error(e.message || "Erro ao desativar");
+      }
     }
-  }
 
   async function save(id: string, payload: Partial<IApplicationUser>) {
     try {

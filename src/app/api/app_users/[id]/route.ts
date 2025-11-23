@@ -44,11 +44,11 @@ export async function DELETE(
   req: NextRequest,
   props: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await props.params; 
+  const { id } = await props.params;
 
   try {
-    await deleteAppUser(id);
-    return NextResponse.json({ success: true });
+    const data = await deleteAppUser(id);
+    return NextResponse.json({ success: true, data });
   } catch (err: any) {
     return NextResponse.json(
       { success: false, error: err.message },

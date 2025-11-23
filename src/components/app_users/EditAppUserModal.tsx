@@ -1,76 +1,72 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, KeyRound, Info, Loader2 } from "lucide-react";
 import { generateStrongSecret } from "@/components/app_users/utils";
 import { supabase } from "@/utils/supabase/client";
 import type { IApplicationUser } from "@/services/application_user.service";
 
-export type AppUser = IApplicationUser;
-
-type FormAddAppUsersProps = {
+type EditAppUserModalProps = {
   open: boolean;
+  user: IApplicationUser | null;
   onClose: () => void;
-  onCreated?: (user: AppUser) => void;
+  onSubmit: (payload: {
+    application_name: string;
+    password: string;
+    changed_by: string;
+  }) => Promise<void> | void;
 };
 
-export default function FormAddAppUsers({
+export default function EditAppUserModal({
   open,
+  user,
   onClose,
-  onCreated,
-}: FormAddAppUsersProps) {
+  onSubmit,
+}: EditAppUserModalProps) {
   const [applicationName, setApplicationName] = useState("");
   const [secret, setSecret] = useState("");
-  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
   const [passwordScore, setPasswordScore] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<{ ok: boolean; msg: string } | null>(
     null
   );
+  const [currentUserName, setCurrentUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      setApplicationName(user.application_name);
+      setSecret("");
+      setPasswordScore(0);
+      setFeedback(null);
+    }
+  }, [user]);
 
   useEffect(() => {
     async function loadCurrentUser() {
       try {
         const storedUser = localStorage.getItem("user");
-        if (!storedUser) {
-          console.error("Nenhum user no localStorage");
-          return;
-        }
+        if (!storedUser) return;
 
         const authUser = JSON.parse(storedUser);
         const userId: string | undefined = authUser.id;
-        if (!userId) {
-          console.error("User do localStorage sem id");
-          return;
-        }
+        if (!userId) return;
+
         const { data: profile, error } = await supabase
           .from("User_Profile")
           .select("first_name, last_name")
           .eq("id_user", userId)
           .maybeSingle();
 
-        if (error) {
-          console.error("Erro buscando User_Profile:", error);
-          return;
-        }
-
-        if (!profile) {
-          console.error("Nenhum perfil encontrado para id_user:", userId);
-          return;
-        }
+        if (error || !profile) return;
 
         const fullName = [profile.first_name, profile.last_name]
           .filter(Boolean)
           .join(" ")
           .trim();
 
-        if (!fullName) {
-          console.error("Perfil encontrado mas com nome vazio:", profile);
-          return;
-        }
+        if (!fullName) return;
 
         setCurrentUserName(fullName);
-        console.log("Nome carregado do User_Profile:", fullName);
       } catch (err) {
         console.error("Erro ao carregar usuário logado:", err);
       }
@@ -98,20 +94,18 @@ export default function FormAddAppUsers({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!user) return;
     setFeedback(null);
 
     if (!applicationName.trim()) {
-      setFeedback({
-        ok: false,
-        msg: "Informe o nome do usuário de aplicação.",
-      });
+      setFeedback({ ok: false, msg: "Informe o nome do usuário de aplicação." });
       return;
     }
 
     if (!secret.trim()) {
       setFeedback({
         ok: false,
-        msg: "Gere ou informe uma senha / token.",
+        msg: "Informe ou gere uma nova senha / token.",
       });
       return;
     }
@@ -123,6 +117,7 @@ export default function FormAddAppUsers({
       });
       return;
     }
+
     if (!currentUserName) {
       setFeedback({
         ok: false,
@@ -134,30 +129,14 @@ export default function FormAddAppUsers({
     setSubmitting(true);
 
     try {
-      const res = await fetch("/api/app_users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          application_name: applicationName,
-          password: secret,
-          created_by: currentUserName,
-        }),
+      await onSubmit({
+        application_name: applicationName,
+        password: secret,
+        changed_by: currentUserName,
       });
-
-      const result = await res.json();
-
-      if (!result.success) throw new Error(result.error || "Erro inesperado");
-
-      if (result.data && onCreated) {
-        onCreated(result.data as AppUser);
-      }
-
-      setApplicationName("");
-      setSecret("");
-      setPasswordScore(0);
-      setFeedback(null);
       onClose();
     } catch (err: any) {
+      console.error(err);
       setFeedback({
         ok: false,
         msg: err.message || "Erro inesperado ao salvar.",
@@ -167,40 +146,11 @@ export default function FormAddAppUsers({
     }
   }
 
-  function PasswordStrengthBar() {
-    const colors = [
-      "bg-red-500",
-      "bg-orange-500",
-      "bg-yellow-400",
-      "bg-green-500",
-      "bg-green-700",
-    ];
-    const labels = ["Fraca", "Razoável", "Boa", "Forte", "Muito Forte"];
-
-    return (
-      <div className="flex items-center gap-2">
-        <div className="flex flex-1 h-2 rounded overflow-hidden">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className={`flex-1 transition-colors ${
-                i < passwordScore ? colors[passwordScore - 1] : "bg-transparent"
-              }`}
-            />
-          ))}
-        </div>
-        <span className="text-[10px] uppercase tracking-wide">
-          {passwordScore === 0 ? "Fraca" : labels[passwordScore - 1]}
-        </span>
-      </div>
-    );
-  }
-
   const inputClass =
     "w-full rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]";
   const labelClass = "text-sm font-medium flex items-center gap-1";
 
-  if (!open) return null;
+  if (!open || !user) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -222,12 +172,13 @@ export default function FormAddAppUsers({
             </button>
 
             <h2 className="text-[16px] font-semibold leading-tight mt-1">
-              Novo Usuário de Aplicação
+              Editar Usuário de Aplicação
             </h2>
 
             {currentUserName && (
               <p className="text-[12px] mt-1">
-                Criado automaticamente por <strong>{currentUserName}</strong>
+                Alterações registradas como{" "}
+                <strong>{currentUserName}</strong>
               </p>
             )}
           </div>
@@ -250,7 +201,7 @@ export default function FormAddAppUsers({
             </div>
 
             <div className="space-y-2">
-              <label className={labelClass}>Senha / Token</label>
+              <label className={labelClass}>Nova Senha / Token</label>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -278,9 +229,9 @@ export default function FormAddAppUsers({
                     evaluateStrength(e.target.value);
                   }}
                 />
-
-                <PasswordStrengthBar />
               </div>
+
+              <PasswordStrengthBar passwordScore={passwordScore} />
             </div>
 
             {feedback && (
@@ -311,12 +262,41 @@ export default function FormAddAppUsers({
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md bg-[#2F5F1F] text-white disabled:opacity-50"
               >
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Salvar Usuário de Aplicação
+                Salvar alterações
               </button>
             </div>
           </form>
         </section>
       </div>
+    </div>
+  );
+}
+
+function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
+  const colors = [
+    "bg-red-500",
+    "bg-orange-500",
+    "bg-yellow-400",
+    "bg-green-500",
+    "bg-green-700",
+  ];
+  const labels = ["Fraca", "Razoável", "Boa", "Forte", "Muito Forte"];
+
+  return (
+    <div className="flex items-center gap-2 mt-1">
+      <div className="flex flex-1 h-2 rounded overflow-hidden">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className={`flex-1 transition-colors ${
+              i < passwordScore ? colors[passwordScore - 1] : "bg-transparent"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="text-[10px] uppercase tracking-wide">
+        {passwordScore === 0 ? "Fraca" : labels[passwordScore - 1]}
+      </span>
     </div>
   );
 }
