@@ -2,7 +2,7 @@ import { supabase } from "@/utils/supabase/client";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { firstName, lastName, email, password } = await req.json();
+  const { first_name, last_name, email, password } = await req.json();
 
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
@@ -15,8 +15,8 @@ export async function POST(req: Request) {
 
   const { error: insertError } = await supabase.from("User_Profile").insert({
     id_user: authData.user?.id,
-    first_name: firstName,
-    last_name: lastName
+    first_name: first_name,
+    last_name: last_name
   });
 
   if (insertError) {

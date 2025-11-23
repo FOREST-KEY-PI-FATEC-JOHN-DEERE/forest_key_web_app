@@ -17,8 +17,8 @@ interface AuthFormProps {
 
 export default function RegisterForm({ onSwitchToLogin, noWrapper = false }: AuthFormProps) {
   const { t } = useTranslation();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,7 +30,7 @@ export default function RegisterForm({ onSwitchToLogin, noWrapper = false }: Aut
     setLoading(true);
 
     // Basic validation
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (!first_name || !last_name || !email || !password || !confirmPassword) {
       const msg = t('register_error_required', 'Preencha todos os campos.');
       setError(msg);
       showError(msg, t('error', 'Erro'));
@@ -57,8 +57,8 @@ export default function RegisterForm({ onSwitchToLogin, noWrapper = false }: Aut
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName,
-          lastName,
+          first_name,
+          last_name,
           email,
           password,
         }),
@@ -96,12 +96,12 @@ export default function RegisterForm({ onSwitchToLogin, noWrapper = false }: Aut
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-gray-300">{t('first_name', 'Nome')}</label>
-              <Input type="text" placeholder={t('placeholder_display_name', 'First name')} value={firstName} onChange={(e) => setFirstName(e.target.value)} icon={<User size={18} />} className="mt-1" />
+              <Input type="text" placeholder={t('placeholder_display_name', 'First name')} value={first_name} onChange={(e) => setfirst_name(e.target.value)} icon={<User size={18} />} className="mt-1" />
           </div>
 
           <div>
             <label className="text-xs text-gray-300">{t('last_name', 'Sobrenome')}</label>
-              <Input type="text" placeholder={t('placeholder_display_name', 'Last name')} value={lastName} onChange={(e) => setLastName(e.target.value)} icon={<User size={18} />} className="mt-1" />
+              <Input type="text" placeholder={t('placeholder_display_name', 'Last name')} value={last_name} onChange={(e) => setlast_name(e.target.value)} icon={<User size={18} />} className="mt-1" />
           </div>
         </div>
 
