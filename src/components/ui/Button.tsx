@@ -17,15 +17,15 @@ const sizeMap: Record<ButtonSize, string> = {
 };
 
 const intentMap: Record<ButtonIntent, string> = {
-  positive: 'bg-status-positivo text-white hover:bg-status-positivo/80 focus:ring-4 focus:ring-status-positivo/50',
-  negative: 'bg-status-negativo text-white hover:bg-status-negativo/80 focus:ring-4 focus:ring-status-negativo/50',
+  positive: 'bg-status-positivo  hover:bg-status-positivo/80 focus:ring-4 focus:ring-status-positivo/50',
+  negative: 'bg-status-negativo  hover:bg-status-negativo/80 focus:ring-4 focus:ring-status-negativo/50',
   none: '',
 };
 
 const variantMap: Record<ButtonVariant, string> = {
-  primary: 'bg-main-green text-white hover:bg-main-green/90 focus:ring-4 focus:ring-main-green/50',
-  secondary: 'bg-transparent text-main-green border border-main-green hover:bg-main-green/10',
-  outline: 'bg-transparent text-gray-700 hover:bg-gray-100 border border-transparent',
+  primary: 'bg-main-green  hover:bg-main-green/90 focus:ring-4 focus:ring-main-green/50',
+  secondary: 'bg-transparent border border-main-green hover:bg-main-green/10',
+  outline: 'bg-transparent border border-transparent',
 };
 
 

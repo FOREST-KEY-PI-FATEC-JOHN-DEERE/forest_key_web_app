@@ -51,14 +51,14 @@ export default function LoginForm({ onSwitchToRegister }: AuthFormProps) {
   };
 
   return (
-    <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-2xl border border-gray-100 animate-[fadeIn_0.3s_ease]">
+    <div className="w-full max-w-md p-8 rounded-2xl shadow-2xl border animate-[fadeIn_0.3s_ease]">
       
       {/* HEADER */}
       <div className="text-center mb-6 space-y-1">
-        <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
+        <h1 className="text-2xl font-bold tracking-tight">
           Bem-vindo 👋
         </h1>
-        <p className="text-gray-500 text-sm">
+        <p className="text-sm">
           Entre com sua conta para continuar
         </p>
       </div>
@@ -70,7 +70,7 @@ export default function LoginForm({ onSwitchToRegister }: AuthFormProps) {
           placeholder="Seu e-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          icon={<Mail size={20} className="text-gray-400" />}
+          icon={<Mail size={20} />}
         />
 
         <Input
@@ -78,13 +78,13 @@ export default function LoginForm({ onSwitchToRegister }: AuthFormProps) {
           placeholder="Sua senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          icon={<Lock size={20} className="text-gray-400" />}
+          icon={<Lock size={20} />}
         />
 
         <Button
           type="submit"
           disabled={loading}
-          className="w-full py-3 rounded-xl text-white bg-main-green hover:bg-green-600 transition-all shadow-md disabled:opacity-50"
+          className="w-full py-3 rounded-xl  bg-main-green hover:bg-green-600 transition-all shadow-md disabled:opacity-50"
         >
           {loading ? "Entrando..." : "Entrar"}
         </Button>

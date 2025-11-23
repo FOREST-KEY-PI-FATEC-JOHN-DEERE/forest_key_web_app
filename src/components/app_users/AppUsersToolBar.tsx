@@ -25,7 +25,7 @@ export default function SearchAndActions({
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
       placeholder="Filtrar por aplicação, responsável, ID ou data..."
-      className="w-full sm:w-64 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]"
+      className="w-full sm:w-64 rounded-md border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]"
     />
 
       <div className="flex items-center gap-3">

@@ -39,7 +39,7 @@ export default function Pagination({
         onClick={() => goToPage(p)}
         className={`px-2 py-1 text-xs rounded border ${
           p === currentPage
-            ? "border-blue-600 bg-blue-600 text-white"
+            ? "border-blue-600 bg-blue-600 "
             : "border-gray-300 text-gray-700 hover:bg-gray-100"
         }`}
       >
@@ -49,7 +49,7 @@ export default function Pagination({
   };
 
   return (
-    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[12px] text-gray-600 dark:text-gray-300">
+    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[12px] text-gray-600 ">
       {/* Page size selector */}
       <div className="flex items-center gap-2">
         <span>{t("show") || "Show"}</span>
@@ -59,7 +59,7 @@ export default function Pagination({
             setPageSize(Number(e.target.value));
             goToPage(1);
           }}
-          className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 bg-white dark:bg-gray-800 text-[12px]"
+          className="border  rounded px-2 py-1  text-[12px]"
         >
           <option value={5}>5</option>
           <option value={10}>10</option>

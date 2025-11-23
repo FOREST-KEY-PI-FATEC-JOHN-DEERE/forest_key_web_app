@@ -18,20 +18,20 @@ const KpiCard: React.FC<KpiCardProps> = ({ title, value, icon: Icon, theme, desc
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 flex flex-col justify-between h-full border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+    <div className="bg-[var(--color-card)] shadow-lg rounded-xl p-6 flex flex-col justify-between h-full transition duration-300 hover:shadow-xl">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold uppercase text-gray-500 dark:text-gray-400">{title}</p>
+        <p className="text-sm font-semibold uppercase  dark:text-gray-400">{title}</p>
         <div className={`p-2 rounded-full ${themeClasses[theme]}`}>
           <Icon className="h-5 w-5" />
         </div>
       </div>
       
       <div className="mt-4">
-        <p className="text-3xl font-bold text-gray-900 dark:text-white">{value}</p>
+        <p className="text-3xl font-bold text-gray-900 dark:">{value}</p>
       </div>
 
       {description && (
-        <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-3 text-sm  dark:text-gray-400">
           {description}
         </p>
       )}

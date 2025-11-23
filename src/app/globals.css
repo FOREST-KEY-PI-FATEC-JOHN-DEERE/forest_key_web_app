@@ -1,40 +1,54 @@
 @import 'tailwindcss';
-:root {
-  --background: #171717;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+/* ===========================
+   LIGHT MODE (default)
+   =========================== */
+:root {
+  /* base tokens */
+  --background: #f5f5f5;
+  --foreground: #171717;
+
+  /* UI Theme Tokens */
+  --color-background: #F8FAFC;       /* Fundo Base */
+  --color-foreground: #1E293B;       /* Texto Principal */
+  --color-card: #FFFFFF;             /* Card / Container */
+  --color-divider: #E2E8F0;          /* Divisórias */
+  --color-text-secondary: #64748B;   /* Texto Secundário */
+  --color-placeholder: #94A3B8;      /* Placeholder */
+
+  /* Brand */
+  --color-main-green: #228b22;
+  --color-main-yellow: #E6B847;
+  --color-main-darkBlue: #1E293B;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-main-green: #367C2B;
-  --color-main-darkBlue: #1E293B;
-  --color-main-yellow: #FFDE00;
-  --color-main-gray: #F5F6F8;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-:root {
-  --color-background: #f5f5f5; /* light background */
-  --color-foreground: #171717; /* light text */
-}
-
-/* Tailwind dark class overrides */
+/* ===========================
+   DARK MODE (via next-themes)
+   =========================== */
 .dark {
-  --color-background: #171717;
-  --color-foreground: #ededed;
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+
+  --color-background: #0F172A;        /* Fundo Base escuro */
+  --color-foreground: #E2E8F0;        /* Texto Principal */
+  --color-card: #1E293B;              /* Card / Container */
+  --color-divider: #334155;           /* Divisórias */
+  --color-text-secondary: #CBD5E1;    /* Texto Secundário */
+  --color-placeholder: #475569;       /* Placeholder */
+
+  --color-main-green: #228b22;        /* mantém */
+  --color-main-yellow: #E6B847;
+  --color-main-darkBlue: #1E293B;
 }
 
+/* ===========================
+   Global Application
+   =========================== */
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

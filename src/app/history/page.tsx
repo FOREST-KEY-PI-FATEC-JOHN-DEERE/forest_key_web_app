@@ -25,8 +25,8 @@ export default function HistoryPage() {
           {/* Coluna principal */}
           <div className="flex-1 space-y-6">
             {/* Nome da Aplicação */}
-            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-              <div className="bg-blue-600 text-white text-lg font-medium rounded-md px-4 py-3 inline-block">
+            <div className=" rounded-lg p-4">
+              <div className="bg-blue-600  text-lg font-medium rounded-md px-4 py-3 inline-block">
                 {t('generic_application')}
               </div>
             </div>
@@ -34,8 +34,8 @@ export default function HistoryPage() {
             {/* Campos */}
             <div className="space-y-4">
               {/* Campo 1 - Nome de Usuário */}
-              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 ">
+                <label className="block text-sm font-medium text-gray-700  mb-2">
                   {t('username')}
                 </label>
                 <input
@@ -46,8 +46,8 @@ export default function HistoryPage() {
               </div>
 
               {/* Campo 2 - Email */}
-              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 ">
+                <label className="block text-sm font-medium text-gray-700  mb-2">
                   {t('email')}
                 </label>
                 <input
@@ -58,9 +58,9 @@ export default function HistoryPage() {
               </div>
 
               {/* Campo 3 - Senha de Acesso */}
-              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
+              <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 ">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-medium text-gray-700 ">
                     {t('access_password')}
                   </label>
 
@@ -86,7 +86,7 @@ export default function HistoryPage() {
 
                 {/* Campo da senha */}
                 {autoUpdate ? (
-                  <div className="w-full border border-dashed border-gray-400 dark:border-gray-500 rounded-md px-3 py-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700">
+                  <div className="w-full border border-dashed border-gray-400 dark:border-gray-500 rounded-md px-3 py-2 text-sm  dark:text-gray-400 ">
                     {t('automatic_update')}
                   </div>
                 ) : (
@@ -104,7 +104,7 @@ export default function HistoryPage() {
               <button className="px-8 py-2 bg-red-100 dark:bg-red-900 border border-red-500 text-red-700 dark:text-red-300 font-semibold rounded-md hover:bg-red-200 dark:hover:bg-red-800 transition">
                 {t('delete')}
               </button>
-              <button className="px-8 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-md transition">
+              <button className="px-8 py-2 bg-green-600 hover:bg-green-700  font-semibold rounded-md transition">
                 {t('edit')}
               </button>
             </div>
@@ -132,7 +132,7 @@ export default function HistoryPage() {
                   <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                     05/03/2025 08:30:00
                   </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <p className="text-sm text-gray-700 ">
                     {t('password_changed_by')} - {t('system_caps')} - <br />
                     {t('reason')}: {t('automatic_update')}
                   </p>
@@ -149,7 +149,7 @@ export default function HistoryPage() {
                   <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                     18/08/2025 09:45:12
                   </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <p className="text-sm text-gray-700 ">
                     {t('password_changed_by')} - NOME RESPONSÁVEL - <br />
                     {t('reason')}: {t('expired_deadline')}
                   </p>
@@ -165,7 +165,7 @@ export default function HistoryPage() {
                   <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                     26/10/2025 10:10:45
                   </p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <p className="text-sm text-gray-700 ">
                     {t('password_changed_by')} - {t('system_caps')} - <br />
                     {t('reason')}: {t('automatic_update')}
                   </p>

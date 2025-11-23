@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   const userId = authData.user.id;
 
   const { data: profile, error: profileError } = await supabase
-    .from("User")
+    .from("User_Profile")
     .select("first_name, last_name")
     .eq("id_user", userId)
     .single();

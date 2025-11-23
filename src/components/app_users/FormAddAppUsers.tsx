@@ -133,7 +133,7 @@ async function handleSubmit(e: React.FormEvent) {
 
     return (
       <div className="flex items-center gap-2">
-        <div className="flex flex-1 h-2 rounded bg-gray-200 overflow-hidden">
+        <div className="flex flex-1 h-2 rounded overflow-hidden">
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
@@ -141,15 +141,15 @@ async function handleSubmit(e: React.FormEvent) {
             />
           ))}
         </div>
-        <span className="text-[10px] uppercase text-gray-500 tracking-wide">
+        <span className="text-[10px] uppercase  tracking-wide">
           {passwordScore === 0 ? "Fraca" : labels[passwordScore - 1]}
         </span>
       </div>
     );
   }
 
-  const inputClass = "w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]";
-  const labelClass = "text-sm font-medium text-gray-700 flex items-center gap-1";
+  const inputClass = "w-full rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]";
+  const labelClass = "text-sm font-medium flex items-center gap-1";
 
   if (!open) return null;
 
@@ -157,31 +157,26 @@ async function handleSubmit(e: React.FormEvent) {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={() => !submitting && onClose()} />
 
-      <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-md border border-gray-300 bg-white shadow-xl">
+      <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-md border border-gray-300 shadow-xl">
         <header className="flex items-start justify-between px-6 pt-4 pb-3 border-b border-gray-200">
           <div>
-            <button className="flex items-center text-sm text-gray-600 hover:text-gray-900" disabled={submitting} onClick={onClose}>
+            <button className="flex items-center text-sm" disabled={submitting} onClick={onClose}>
               <ArrowLeft className="w-4 h-4 mr-1" />
               Voltar para a Lista
             </button>
 
-            <h2 className="text-[16px] font-semibold leading-tight text-[#0f1a2c] mt-1">
+            <h2 className="text-[16px] font-semibold leading-tight mt-1">
               Novo Usuário de Aplicação
             </h2>
 
             {currentUserName && (
-              <p className="text-[12px] text-gray-500 mt-1">
+              <p className="text-[12px]  mt-1">
                 Criado automaticamente por <strong>{currentUserName}</strong>
               </p>
             )}
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="text-gray-700 hover:text-gray-900" disabled>
-              <Shield className="w-5 h-5" />
-            </button>
-            <div className="w-6 h-6 rounded-full border border-gray-400 bg-[url('/br-flag.svg')] bg-cover bg-center" title="PT-BR" />
-          </div>
+         
         </header>
 
         <section className="px-6 py-6">
@@ -205,7 +200,7 @@ async function handleSubmit(e: React.FormEvent) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
-                    <KeyRound className="w-4 h-4 text-gray-500" /> Senha
+                    <KeyRound className="w-4 h-4 " /> Senha
                   </span>
 
                   <button
@@ -240,11 +235,11 @@ async function handleSubmit(e: React.FormEvent) {
             )}
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-              <button type="button" disabled={submitting} className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-md bg-white" onClick={onClose}>
+              <button type="button" disabled={submitting} className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border border-gray-300 rounded-m" onClick={onClose}>
                 Cancelar
               </button>
 
-              <button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white rounded-md bg-[#2F5F1F] hover:bg-[#244c19] disabled:opacity-50 disabled:cursor-not-allowed">
+              <button type="submit" disabled={submitting} className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold  rounded-md bg-[#2F5F1F] hover:bg-[#244c19] disabled:opacity-50 disabled:cursor-not-allowed">
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                 Salvar Usuário de Aplicação
               </button>

@@ -25,7 +25,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
 
     if (!storedUser) return;
     const parsedUser = JSON.parse(storedUser);
-    setIdUser(parsedUser.id_user);
+    setIdUser(parsedUser.id);
 
     const profileData = storedProfile ? JSON.parse(storedProfile) : {};
     const loadedProfile = {
@@ -80,7 +80,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
   const hasChanges = editedProfile.firstName !== profile.firstName || editedProfile.lastName !== profile.lastName;
 
   return (
-    <section className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+    <section className="bg-[var(--color-card)] p-6 rounded-xl shadow-md">
       <h2 className="text-2xl font-semibold mb-6">{t("profile_settings")}</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
@@ -90,7 +90,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
             type="text"
             value={editedProfile.firstName}
             onChange={(e) => handleChange("firstName", e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
         <div>
@@ -99,7 +99,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
             type="text"
             value={editedProfile.lastName}
             onChange={(e) => handleChange("lastName", e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
       </div>
@@ -110,7 +110,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
           type="text"
           value={editedProfile.email}
           disabled
-          className="w-full px-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-700 cursor-not-allowed"
+          className="w-full px-4 py-2 border rounded-lg  cursor-not-allowed"
         />
       </div>
 
@@ -118,7 +118,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          className="px-6 py-2 bg-blue-600  rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
           {saving ? t("saving") || "Saving..." : t("save_changes") || "Save changes"}
         </button>

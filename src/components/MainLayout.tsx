@@ -20,14 +20,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageTitle }) => {
     : 'flex-1 transition-all duration-300'; 
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 ${isHomePage ? '' : 'flex'}`}> 
+    <div className={`min-h-screen ${isHomePage ? '' : 'flex'}`}> 
       
 
       {!isHomePage && <Sidebar />} 
       
       <main className={contentClasses}>
     
-        <div className="m-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg min-h-[calc(100vh-2rem)]">
+        <div className="m-4  rounded-xl shadow-lg min-h-[calc(100vh-2rem)]">
             
             <div className="px-8">
               <Header pageTitle={pageTitle} />

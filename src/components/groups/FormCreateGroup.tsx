@@ -54,7 +54,7 @@ export default function FormCreateGroup() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Ex: Grupo - A"
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
@@ -68,7 +68,7 @@ export default function FormCreateGroup() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Descreva as permissões e o escopo de atuação do grupo."
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
@@ -82,7 +82,7 @@ export default function FormCreateGroup() {
                 value={owner}
                 onChange={(e) => setOwner(e.target.value)}
                 placeholder="Ex: Nome_Sobrenome"
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
@@ -96,14 +96,14 @@ export default function FormCreateGroup() {
                 value={backup}
                 onChange={(e) => setBackup(e.target.value)}
                 placeholder="Ex: Nome_Substituto"
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 bg-green-600 text-white rounded-lg font-medium text-lg hover:bg-green-700 hover:scale-[1.01] transition-transform"
+              className="w-full py-3 bg-green-600  rounded-lg font-medium text-lg hover:bg-green-700 hover:scale-[1.01] transition-transform"
             >
               Criar Grupo
             </button>

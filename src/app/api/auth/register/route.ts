@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: authError.message }, { status: 400 });
   }
 
-  const { error: insertError } = await supabase.from("User").insert({
+  const { error: insertError } = await supabase.from("User_Profile").insert({
     id_user: authData.user?.id,
     first_name: firstName,
     last_name: lastName

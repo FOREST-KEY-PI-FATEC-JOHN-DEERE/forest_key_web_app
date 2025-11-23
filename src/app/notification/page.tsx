@@ -22,7 +22,7 @@ export default function NotificationPage() {
                     {/* Aqui você pode adicionar os filtros específicos */}
                     <div className="space-y-4">
                         <div className="p-4 bg-white dark:bg-gray-600 rounded-md shadow-sm">
-                            <p className="text-sm text-gray-600 dark:text-gray-300">
+                            <p className="text-sm text-gray-600 ">
                                 Filtros em desenvolvimento
                             </p>
                         </div>
@@ -60,7 +60,7 @@ export default function NotificationPage() {
                                         
                                         {/* Botão de Ação */}
                                         <div className="flex-shrink-0">
-                                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors duration-200">
+                                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700  rounded-md text-sm font-medium transition-colors duration-200">
                                                 {t('access')}
                                             </button>
                                         </div>

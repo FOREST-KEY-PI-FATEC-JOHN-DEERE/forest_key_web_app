@@ -66,7 +66,7 @@ export default function FormAddUser() {
               <select
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               >
                 <option value="">Selecione o usuário</option>
@@ -85,7 +85,7 @@ export default function FormAddUser() {
               <select
                 value={selectedAccess}
                 onChange={(e) => setSelectedAccess(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               >
                 <option value="">Selecione o nível</option>
@@ -104,7 +104,7 @@ export default function FormAddUser() {
               <select
                 value={selectedGroup}
                 onChange={(e) => setSelectedGroup(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white text-gray-500 text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               >
                 <option value="">Selecione o grupo</option>
@@ -118,7 +118,7 @@ export default function FormAddUser() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-green-600 text-white rounded-lg font-medium text-lg hover:bg-green-700 hover:scale-[1.01] transition-transform"
+              className="w-full py-3 bg-green-600  rounded-lg font-medium text-lg hover:bg-green-700 hover:scale-[1.01] transition-transform"
             >
               Adicionar Usuário
             </button>

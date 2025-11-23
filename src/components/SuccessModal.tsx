@@ -35,7 +35,7 @@ export default function SuccessModal({ isOpen, onClose, message, showOkButton = 
         {showOkButton && (
           <button
             onClick={onClose}
-            className="w-full py-3 bg-green-600 text-white rounded-lg font-medium text-lg hover:bg-green-700 transition-transform"
+            className="w-full py-3 bg-green-600  rounded-lg font-medium text-lg hover:bg-green-700 transition-transform"
           >
             OK
           </button>

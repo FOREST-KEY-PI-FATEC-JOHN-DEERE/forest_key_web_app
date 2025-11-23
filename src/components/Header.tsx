@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
       <div className="flex justify-between items-center h-20 px-8">
         
         {/* Lado Esquerdo: Título da Página */}
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-2xl font-bold">
           {pageTitle}
         </h1>
         
@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
           
           {/* Ícone de Acessibilidade (Pode ser um botão funcional ou apenas um ícone) */}
           <button
-            className="p-2 rounded-full text-gray-600 hover:text-principal-azul hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700/50 transition duration-150"
+            className="p-2 rounded-full transition duration-150"
             title="Opções de Acessibilidade"
           >
             <FaUniversalAccess className="h-7 w-7" />
@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
         </div>
       </div>
       
-      <div className="h-px w-full bg-gray-200 dark:bg-gray-700" />
+      <div className="h-px w-full" />
     </header>
   );
 };

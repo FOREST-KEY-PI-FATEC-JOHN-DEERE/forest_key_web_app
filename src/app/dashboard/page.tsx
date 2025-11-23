@@ -13,7 +13,7 @@ const DashboardPage: React.FC = () => {
     <MainLayout pageTitle={t('dashboard')}>
 
       <section className="mb-10">
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
+        <h2 className="text-xl font-semibold  mb-4 border-b  pb-2">
           Visão Estratégica
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -48,7 +48,7 @@ const DashboardPage: React.FC = () => {
       </section>
 
       <section className="mb-10">
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
+        <h2 className="text-xl font-semibold  mb-4 border-b  pb-2">
           Visão Tática e Risco
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -80,24 +80,24 @@ const DashboardPage: React.FC = () => {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
+        <h2 className="text-xl font-semibold  mb-4 border-b  pb-2">
           Detalhes e Ações
         </h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           
-          <div className="lg:col-span-3 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <div className="lg:col-span-3  shadow-lg rounded-xl p-6 border ">
+            <h3 className="text-lg font-semibold  flex items-center">
               <FaChartLine className="h-5 w-5 mr-2 text-blue-500" />
               Tendência de Conformidade Mensal
             </h3>
-            <div className="h-64 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center text-gray-500">
+            <div className="h-64  rounded-lg flex items-center justify-center ">
               [Gráfico de Linha: Taxa de Conformidade vs. Tempo]
             </div>
           </div>
 
-          <div className="lg:col-span-2 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <div className="lg:col-span-2  shadow-lg rounded-xl p-6 border ">
+            <h3 className="text-lg font-semibold  flex items-center">
               <FaExclamationTriangle className="h-5 w-5 mr-2 text-red-500" />
               Top 5 Usuários de Alto Risco
             </h3>
@@ -105,17 +105,11 @@ const DashboardPage: React.FC = () => {
               <table className="min-w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="p-2 text-left text-xs font-medium text-gray-500 uppercase">Usuário</th>
-                    <th className="p-2 text-left text-xs font-medium text-gray-500 uppercase">Risco</th>
+                    <th className="p-2 text-left text-xs font-medium  uppercase">Usuário</th>
+                    <th className="p-2 text-left text-xs font-medium  uppercase">Risco</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 1</td><td className="p-2 text-red-500 font-semibold">Crítico</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 2</td><td className="p-2 text-red-500 font-semibold">Crítico</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 3</td><td className="p-2 text-yellow-600 font-semibold">Alto</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 4</td><td className="p-2 text-yellow-600 font-semibold">Alto</td></tr>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50"><td className="p-2">User 5</td><td className="p-2 text-orange-500 font-semibold">Médio</td></tr>
-                </tbody>
+                
               </table>
             </div>
           </div>
