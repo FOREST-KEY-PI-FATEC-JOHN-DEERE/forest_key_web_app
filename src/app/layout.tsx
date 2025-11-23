@@ -30,7 +30,48 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Toaster position="top-right" />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 5000,
+            // Default styles for all toasts
+            style: {
+              background: 'var(--color-card)',
+              color: 'var(--color-foreground)',
+              padding: '14px 18px',
+              borderRadius: '12px',
+              boxShadow: '0 8px 30px rgba(2,6,23,0.2)',
+              fontWeight: 600,
+              minWidth: '320px',
+            },
+            // Type-specific overrides
+            success: {
+              iconTheme: {
+                primary: 'var(--color-main-green)',
+                secondary: '#ffffff',
+              },
+              style: {
+                background: 'linear-gradient(90deg, var(--jd-gradient-start), var(--jd-gradient-end))',
+                color: '#ffffff',
+                boxShadow: '0 10px 36px rgba(18, 83, 30, 0.28)',
+                minWidth: '360px',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#f43f5e',
+                secondary: '#ffffff',
+              },
+              style: {
+                background: '#3b1f20',
+                color: '#ffd7d9',
+                boxShadow: '0 10px 36px rgba(125, 18, 26, 0.28)',
+                minWidth: '360px',
+              },
+            },
+            // Use a larger close button area on desktop by default
+          }}
+        />
         <Providers>
           <AppI18nProvider>{children}</AppI18nProvider>
         </Providers>

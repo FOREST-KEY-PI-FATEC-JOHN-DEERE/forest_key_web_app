@@ -3,6 +3,7 @@
 import type { IApplicationUser } from "@/services/application_user.service";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { showSuccess, showError } from "@/utils/toast";
 
 export function useAppUsers() {
   const [users, setUsers] = useState<IApplicationUser[]>([]);
@@ -20,7 +21,7 @@ export function useAppUsers() {
       setUsers(json.data as IApplicationUser[]);
     } catch (e: any) {
       console.error(e);
-      toast.error("Erro ao carregar usuários");
+      showError("Erro ao carregar usuários", "Erro");
     } finally {
       setLoading(false);
     }
@@ -36,10 +37,10 @@ export function useAppUsers() {
       if (!json.success) throw new Error(json.error || "Erro ao deletar");
 
       setUsers((prev) => prev.filter((u) => u.id_app_user !== id));
-      toast.success("Usuário deletado!");
+      showSuccess("Usuário deletado!", "Sucesso");
     } catch (e: any) {
       console.error(e);
-      toast.error("Erro ao deletar");
+      showError("Erro ao deletar", "Erro");
     }
   }
 
@@ -60,10 +61,10 @@ export function useAppUsers() {
         prev.map((u) => (u.id_app_user === id ? updated : u))
       );
 
-      toast.success("Atualizado!");
+      showSuccess("Atualizado!", "Sucesso");
     } catch (e: any) {
       console.error(e);
-      toast.error("Erro ao atualizar");
+      showError("Erro ao atualizar", "Erro");
     }
   }
 

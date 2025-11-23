@@ -28,6 +28,12 @@
   "settings": "Configurações",
   "logout": "Sair",
   "menu": "Menu",
+  "home": "Início",
+  "collapse": "Recolher",
+  "expand": "Expandir",
+  "main_navigation": "Navegação Principal",
+  "logout_success": "Você saiu com sucesso.",
+  "logout_error": "Falha ao encerrar sessão.",
   "create_new_user": "Criar Novo Usuário",
   "edit_user": "Editar Usuário",
   "basic_information": "Informações Básicas",
@@ -100,4 +106,24 @@
   "filter_placeholder": "Filtrar por aplicação, responsável, ID ou data...",
   "created_by": "Criado por",
   "show": "Mostrar"
+  ,
+  "welcome_back": "Bem-vindo de volta",
+  "login_subtitle": "Entre com sua conta para continuar",
+  "login_button": "Entrar",
+  "no_account": "Não tem conta?",
+  "register_cta": "Cadastre-se",
+  "create_account": "Criar conta",
+  "register_subtitle": "Preencha os dados para criar sua conta",
+  "first_name": "Nome",
+  "last_name": "Sobrenome",
+  "confirm_password": "Repita a senha",
+  "register_button": "CADASTRAR",
+  "already_have_account": "Já tenho conta"
+  ,
+  "login_error_required": "Preencha e-mail e senha.",
+  "login_error_invalid_email": "E-mail inválido.",
+  "error": "Erro"
+  ,
+  "register_error_required": "Preencha todos os campos.",
+  "register_error_password_length": "A senha deve ter ao menos 8 caracteres."
 }

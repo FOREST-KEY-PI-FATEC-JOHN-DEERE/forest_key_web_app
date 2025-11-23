@@ -3,7 +3,6 @@
 import React from 'react';
 import MainLayout from '@/components/MainLayout';
 import Image from 'next/image';
-import logo from "../../../public/logo.png"
 import { useTranslation } from 'react-i18next';
 
 const Exemplos = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"]
@@ -41,11 +40,11 @@ export default function NotificationPage() {
                                     <div className="flex items-center justify-between">
                                         {/* Logo */}
                                         <div className="flex-shrink-0">
-                                            <Image 
-                                                src={logo} 
+                                            {/* <Image 
+                                                src="/images/john%20deere%20logo.svg" 
                                                 className="w-16 h-16 rounded-full object-cover" 
                                                 alt={t('company_logo')} 
-                                            />
+                                            /> */}
                                         </div>
                                         
                                         {/* Conteúdo da Notificação */}
