@@ -21,7 +21,9 @@
     "react-dom": "^19.1.1",
     "react-hot-toast": "^2.6.0",
     "react-i18next": "^16.2.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
