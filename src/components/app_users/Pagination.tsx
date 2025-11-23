@@ -1,4 +1,5 @@
 "use client";
+
 import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
@@ -20,7 +21,6 @@ export default function Pagination({
 }: PaginationProps) {
   const { t } = useTranslation();
 
-  // Cria os números de página para renderizar
   const renderPageNumbers = () => {
     const pages: number[] = [];
     const maxToShow = 5;
@@ -39,7 +39,7 @@ export default function Pagination({
         onClick={() => goToPage(p)}
         className={`px-2 py-1 text-xs rounded border ${
           p === currentPage
-            ? "border-blue-600 bg-blue-600 "
+            ? "border-blue-600 bg-blue-600 text-white"
             : "border-gray-300 text-gray-700 hover:bg-gray-100"
         }`}
       >
@@ -49,8 +49,7 @@ export default function Pagination({
   };
 
   return (
-    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[12px] text-gray-600 ">
-      {/* Page size selector */}
+    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[12px] text-gray-600">
       <div className="flex items-center gap-2">
         <span>{t("show") || "Show"}</span>
         <select
@@ -59,7 +58,7 @@ export default function Pagination({
             setPageSize(Number(e.target.value));
             goToPage(1);
           }}
-          className="border  rounded px-2 py-1  text-[12px]"
+          className="border rounded px-2 py-1 text-[12px]"
         >
           <option value={5}>5</option>
           <option value={10}>10</option>
@@ -69,7 +68,6 @@ export default function Pagination({
         <span>{t("per_page") || "per page"}</span>
       </div>
 
-      {/* Page numbers */}
       {totalPages > 1 && (
         <div className="flex justify-center gap-1">
           <button
@@ -110,10 +108,10 @@ export default function Pagination({
         </div>
       )}
 
-      {/* Total items */}
       <div className="flex items-center justify-end">
         <span>
-          {t("total") || "Total"}: <strong>{totalItems}</strong> {t("records") || "records"}
+          {t("total") || "Total"}: <strong>{totalItems}</strong>{" "}
+          {t("records") || "records"}
         </span>
       </div>
     </div>

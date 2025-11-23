@@ -17,7 +17,7 @@ export async function updateProfile(
       last_name: payload.lastName,
     })
     .eq("id_user", id)
-    .select();
+    .select("*");
 
   console.log("UPDATE RESULT:", { data, error });
 

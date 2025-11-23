@@ -1,9 +1,13 @@
 "use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { X } from "lucide-react";
 
 import MainLayout from "@/components/MainLayout";
-import FormAddAppUsers, { AppUser } from "@/components/app_users/FormAddAppUsers";
+import FormAddAppUsers, {
+  AppUser,
+} from "@/components/app_users/FormAddAppUsers";
 import TableAppUsers from "@/components/app_users/Table";
 import SearchAndActions from "@/components/app_users/AppUsersToolBar";
 import Pagination from "@/components/app_users/Pagination";
@@ -16,50 +20,66 @@ export default function AppUsersPage() {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [massUpdating, setMassUpdating] = useState(false);
-  const [massUpdateMessage, setMassUpdateMessage] = useState<string | null>(null);
+  const [massUpdateMessage, setMassUpdateMessage] =
+    useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch users via API
+  const fetchUsers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/app_users");
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Error fetching users");
+      setUsers(json.data);
+    } catch (err: any) {
+      setError(
+        err.message || t("load_failed") || "Falha ao carregar usuários."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch("/api/app_users");
-        const json = await res.json();
-        if (!json.success) throw new Error(json.error || "Error fetching users");
-        setUsers(json.data);
-      } catch (err: any) {
-        setError(err.message || t("load_failed") || "Falha ao carregar usuários.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchUsers();
   }, [t]);
 
-  // Mass update passwords
   const handleMassPasswordUpdate = async () => {
     setMassUpdating(true);
     setMassUpdateMessage(null);
 
     try {
       if (users.length === 0) {
-        setMassUpdateMessage(t("no_users_to_update") || "No users to update.");
+        setMassUpdateMessage(
+          t("no_users_to_update") || "No users to update."
+        );
         return;
       }
 
       for (const u of users) {
         const newPass = generateStrongSecret();
-        await fetch(`/api/app_users`, {
-          method: "PATCH",
-          body: JSON.stringify({ id: u.id_app_user, password: newPass }),
+        const res = await fetch(`/api/app_users/${u.id_app_user}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password: newPass }),
         });
+
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || "Erro ao atualizar senhas");
+        }
       }
 
-      setMassUpdateMessage(t("mass_update_success") || "Passwords updated successfully!");
+      await fetchUsers();
+
+      setMassUpdateMessage(
+        t("mass_update_success") || "Passwords updated successfully!"
+      );
     } catch (err: any) {
       setMassUpdateMessage(
         (t("mass_update_error_prefix") || "Error updating passwords: ") +
@@ -70,7 +90,6 @@ export default function AppUsersPage() {
     }
   };
 
-  // Filtered & paginated
   const filteredUsers = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return users;
@@ -79,7 +98,16 @@ export default function AppUsersPage() {
       const app = u.application_name?.toLowerCase() ?? "";
       const createdBy = u.created_by?.toLowerCase() ?? "";
       const createdAtStr = new Date(u.created_at).toLocaleDateString("pt-BR");
-      return app.includes(term) || createdBy.includes(term) || createdAtStr.includes(term);
+      const responsible = (u as any).responsible_user_id
+        ? (u as any).responsible_user_id.toLowerCase()
+        : "";
+
+      return (
+        app.includes(term) ||
+        createdBy.includes(term) ||
+        createdAtStr.includes(term) ||
+        responsible.includes(term)
+      );
     });
   }, [users, searchTerm]);
 
@@ -92,7 +120,8 @@ export default function AppUsersPage() {
     return filteredUsers.slice(start, start + pageSize);
   }, [filteredUsers, safeCurrentPage, pageSize]);
 
-  const goToPage = (page: number) => setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+  const goToPage = (page: number) =>
+    setCurrentPage(Math.min(Math.max(page, 1), totalPages));
 
   return (
     <MainLayout pageTitle={t("app_users") || "Application Users"}>
@@ -111,12 +140,21 @@ export default function AppUsersPage() {
 
         {massUpdateMessage && (
           <div
-            className={`text-sm rounded-lg border px-4 py-3 ${
-              massUpdateMessage.toLowerCase().includes("success")
-                ? "border-green-300 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/20 dark:text-green-400"
-                : "border-yellow-300 bg-yellow-50 text-yellow-700 dark:border-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400"
-            }`}
+            className={`relative text-sm rounded-lg border px-4 py-3 pr-10
+              ${
+                massUpdateMessage.toLowerCase().includes("success")
+                  ? "border-green-300 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/20 dark:text-green-400"
+                  : "border-yellow-300 bg-yellow-50 text-yellow-700 dark:border-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400"
+              }`}
           >
+            <button
+              type="button"
+              onClick={() => setMassUpdateMessage(null)}
+              className="absolute right-2 top-2 inline-flex items-center justify-center rounded-full p-1 hover:bg-black/5 dark:hover:bg-white/10"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
             {massUpdateMessage}
           </div>
         )}
@@ -127,7 +165,11 @@ export default function AppUsersPage() {
           </div>
         )}
 
-        <TableAppUsers users={users} loading={loading} paginatedUsers={paginatedUsers} />
+        <TableAppUsers
+          users={users}
+          loading={loading}
+          paginatedUsers={paginatedUsers}
+        />
 
         {totalPages > 1 && (
           <Pagination

@@ -1,8 +1,7 @@
 "use client";
 
-import { deleteAppUser, getAllAppUsers, IApplicationUser, updateAppUser } from "@/services/application_user.service";
+import type { IApplicationUser } from "@/services/application_user.service";
 import { useEffect, useState } from "react";
-
 import toast from "react-hot-toast";
 
 export function useAppUsers() {
@@ -13,35 +12,57 @@ export function useAppUsers() {
   async function load() {
     try {
       setLoading(true);
-      const data = await getAllAppUsers();
-      setUsers(data);
+      const res = await fetch("/api/app_users");
+      const json = await res.json();
+
+      if (!json.success) throw new Error(json.error || "Erro ao carregar usuários");
+
+      setUsers(json.data as IApplicationUser[]);
     } catch (e: any) {
+      console.error(e);
       toast.error("Erro ao carregar usuários");
     } finally {
       setLoading(false);
     }
   }
 
-  async function remove(id: any) {
+  async function remove(id: string) {
     try {
-      await deleteAppUser(id);
-      setUsers(prev => prev.filter(u => u.id_app_user !== id));
+      const res = await fetch(`/api/app_users/${id}`, {
+        method: "DELETE",
+      });
+
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Erro ao deletar");
+
+      setUsers((prev) => prev.filter((u) => u.id_app_user !== id));
       toast.success("Usuário deletado!");
-    } catch {
+    } catch (e: any) {
+      console.error(e);
       toast.error("Erro ao deletar");
     }
   }
 
-  async function save(id: any, payload: Partial<IApplicationUser>) {
+  async function save(id: string, payload: Partial<IApplicationUser>) {
     try {
-      const updated = await updateAppUser(id, payload);
+      const res = await fetch(`/api/app_users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-      setUsers(prev =>
-        prev.map(u => (u.id_app_user === id ? updated : u))
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Erro ao atualizar");
+
+      const updated = json.data as IApplicationUser;
+
+      setUsers((prev) =>
+        prev.map((u) => (u.id_app_user === id ? updated : u))
       );
 
       toast.success("Atualizado!");
-    } catch {
+    } catch (e: any) {
+      console.error(e);
       toast.error("Erro ao atualizar");
     }
   }
@@ -57,5 +78,6 @@ export function useAppUsers() {
     setEditing,
     remove,
     save,
+    reload: load,
   };
 }
