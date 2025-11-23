@@ -6,7 +6,7 @@ const BASE_FORM_STYLES = [
   'shadow-sm',
   'transition duration-150',
   'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100',
-  'focus:border-main-green focus:ring-2 focus:ring-main-green/50 focus:outline-none',
+  'focus:border-jd-green-500 focus:ring-2 focus:ring-jd-green-500/30 focus:outline-none',
   
   'appearance-none', 
 ].join(' '); 

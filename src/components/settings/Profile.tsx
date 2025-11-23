@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { showSuccess, showError } from "@/utils/toast";
 
 interface ProfileData {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
 }
 
@@ -13,10 +14,9 @@ interface ProfileSettingsProps {}
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
   const { t } = useTranslation();
-  const [profile, setProfile] = useState<ProfileData>({ firstName: "", lastName: "", email: "" });
-  const [editedProfile, setEditedProfile] = useState<ProfileData>({ firstName: "", lastName: "", email: "" });
+  const [profile, setProfile] = useState<ProfileData>({ first_name: "", last_name: "", email: "" });
+  const [editedProfile, setEditedProfile] = useState<ProfileData>({ first_name: "", last_name: "", email: "" });
   const [saving, setSaving] = useState(false);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const [idUser, setIdUser] = useState("");
 
   useEffect(() => {
@@ -29,8 +29,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
 
     const profileData = storedProfile ? JSON.parse(storedProfile) : {};
     const loadedProfile = {
-      firstName: profileData.first_name || "",
-      lastName: profileData.last_name || "",
+      first_name: profileData.first_name || "",
+      last_name: profileData.last_name || "",
       email: parsedUser.email,
     };
 
@@ -44,40 +44,38 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
 
   const handleSave = async () => {
     setSaving(true);
-    setFeedback(null);
 
     try {
       // Save to localStorage
       localStorage.setItem(
         "profile",
-        JSON.stringify({ first_name: editedProfile.firstName, last_name: editedProfile.lastName })
+        JSON.stringify({ first_name: editedProfile.first_name, last_name: editedProfile.last_name })
       );
 
       setProfile(editedProfile);
-      setFeedback(t("changes_saved") || "Changes saved locally");
 
       // Save via API
       const res = await fetch(`/api/profile?id=${idUser}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          first_name: editedProfile.firstName,
-          last_name: editedProfile.lastName,
+          first_name: editedProfile.first_name,
+          last_name: editedProfile.last_name,
         }),
       });
 
       const result = await res.json();
       if (!result.success) throw new Error(result.error || "Failed to save remotely");
 
-      setFeedback(t("changes_saved") || "Changes saved successfully");
+      showSuccess(t("changes_saved") || "Changes saved successfully");
     } catch (err: any) {
-      setFeedback(err.message || "Error saving changes");
+      showError(err.message || "Error saving changes");
     } finally {
       setSaving(false);
     }
   };
 
-  const hasChanges = editedProfile.firstName !== profile.firstName || editedProfile.lastName !== profile.lastName;
+  const hasChanges = editedProfile.first_name !== profile.first_name || editedProfile.last_name !== profile.last_name;
 
   return (
     <section className="bg-[var(--color-card)] p-6 rounded-xl shadow-md">
@@ -88,8 +86,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
           <label className="block mb-1 text-sm font-medium">{t("first_name")}</label>
           <input
             type="text"
-            value={editedProfile.firstName}
-            onChange={(e) => handleChange("firstName", e.target.value)}
+            value={editedProfile.first_name}
+            onChange={(e) => handleChange("first_name", e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
@@ -97,8 +95,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
           <label className="block mb-1 text-sm font-medium">{t("last_name")}</label>
           <input
             type="text"
-            value={editedProfile.lastName}
-            onChange={(e) => handleChange("lastName", e.target.value)}
+            value={editedProfile.last_name}
+            onChange={(e) => handleChange("last_name", e.target.value)}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
@@ -124,7 +122,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
         </button>
       )}
 
-      {feedback && <p className="mt-4 text-sm text-green-600 dark:text-green-400">{feedback}</p>}
     </section>
   );
 };

@@ -7,18 +7,19 @@ export interface IProfile {
 
 export async function updateProfile(
   id: string,
-  payload: { firstName: string; lastName: string }
+  payload: { first_name: string; last_name: string }
 ) {
 
   const { data, error } = await supabase
     .from('User_Profile')
     .update({
-      first_name: payload.firstName,
-      last_name: payload.lastName,
+      first_name: payload.first_name,
+      last_name: payload.last_name,
     })
     .eq("id_user", id)
     .select("*");
-
+  
+    console.log(payload);
   console.log("UPDATE RESULT:", { data, error });
 
   if (error) throw new Error(error.message);

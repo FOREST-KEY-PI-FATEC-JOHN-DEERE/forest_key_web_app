@@ -17,7 +17,21 @@
   --color-placeholder: #94A3B8;      /* Placeholder */
 
   /* Brand */
-  --color-main-green: #228b22;
+  --color-main-green-50: #eef9ef;
+  --color-main-green-100: #dff2df;
+  --color-main-green-200: #c6e6c1;
+  --color-main-green-300: #9fd89a;
+  --color-main-green-400: #6fc86a;
+  --color-main-green-500: #4eab47;
+  --color-main-green-600: #3e8d36;
+  --color-main-green-700: #2f6c28;
+  --color-main-green-800: #234d1c;
+  --color-main-green-900: #172f11;
+  --color-main-green: var(--color-main-green-500);
+  --color-main-green-dark: var(--color-main-green-700);
+  --color-main-green-light: var(--color-main-green-200);
+  --jd-gradient-start: var(--color-main-green-400);
+  --jd-gradient-end: var(--color-main-green-700);
   --color-main-yellow: #E6B847;
   --color-main-darkBlue: #1E293B;
 
@@ -42,6 +56,11 @@
   --color-main-green: #228b22;        /* mantém */
   --color-main-yellow: #E6B847;
   --color-main-darkBlue: #1E293B;
+  --color-main-green: var(--color-main-green-300);
+  --color-main-green-dark: var(--color-main-green-600);
+  --color-main-green-light: var(--color-main-green-100);
+  --jd-gradient-start: var(--color-main-green-300);
+  --jd-gradient-end: var(--color-main-green-700);
 }
 
 /* ===========================
@@ -51,4 +70,9 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Auth panel width — change here to adjust login/register card size globally */
+:root {
+  --auth-panel-max-w: 420px; /* try 360px or 480px */
 }
