@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 
 const SIDEBAR_WIDTH_OPEN = 'w-64';
 const SIDEBAR_WIDTH_CLOSED = 'w-24'; 
-const LOGO_IMAGE_PATH = '/images/john%20deere%20logo.svg'; 
-const JOHN_DEERE_GREEN = '#367c39';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -117,7 +115,6 @@ const Sidebar: React.FC = () => {
   const menuItems: MenuItemType[] = [
     { nameKey: 'home', icon: FaHome, href: '/', current: false },
     { nameKey: 'app_users', icon: FaUsers, href: '/app_users', current: false },
-    { nameKey: 'notifications', icon: FaBell, href: '/notification', current: false },
     { nameKey: 'dashboard', icon: FaChartBar, href: '/dashboard', current: false },
     { nameKey: 'groups', icon: FaUserCheck , href: '/groups/create', current: false },
   ];
