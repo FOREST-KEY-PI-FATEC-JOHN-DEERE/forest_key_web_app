@@ -240,7 +240,6 @@ export default function FormAddAppUsers({
                 Nome do Usuário de Aplicação
                 <Info className="w-4 h-4 text-gray-400" />
               </label>
-
               <input
                 className={inputClass}
                 placeholder="Insira o nome do Usuário de Aplicação"

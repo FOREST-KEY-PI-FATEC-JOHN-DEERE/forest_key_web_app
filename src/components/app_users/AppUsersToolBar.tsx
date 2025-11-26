@@ -1,5 +1,4 @@
 "use client";
-
 import { PlusCircle, Loader2 } from "lucide-react";
 
 interface SearchAndActionsProps {

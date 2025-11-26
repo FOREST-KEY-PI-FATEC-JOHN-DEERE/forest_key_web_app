@@ -125,7 +125,6 @@ export async function updateAppUser(
     .single();
 
   if (error) throw new Error(error.message);
-
   return decryptSensitive(data as IApplicationUser);
 }
 
