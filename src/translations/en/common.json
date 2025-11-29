@@ -105,5 +105,20 @@
   "records": "records",
   "filter_placeholder": "Filter by application, owner, ID or date...",
   "created_by": "Created by",
-  "show": "Show"
+  "show": "Show",
+  "confirm_delete_title": "Confirm deletion",
+  "confirm_delete_message_prefix": "Are you sure you want to delete the application user",
+  "confirm_delete_message_suffix": "This action cannot be undone.",
+  "edit_app_user": "Edit Application User",
+  "new_password_token": "New Password / Token",
+  "changes_recorded_as": "Changes recorded as",
+  "updated_by": "Updated by",
+  "last_update": "Last update",
+  "actions": "Actions",
+  "inactive": "Inactive",
+  "app_user_error_missing_name": "Please enter the application user name.",
+  "app_user_error_missing_secret": "Generate or enter a password / token.",
+  "app_user_error_weak_password": "Weak password. Please generate a stronger one.",
+  "app_user_error_missing_current_user": "Failed to identify the signed in user.",
+  "app_user_name_placeholder": "Enter the Application User name"
 }

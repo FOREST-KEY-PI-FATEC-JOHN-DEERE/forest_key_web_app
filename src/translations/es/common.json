@@ -105,5 +105,20 @@
   "records": "registros",
   "filter_placeholder": "Filtrar por aplicación, responsable, ID o fecha...",
   "created_by": "Creado por",
-  "show": "Mostrar"
+  "show": "Mostrar",
+  "confirm_delete_title": "Confirmar eliminación",
+  "confirm_delete_message_prefix": "¿Está seguro de que desea eliminar el usuario de aplicación",
+  "confirm_delete_message_suffix": "Esta acción no se puede deshacer.",
+  "edit_app_user": "Editar Usuario de Aplicación",
+  "new_password_token": "Nueva Contraseña / Token",
+  "changes_recorded_as": "Cambios registrados como",
+  "updated_by": "Actualizado por",
+  "last_update": "Última actualización",
+  "actions": "Acciones",
+  "inactive": "Inactivo",
+  "app_user_error_missing_name": "Ingrese el nombre del usuario de aplicación.",
+  "app_user_error_missing_secret": "Genere o ingrese una contraseña / token.",
+  "app_user_error_weak_password": "Contraseña débil. Genere una contraseña más fuerte.",
+  "app_user_error_missing_current_user": "Error al identificar el usuario conectado.",
+  "app_user_name_placeholder": "Ingrese el nombre del Usuario de Aplicación"
 }

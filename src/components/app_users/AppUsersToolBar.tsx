@@ -1,5 +1,7 @@
 "use client";
+
 import { PlusCircle, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface SearchAndActionsProps {
   searchTerm: string;
@@ -18,13 +20,18 @@ export default function SearchAndActions({
   massUpdating,
   usersLength,
 }: SearchAndActionsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Filtrar por aplicação, responsável, ID ou data..."
+        placeholder={
+          t("filter_placeholder") ||
+          "Filter by application, owner, ID or date..."
+        }
         className="w-full sm:w-64 rounded-md border px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]"
       />
 
@@ -35,7 +42,7 @@ export default function SearchAndActions({
           className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium hover:bg-gray-50"
         >
           <PlusCircle className="w-4 h-4" />
-          New User
+          {t("new_app_user") || "New Application User"}
         </button>
 
         <button
@@ -47,7 +54,7 @@ export default function SearchAndActions({
           {massUpdating ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
-            "Update all passwords"
+            t("update_all_passwords") || "Update all passwords"
           )}
         </button>
       </div>

@@ -125,5 +125,20 @@
   "error": "Erro"
   ,
   "register_error_required": "Preencha todos os campos.",
-  "register_error_password_length": "A senha deve ter ao menos 8 caracteres."
+  "register_error_password_length": "A senha deve ter ao menos 8 caracteres.",
+  "confirm_delete_title": "Confirmar exclusão",
+  "confirm_delete_message_prefix": "Tem certeza que deseja excluir o usuário de aplicação",
+  "confirm_delete_message_suffix": "Esta ação não pode ser desfeita.",
+  "edit_app_user": "Editar Usuário de Aplicação",
+  "new_password_token": "Nova Senha / Token",
+  "changes_recorded_as": "Alterações registradas como",
+  "updated_by": "Atualizado por",
+  "last_update": "Última atualização",
+  "actions": "Ações",
+  "inactive": "Inativo",
+  "app_user_error_missing_name": "Informe o nome do usuário de aplicação.",
+  "app_user_error_missing_secret": "Gere ou informe uma senha / token.",
+  "app_user_error_weak_password": "Senha fraca. Gere uma senha mais forte.",
+  "app_user_error_missing_current_user": "Falha ao identificar o usuário logado.",
+  "app_user_name_placeholder": "Insira o nome do Usuário de Aplicação"
 }

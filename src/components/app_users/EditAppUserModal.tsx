@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowLeft, KeyRound, Info, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { generateStrongSecret } from "@/components/app_users/utils";
 import { supabase } from "@/utils/supabase/client";
 import type { IApplicationUser } from "@/services/application_user.service";
@@ -23,6 +24,8 @@ export default function EditAppUserModal({
   onClose,
   onSubmit,
 }: EditAppUserModalProps) {
+  const { t } = useTranslation();
+
   const [applicationName, setApplicationName] = useState("");
   const [secret, setSecret] = useState("");
   const [passwordScore, setPasswordScore] = useState(0);
@@ -68,7 +71,7 @@ export default function EditAppUserModal({
 
         setCurrentUserName(fullName);
       } catch (err) {
-        console.error("Erro ao carregar usuário logado:", err);
+        console.error("Error loading logged user:", err);
       }
     }
 
@@ -98,14 +101,21 @@ export default function EditAppUserModal({
     setFeedback(null);
 
     if (!applicationName.trim()) {
-      setFeedback({ ok: false, msg: "Informe o nome do usuário de aplicação." });
+      setFeedback({
+        ok: false,
+        msg:
+          t("app_user_error_missing_name") ||
+          "Please enter the application user name.",
+      });
       return;
     }
 
     if (!secret.trim()) {
       setFeedback({
         ok: false,
-        msg: "Informe ou gere uma nova senha / token.",
+        msg:
+          t("app_user_error_missing_secret") ||
+          "Generate or enter a new password / token.",
       });
       return;
     }
@@ -113,7 +123,9 @@ export default function EditAppUserModal({
     if (passwordScore < 4) {
       setFeedback({
         ok: false,
-        msg: "Senha fraca. Gere uma senha mais forte.",
+        msg:
+          t("app_user_error_weak_password") ||
+          "Weak password. Please generate a stronger one.",
       });
       return;
     }
@@ -121,7 +133,9 @@ export default function EditAppUserModal({
     if (!currentUserName) {
       setFeedback({
         ok: false,
-        msg: "Falha ao identificar o usuário logado.",
+        msg:
+          t("app_user_error_missing_current_user") ||
+          "Failed to identify the signed in user.",
       });
       return;
     }
@@ -139,7 +153,10 @@ export default function EditAppUserModal({
       console.error(err);
       setFeedback({
         ok: false,
-        msg: err.message || "Erro inesperado ao salvar.",
+        msg:
+          err.message ||
+          (t("unknown_error") as string) ||
+          "Unexpected error while saving.",
       });
     } finally {
       setSubmitting(false);
@@ -168,16 +185,16 @@ export default function EditAppUserModal({
               onClick={onClose}
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
-              Voltar para a Lista
+              {t("back_to_list") || "Back to List"}
             </button>
 
             <h2 className="text-[16px] font-semibold leading-tight mt-1">
-              Editar Usuário de Aplicação
+              {t("edit_app_user") || "Edit Application User"}
             </h2>
 
             {currentUserName && (
               <p className="text-[12px] mt-1">
-                Alterações registradas como{" "}
+                {(t("changes_recorded_as") || "Changes recorded as") + " "}
                 <strong>{currentUserName}</strong>
               </p>
             )}
@@ -188,25 +205,31 @@ export default function EditAppUserModal({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className={labelClass}>
-                Nome do Usuário de Aplicação
+                {t("app_user_name") || "Application User Name"}
                 <Info className="w-4 h-4 text-gray-400" />
               </label>
 
               <input
                 className={inputClass}
-                placeholder="Insira o nome do Usuário de Aplicação"
+                placeholder={
+                  t("app_user_name_placeholder") ||
+                  "Enter the Application User name"
+                }
                 value={applicationName}
                 onChange={(e) => setApplicationName(e.target.value)}
               />
             </div>
 
             <div className="space-y-2">
-              <label className={labelClass}>Nova Senha / Token</label>
+              <label className={labelClass}>
+                {t("new_password_token") || "New Password / Token"}
+              </label>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
-                    <KeyRound className="w-4 h-4" /> Senha
+                    <KeyRound className="w-4 h-4" />{" "}
+                    {t("access_password") || "Password"}
                   </span>
 
                   <button
@@ -215,7 +238,7 @@ export default function EditAppUserModal({
                     disabled={submitting}
                     className="text-[11px] font-semibold text-[#2F5F1F] underline"
                   >
-                    Gerar senha segura
+                    {t("generate_secure_password") || "Generate secure password"}
                   </button>
                 </div>
 
@@ -253,7 +276,7 @@ export default function EditAppUserModal({
                 className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-m"
                 onClick={onClose}
               >
-                Cancelar
+                {t("cancel") || "Cancel"}
               </button>
 
               <button
@@ -262,7 +285,7 @@ export default function EditAppUserModal({
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md bg-[#2F5F1F] text-white disabled:opacity-50"
               >
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Salvar alterações
+                {t("save_changes") || "Save changes"}
               </button>
             </div>
           </form>
@@ -273,6 +296,15 @@ export default function EditAppUserModal({
 }
 
 function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
+  const { t } = useTranslation();
+
+  const labels = [
+    t("weak") || "Weak",
+    t("fair") || "Fair",
+    t("good") || "Good",
+    t("strong") || "Strong",
+    t("very_strong") || "Very Strong",
+  ];
   const colors = [
     "bg-red-500",
     "bg-orange-500",
@@ -280,7 +312,9 @@ function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
     "bg-green-500",
     "bg-green-700",
   ];
-  const labels = ["Fraca", "Razoável", "Boa", "Forte", "Muito Forte"];
+
+  const label =
+    passwordScore === 0 ? labels[0] : labels[passwordScore - 1] ?? labels[0];
 
   return (
     <div className="flex items-center gap-2 mt-1">
@@ -294,9 +328,7 @@ function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
           />
         ))}
       </div>
-      <span className="text-[10px] uppercase tracking-wide">
-        {passwordScore === 0 ? "Fraca" : labels[passwordScore - 1]}
-      </span>
+      <span className="text-[10px] uppercase tracking-wide">{label}</span>
     </div>
   );
 }

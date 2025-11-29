@@ -2,6 +2,7 @@
 
 import { MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type AppUserRowActionsProps = {
   onView: () => void;
@@ -15,6 +16,7 @@ export default function AppUserRowActions({
   onDelete,
 }: AppUserRowActionsProps) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   function handleToggle(e: React.MouseEvent) {
     e.stopPropagation();
@@ -60,7 +62,7 @@ export default function AppUserRowActions({
             className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs hover:bg-gray-100"
           >
             <Eye className="w-4 h-4" />
-            Visualizar histórico
+            {t("click_to_view_history") || "View history"}
           </button>
 
           <button
@@ -69,7 +71,7 @@ export default function AppUserRowActions({
             className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs hover:bg-gray-100"
           >
             <Pencil className="w-4 h-4" />
-            Editar
+            {t("edit") || "Edit"}
           </button>
 
           <button
@@ -78,7 +80,7 @@ export default function AppUserRowActions({
             className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-600 hover:bg-red-50"
           >
             <Trash2 className="w-4 h-4" />
-            Excluir
+            {t("delete") || "Delete"}
           </button>
         </div>
       )}
