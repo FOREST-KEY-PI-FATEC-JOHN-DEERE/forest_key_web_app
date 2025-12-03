@@ -131,7 +131,7 @@ export default function AddUsersToGroup({ groupId, onUserAdded }: Props) {
           } else if (u.id_user) {
             label = `${u.id_user.slice(0,8)}...`;
           } else {
-            label = "Unknown";
+            label = t('unknown') || 'Unknown';
           }
 
           return (

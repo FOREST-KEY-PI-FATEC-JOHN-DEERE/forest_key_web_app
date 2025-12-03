@@ -106,19 +106,19 @@ const DashboardPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           
           <KpiCard
-            title="Força Média da Senha (proxy)"
+            title={t('password_strength_proxy') || 'Password strength (proxy)'}
             value={data?.passwordStrength?.percent != null ? `${data.passwordStrength.percent}%` : '—'}
             icon={FaShieldAlt}
             theme="success"
-            description={data?.passwordStrength ? `Atualizadas nos últimos ${data.passwordStrength.recent} de ${data.passwordStrength.total}` : 'Carregando...'}
+            description={data?.passwordStrength ? (t('password_strength_recent', { recent: data.passwordStrength.recent, total: data.passwordStrength.total }) || `Updated in the last ${data.passwordStrength.recent} of ${data.passwordStrength.total}`) : (t('loading') || 'Loading...')}
           />
 
           <KpiCard
-            title="Vencimento Próximo (< 7 dias)"
-            value={data?.nextDue ? `${data.nextDue.length} Usuários` : '—'}
+            title={t('next_due_7_days') || 'Next due (< 7 days)'}
+            value={data?.nextDue ? `${data.nextDue.length} ${t('users') || 'Users'}` : '—'}
             icon={FaUserClock}
             theme="warning"
-            description={data?.nextDue ? 'Usuários com expiração nos próximos 7 dias.' : 'Carregando...'}
+            description={data?.nextDue ? (t('next_due_description') || 'Users with expiry in the next 7 days.') : (t('loading') || 'Loading...')}
           />
 
           <div className="lg:col-span-2  shadow-lg rounded-xl p-6 ">
@@ -132,10 +132,10 @@ const DashboardPage: React.FC = () => {
               <table className="min-w-full text-sm">
                 <thead className="sticky top-0 bg-white/80 dark:bg-gray-800/70 backdrop-blur-sm">
                   <tr>
-                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">Usuário</th>
-                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">Dias</th>
-                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">Expira em</th>
-                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">Última alteração</th>
+                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">{t('user') || 'User'}</th>
+                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">{t('days') || 'Days'}</th>
+                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">{t('expires_at') || 'Expires at'}</th>
+                    <th className="p-3 text-left text-xs font-semibold uppercase text-gray-500">{t('last_update') || 'Last update'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">

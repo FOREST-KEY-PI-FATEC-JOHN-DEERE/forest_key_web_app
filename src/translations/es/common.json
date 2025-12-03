@@ -15,31 +15,92 @@
   },
   "go": "Ir",
   "no_recent_changes": "No hay cambios recientes.",
-  "functionalities": "Funcionalidades"
-  ,"filter_placeholder": "Buscar por aplicación, responsable, ID o fecha..."
-  ,"create_user": "Nuevo Usuario"
-  ,"update_all_passwords": "Actualizar todas las contraseñas"
-  ,"changed_by": "Actualizado por"
-  ,"status": "Estado"
-  ,"last_update": "Última actualización"
-  ,"active": "Activo"
-  ,"inactive": "Inactivo"
-  ,"show": "Mostrar"
-  ,"per_page": "por página"
-  ,"first": "«"
-  ,"previous": "‹"
-  ,"next": "›"
-  ,"last": "»"
-  ,"records": "{{count}} registros"
-  ,"app_user_name": "Nombre de Usuario de Aplicación"
-  ,"created_by": "Creado por"
-  ,"created_at": "Creado en"
-  ,"expires_at": "Expira en"
-  ,"loading": "Cargando..."
-  ,"no_users_registered": "Ningún usuario de aplicación registrado aún."
-  ,"total": "Total"
-  ,"actions": "Acciones"
-  ,"view_history": "Ver historial"
-  ,"edit": "Editar"
-  ,"delete": "Eliminar"
+  "functionalities": "Funcionalidades",
+  "filter_placeholder": "Buscar por aplicación, responsable, ID o fecha...",
+  "create_user": "Nuevo Usuario",
+  "update_all_passwords": "Actualizar todas las contraseñas",
+  "changed_by": "Actualizado por",
+  "status": "Estado",
+  "last_update": "Última actualización",
+  "active": "Activo",
+  "inactive": "Inactivo",
+  "show": "Mostrar",
+  "per_page": "por página",
+  "first": "«",
+  "previous": "‹",
+  "next": "›",
+  "last": "»",
+  "records": "{{count}} registros",
+  "app_user_name": "Nombre de Usuario de Aplicación",
+  "created_by": "Creado por",
+  "created_at": "Creado en",
+  "expires_at": "Expira en",
+  "loading": "Cargando...",
+  "no_users_registered": "Ningún usuario de aplicación registrado aún.",
+  "total": "Total",
+  "actions": "Acciones",
+  "view_history": "Ver historial",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "create_group": "Crear grupo",
+  "edit_group": "Editar grupo",
+  "group_name": "Nombre del grupo",
+  "group_name_placeholder": "Ej: Grupo - A",
+  "group_description_placeholder": "Describa los permisos y el alcance del grupo.",
+  "owner": "Responsable",
+  "owner_placeholder": "Ej: Nombre_Apellido",
+  "backup": "Backup",
+  "backup_placeholder": "Ej: Nombre_Sustituto",
+  "view_members": "Ver miembros",
+  "add_members": "Agregar miembros",
+  "group_create_first": "Crea el grupo primero para gestionar miembros.",
+  "group_name_required": "Nombre del grupo es obligatorio",
+  "group_created_message": "El grupo \"{{name}}\" fue creado con éxito! Ahora puedes agregar usuarios.",
+  "finish": "Finalizar"
+  ,"search_groups": "Buscar grupos..."
+  ,"clear": "Limpiar"
+  ,"group_deleted": "Grupo eliminado"
+  ,"no_groups_found": "Ningún grupo encontrado."
+  ,"confirm_delete_group": "Confirmar eliminación"
+  ,"confirm_delete_group_message": "¿Está seguro de que desea eliminar este grupo?"
+    ,"cancel": "Cancelar"
+    ,"add_user": "Agregar usuario"
+    ,"select_user": "Seleccionar usuario"
+    ,"invalid_user_selected": "Usuario seleccionado inválido"
+    ,"unknown_error": "Error desconocido"
+    ,"access_level": "Nivel de acceso"
+    ,"Admin": "Admin"
+    ,"User": "Usuario"
+    ,"unknown": "Desconocido"
+    ,"loading_chart": "Cargando gráfico..."
+    ,"strategic_view": "Vista Estratégica"
+    ,"renewal_compliance": "Conformidad de renovación"
+    ,"compliance_count_prefix": "Conformidad"
+    ,"expired_users": "Usuarios expirados"
+    ,"expired_requires_manual": "Requiere intervención manual o restablecimiento de contraseña."
+    ,"avg_next_renewal": "Promedio próxima renovación"
+    ,"avg_next_description": "Indica la salud general del ciclo de contraseñas."
+    ,"tactical_view": "Vista Táctica y Riesgo"
+    ,"password_strength_proxy": "Fuerza de contraseña (proxy)"
+    ,"password_strength_recent": "Actualizado en los últimos {{recent}} de {{total}}"
+    ,"next_due_7_days": "Vencimiento próximo (< 7 días)"
+    ,"next_due_description": "Usuarios con expiración en los próximos 7 días."
+    ,"top5_high_risk": "Top 5 usuarios de alto riesgo"
+    ,"user": "Usuario"
+    ,"days": "Días"
+    ,"events": "Eventos"
+    ,"compliance_percent": "Conformidad (%)"
+    ,"no_users_found": "Ningún usuario"
+    ,"setting_title": "Configuración"
+    ,"profile_settings": "Configuración de perfil"
+    ,"first_name": "Nombre"
+    ,"last_name": "Apellido"
+    ,"email": "Email"
+    ,"saving": "Guardando..."
+    ,"save_changes": "Guardar cambios"
+    ,"changes_saved": "Cambios guardados con éxito"
+    ,"theme_settings": "Tema"
+    ,"light_theme": "Claro"
+    ,"dark_theme": "Oscuro"
+    ,"language_settings": "Idioma"
 }

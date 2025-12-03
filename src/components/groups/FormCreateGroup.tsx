@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SuccessModal from '../SuccessModal';
+import { useTranslation } from 'react-i18next';
 
 export default function FormCreateGroup() {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [owner, setOwner] = useState('');
@@ -17,14 +19,13 @@ export default function FormCreateGroup() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Mensagem do modal
     setModalMessage(
-      `O grupo "${title}" foi criado com sucesso! Agora você pode adicionar usuários a ele.`
+      t('group_created_message', { name: title }) || `Group "${title}" created successfully!`
     );
 
     setModalOpen(true);
 
-    // Limpa os campos do formulário
+    // Clear fields
     setTitle('');
     setDescription('');
     setOwner('');
@@ -33,7 +34,7 @@ export default function FormCreateGroup() {
 
   const handleModalOk = () => {
     setModalOpen(false);
-    router.push('/groups/add-user'); // redireciona após clicar OK
+    router.push('/groups/add-user');
   };
 
   return (
@@ -41,19 +42,19 @@ export default function FormCreateGroup() {
       <div className="flex justify-center items-center p-4 font-sans">
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-10">
           <h1 className="text-2xl font-extrabold text-gray-900 border-b pb-3 mb-6">
-            Criar Grupo AD
+            {t('create_group') || 'Create group'}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nome Grupo AD <span className="text-red-500">*</span>
+                {t('group_name')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ex: Grupo - A"
+                placeholder={t('group_name_placeholder') || 'Ex: Group - A'}
                 className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
@@ -61,13 +62,13 @@ export default function FormCreateGroup() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Descrição <span className="text-red-500">*</span>
+                {t('description')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Descreva as permissões e o escopo de atuação do grupo."
+                placeholder={t('group_description_placeholder') || 'Describe the permissions and scope of the group.'}
                 className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
@@ -75,13 +76,13 @@ export default function FormCreateGroup() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Proprietário <span className="text-red-500">*</span>
+                {t('owner')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={owner}
                 onChange={(e) => setOwner(e.target.value)}
-                placeholder="Ex: Nome_Sobrenome"
+                placeholder={t('owner_placeholder') || 'Ex: First_Lastname'}
                 className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
@@ -89,13 +90,13 @@ export default function FormCreateGroup() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Backup <span className="text-red-500">*</span>
+                {t('backup')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={backup}
                 onChange={(e) => setBackup(e.target.value)}
-                placeholder="Ex: Nome_Substituto"
+                placeholder={t('backup_placeholder') || 'Ex: Substitute_Name'}
                 className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
@@ -105,7 +106,7 @@ export default function FormCreateGroup() {
               type="submit"
               className="w-full py-3 bg-green-600  rounded-lg font-medium text-lg hover:bg-green-700 hover:scale-[1.01] transition-transform"
             >
-              Criar Grupo
+              {t('create_group') || 'Create group'}
             </button>
           </form>
         </div>

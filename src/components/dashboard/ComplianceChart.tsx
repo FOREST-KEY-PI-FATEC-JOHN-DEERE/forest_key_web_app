@@ -74,7 +74,7 @@ export default function ComplianceChart({ source = 'compliance' }: { source?: 'c
     labels,
     datasets: [
       {
-        label: isHistory ? 'Eventos' : 'Conformidade (%)',
+        label: isHistory ? (t('events') || 'Events') : (t('compliance_percent') || 'Compliance (%)'),
         data: data.map(d => (isHistory ? d.events ?? 0 : d.percent ?? 0)),
         fill: !isHistory,
         backgroundColor: isHistory ? 'rgba(16,185,129,0.12)' : 'rgba(59,130,246,0.12)',
