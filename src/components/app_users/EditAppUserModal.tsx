@@ -13,8 +13,8 @@ type EditAppUserModalProps = {
   onClose: () => void;
   onSubmit: (payload: {
     application_name: string;
-    password: string;
     changed_by: string;
+    password?: string; // senha opcional
   }) => Promise<void> | void;
 };
 
@@ -85,6 +85,11 @@ export default function EditAppUserModal({
   }
 
   function evaluateStrength(pwd: string) {
+    if (!pwd) {
+      setPasswordScore(0);
+      return;
+    }
+
     let score = 0;
     if (pwd.length >= 12) score++;
     if (/[a-z]/.test(pwd)) score++;
@@ -100,6 +105,7 @@ export default function EditAppUserModal({
     if (!user) return;
     setFeedback(null);
 
+    // Nome continua obrigatório (não pode ficar vazio)
     if (!applicationName.trim()) {
       setFeedback({
         ok: false,
@@ -110,17 +116,10 @@ export default function EditAppUserModal({
       return;
     }
 
-    if (!secret.trim()) {
-      setFeedback({
-        ok: false,
-        msg:
-          t("app_user_error_missing_secret") ||
-          "Generate or enter a new password / token.",
-      });
-      return;
-    }
+    const hasPasswordChange = secret.trim().length > 0;
 
-    if (passwordScore < 4) {
+    // Só valida força da senha se o usuário realmente quiser mudar a senha
+    if (hasPasswordChange && passwordScore < 4) {
       setFeedback({
         ok: false,
         msg:
@@ -143,11 +142,21 @@ export default function EditAppUserModal({
     setSubmitting(true);
 
     try {
-      await onSubmit({
+      const payload: {
+        application_name: string;
+        changed_by: string;
+        password?: string;
+      } = {
         application_name: applicationName,
-        password: secret,
         changed_by: currentUserName,
-      });
+      };
+
+      // Só manda a senha se ela tiver sido preenchida
+      if (hasPasswordChange) {
+        payload.password = secret;
+      }
+
+      await onSubmit(payload);
       onClose();
     } catch (err: any) {
       console.error(err);
@@ -203,6 +212,7 @@ export default function EditAppUserModal({
 
         <section className="px-6 py-6">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Nome do usuário de aplicação */}
             <div className="space-y-2">
               <label className={labelClass}>
                 {t("app_user_name") || "Application User Name"}
@@ -220,6 +230,7 @@ export default function EditAppUserModal({
               />
             </div>
 
+            {/* Senha / Token opcional */}
             <div className="space-y-2">
               <label className={labelClass}>
                 {t("new_password_token") || "New Password / Token"}
@@ -252,9 +263,16 @@ export default function EditAppUserModal({
                     evaluateStrength(e.target.value);
                   }}
                 />
-              </div>
 
-              <PasswordStrengthBar passwordScore={passwordScore} />
+                <p className="text-[11px] text-gray-500">
+                  {t("password_optional_hint") ||
+                    "Fill this field only if you want to change the password / token."}
+                </p>
+
+                {secret.trim().length > 0 && (
+                  <PasswordStrengthBar passwordScore={passwordScore} />
+                )}
+              </div>
             </div>
 
             {feedback && (
