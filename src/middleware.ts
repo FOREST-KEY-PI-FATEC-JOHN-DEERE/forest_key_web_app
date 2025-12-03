@@ -22,6 +22,6 @@ export function middleware(req: NextRequest) {
 // Define quais rotas o middleware protege
 export const config = {
   matcher: [
-    "/((?!_next|api|public|favicon.ico|robots.txt|login).*)",
+    "/((?!_next|api|public|images|favicon.ico|robots.txt|login).*)",
   ],
 };

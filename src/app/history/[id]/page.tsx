@@ -101,16 +101,16 @@ export default function HistoryPage() {
             onClick={() => router.back()}
             className="text-xl font-semibold text-gray-800 dark:text-gray-200 cursor-pointer hover:underline"
           >
-            {t("Retornar") || "Retornar"}
+            {t("back") || "Back"}
           </h1>
         </div>
 
         <div className="flex gap-8 min-h-[70vh]">
           <div className="flex-1 space-y-6">
             <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-              <div className="bg-blue-600 text-white text-lg font-medium rounded-md px-4 py-3 inline-block">
+                <div className="bg-blue-600 text-white text-lg font-medium rounded-md px-4 py-3 inline-block">
                 <span className="opacity-80 font-normal mr-2">
-                  {t("Nome da aplicação") || "Nome da aplicação"}:
+                  {t("application_name_label") || "Application name"}:
                 </span>
                 {applicationData?.application_name ??
                   t("generic_application")}
@@ -119,27 +119,27 @@ export default function HistoryPage() {
 
             <div className="space-y-4">
               <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t("created_by") || "Criado por"}
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                  {t("created_by") || "Created by"}
                 </label>
                 <input
                   type="text"
                   value={userName}
                   readOnly
-                  placeholder={!userName ? "Carregando..." : ""}
+                  placeholder={!userName ? (t('loading') || 'Loading...') : ""}
                   className="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 />
               </div>
 
               <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {t("access_password") || "Senha de acesso"}
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                    {t("access_password") || "Access password"}
                   </label>
 
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-gray-600 dark:text-gray-400">
-                      {t("Visualizar senha") || "Visualizar senha"}
+                      {t("view_password") || "View password"}
                     </span>
                     <button
                       type="button"
@@ -181,12 +181,12 @@ export default function HistoryPage() {
             <div className="space-y-6">
               {isLoading ? (
                 <p className="text-sm text-gray-500">
-                  {t("loading") || "Carregando..."}
+                  {t("loading") || "Loading..."}
                 </p>
               ) : history.length === 0 ? (
                 <p className="text-sm text-gray-500 italic">
-                  {t("Sem histórico de alterações") ||
-                    "Sem histórico de alterações"}
+                  {t("no_history_changes") ||
+                    "No changes history"}
                 </p>
               ) : (
                 history.map((item, i) => (
@@ -199,7 +199,7 @@ export default function HistoryPage() {
                       <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                         {new Date(item.date).toLocaleString("pt-BR")}
                       </p>
-                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <p className="text-sm text-gray-700 dark:text-gray-200">
                         {t("password_changed_by") || "Senha alterada por"} -{" "}
                         <strong>{item.responsible}</strong>
                         <br />

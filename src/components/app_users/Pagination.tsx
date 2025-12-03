@@ -48,7 +48,7 @@ export default function Pagination({
   };
 
   return (
-    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[12px] text-gray-600">
+    <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-[12px] text-gray-600 overflow-x-auto">
       <div className="flex items-center gap-2">
         <span>{t("show") || "Show"}</span>
         <select
@@ -68,14 +68,14 @@ export default function Pagination({
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center gap-1">
+        <div className="flex flex-wrap justify-center gap-1">
           <button
             type="button"
             onClick={() => goToPage(1)}
             disabled={currentPage === 1}
             className="px-2 py-1 text-xs rounded border border-gray-300 text-gray-700 disabled:opacity-40"
           >
-            «
+            {t('first') || '«'}
           </button>
           <button
             type="button"
@@ -83,7 +83,7 @@ export default function Pagination({
             disabled={currentPage === 1}
             className="px-2 py-1 text-xs rounded border border-gray-300 text-gray-700 disabled:opacity-40"
           >
-            ‹
+            {t('previous') || '‹'}
           </button>
 
           {renderPageNumbers()}
@@ -94,7 +94,7 @@ export default function Pagination({
             disabled={currentPage === totalPages}
             className="px-2 py-1 text-xs rounded border border-gray-300 text-gray-700 disabled:opacity-40"
           >
-            ›
+            {t('next') || '›'}
           </button>
           <button
             type="button"
@@ -102,7 +102,7 @@ export default function Pagination({
             disabled={currentPage === totalPages}
             className="px-2 py-1 text-xs rounded border border-gray-300 text-gray-700 disabled:opacity-40"
           >
-            »
+            {t('last') || '»'}
           </button>
         </div>
       )}

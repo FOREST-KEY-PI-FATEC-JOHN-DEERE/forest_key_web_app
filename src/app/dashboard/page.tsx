@@ -19,7 +19,31 @@ const DashboardPage: React.FC = () => {
     async function load() {
       setLoading(true);
       try {
-        const res = await fetch('/api/dashboard');
+        const stored = localStorage.getItem('user');
+        let res;
+        if (stored) {
+          let fullName: string | null = null;
+          try {
+            const authUser = JSON.parse(stored);
+            const userId = authUser?.id;
+            // try to fetch profile full name
+            try {
+              const { data: profile } = await fetch('/api/users').then(r => r.json()).then(j => ({ data: j.data?.find((p: any) => p.id_user === userId) }));
+              if (profile) fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim();
+            } catch {}
+
+            res = await fetch('/api/dashboard', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId: userId, userFullName: fullName }),
+            });
+          } catch {
+            res = await fetch('/api/dashboard');
+          }
+        } else {
+          res = await fetch('/api/dashboard');
+        }
+
         const json = await res.json();
         if (!mounted) return;
         if (json?.success) setData(json.data);
@@ -40,44 +64,44 @@ const DashboardPage: React.FC = () => {
 
       <section className="mb-10">
         <h2 className="text-xl font-semibold  mb-4 border-b  pb-2">
-          Visão Estratégica
+          {t('strategic_view') || 'Strategic view'}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           
           {/* 1. Taxa de Conformidade de Renovação (KPI Principal) */}
           <div className="lg:col-span-2">
             <KpiCard
-            title="Conformidade de Renovação"
+            title={t('renewal_compliance') || 'Renewal compliance'}
             value={data?.compliance?.percent != null ? `${data.compliance.percent}%` : '—'}
             icon={FaCheckCircle}
             theme="success"
-            description={data?.compliance ? `Conformidade ${data.compliance.compliant}/${data.compliance.total}` : 'Carregando...'}
+            description={data?.compliance ? `${t('compliance_count_prefix') || 'Compliant'} ${data.compliance.compliant}/${data.compliance.total}` : (t('loading') || 'Loading...')}
             />
           </div>
 
           {/* 2. Usuários com Senha Expirada/Bloqueada */}
           <KpiCard
-            title="Usuários Expirados"
-            value={data?.expired ? `${data.expired.length} Usuários` : '—'}
+            title={t('expired_users') || 'Expired users'}
+            value={data?.expired ? `${data.expired.length} ${t('users') || 'Users'}` : '—'}
             icon={FaUsersSlash}
             theme="warning"
-            description={data?.expired ? 'Requer intervenção manual ou reset de senha.' : 'Carregando...'}
+            description={data?.expired ? (t('expired_requires_manual') || 'Requires manual intervention or password reset.') : (t('loading') || 'Loading...')}
           />
 
           {/* 3. Média de Dias Até a Próxima Renovação */}
           <KpiCard
-            title="Média Próxima Renovação"
-            value={data?.averageNext?.averageDays != null ? `${data.averageNext.averageDays} Dias` : '—'}
+            title={t('avg_next_renewal') || 'Avg next renewal'}
+            value={data?.averageNext?.averageDays != null ? `${data.averageNext.averageDays} ${t('days') || 'Days'}` : '—'}
             icon={FaCalendarAlt}
             theme="info"
-            description={data?.averageNext ? 'Indica a saúde geral do ciclo de senhas.' : 'Carregando...'}
+            description={data?.averageNext ? (t('avg_next_description') || 'Indicates general health of the password cycle.') : (t('loading') || 'Loading...')}
           />
         </div>
       </section>
 
       <section className="mb-10">
         <h2 className="text-xl font-semibold  mb-4 border-b  pb-2">
-          Visão Tática e Risco
+          {t('tactical_view') || 'Tactical view & risk'}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           
@@ -101,20 +125,10 @@ const DashboardPage: React.FC = () => {
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-semibold flex items-center">
                 <FaExclamationTriangle className="h-5 w-5 mr-2 text-red-500" />
-                Top 5 Usuários de Alto Risco
+                {t('top5_high_risk') || 'Top 5 high risk users'}
               </h3>
-              <div>
-                <button
-                  onClick={() => setScrollableTop5(s => !s)}
-                  title={scrollableTop5 ? 'Expandir tabela' : 'Ativar rolagem'}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-md bg-white/60 dark:bg-gray-800/50 border border-gray-200/30 hover:bg-white/70 transition"
-                >
-                  {scrollableTop5 ? <FaExpandAlt className="w-4 h-4" /> : <FaCompressAlt className="w-4 h-4" />}
-                  <span className="hidden sm:inline">{scrollableTop5 ? 'Expandir' : 'Scroll'}</span>
-                </button>
-              </div>
             </div>
-            <div className={`${scrollableTop5 ? 'h-64 overflow-y-auto' : ''}`}>
+            <div className="h-64 overflow-y-hidden hover:overflow-y-auto transition-all">
               <table className="min-w-full text-sm">
                 <thead className="sticky top-0 bg-white/80 dark:bg-gray-800/70 backdrop-blur-sm">
                   <tr>
@@ -127,7 +141,7 @@ const DashboardPage: React.FC = () => {
                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                   {loading && (
                     <tr>
-                      <td colSpan={4} className="p-4 text-center text-sm text-gray-500">Carregando...</td>
+                      <td colSpan={4} className="p-4 text-center text-sm text-gray-500">{t('loading') || 'Loading...'}</td>
                     </tr>
                   )}
 
@@ -137,13 +151,22 @@ const DashboardPage: React.FC = () => {
                     </tr>
                   )}
 
-                  {!loading && data?.top5 && data.top5.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="p-4 text-center text-sm text-gray-500">Nenhum usuário</td>
-                    </tr>
-                  )}
+                  {!loading && data?.top5 && (() => {
+                    const filteredTop5 = (data.top5 || []).filter((u: any) => {
+                      if (!u.expire_at) return false;
+                      const daysToExpire = Math.ceil((Date.parse(u.expire_at) - Date.now()) / (1000 * 60 * 60 * 24));
+                      return daysToExpire <= 7; // include expired (negative) and <=7 days
+                    });
 
-                  {!loading && data?.top5 && data.top5.map((u: any) => {
+                    if (filteredTop5.length === 0) {
+                      return (
+                        <tr>
+                          <td colSpan={4} className="p-4 text-center text-sm text-gray-500">{t('no_users_found') || 'No users'}</td>
+                        </tr>
+                      );
+                    }
+
+                    return filteredTop5.map((u: any) => {
                     const daysToExpire = u.expire_at ? Math.max(0, Math.round((new Date(u.expire_at).getTime() - Date.now()) / (1000*60*60*24))) : null;
                     const initials = (u.application_name || '').split(' ').map((s: string)=> s[0]).slice(0,2).join('').toUpperCase();
                     return (
@@ -166,7 +189,8 @@ const DashboardPage: React.FC = () => {
                         <td className="p-3 align-top text-xs text-gray-500">{u.last_update ? new Date(u.last_update).toLocaleString() : '—'}</td>
                       </tr>
                     );
-                  })}
+                    });
+                  })()}
                 </tbody>
               </table>
             </div>

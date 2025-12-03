@@ -9,6 +9,7 @@ interface SimpleUser {
   id_user: string;
   first_name: string | null;
   last_name: string | null;
+  email?: string | null;
 }
 
 interface Props {
@@ -23,6 +24,7 @@ export default function AddUsersToGroup({ groupId, onUserAdded }: Props) {
   const [selectedUser, setSelectedUser] = useState("");
   const [admin, setAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // Carregar lista de usuários
   const loadAvailableUsers = async () => {
@@ -40,11 +42,24 @@ export default function AddUsersToGroup({ groupId, onUserAdded }: Props) {
 
   useEffect(() => {
     loadAvailableUsers();
+    try {
+      const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+      if (stored) {
+        const authUser = JSON.parse(stored);
+        setCurrentUserId(authUser?.id || null);
+      }
+    } catch {}
   }, []);
 
   // Adicionar usuário ao grupo
   const handleAdd = async () => {
     if (!selectedUser) return;
+
+    // Basic validation: ensure selectedUser looks like a uuid (length 36) or at least non-empty
+    if (typeof selectedUser !== 'string' || selectedUser.length < 8) {
+      alert(t("invalid_user_selected") || "Invalid user selected");
+      return;
+    }
 
     setLoading(true);
 
@@ -55,6 +70,7 @@ export default function AddUsersToGroup({ groupId, onUserAdded }: Props) {
         body: JSON.stringify({
           id_user: selectedUser,
           admin: admin,
+          created_by: currentUserId ?? null,
         }),
       });
 
@@ -103,11 +119,27 @@ export default function AddUsersToGroup({ groupId, onUserAdded }: Props) {
       >
         <option value="">{t("select_user")}</option>
 
-        {users.map((u) => (
-          <option key={u.id_user} value={u.id_user}>
-            {u.first_name} {u.last_name}
-          </option>
-        ))}
+        {users.map((u) => {
+          const name = `${u.first_name || ''} ${u.last_name || ''}`.trim();
+          let label = "";
+          if (name && u.email) {
+            label = `${name} (${u.email})`;
+          } else if (name) {
+            label = name;
+          } else if (u.email) {
+            label = u.email;
+          } else if (u.id_user) {
+            label = `${u.id_user.slice(0,8)}...`;
+          } else {
+            label = "Unknown";
+          }
+
+          return (
+            <option key={u.id_user} value={u.id_user}>
+              {label}
+            </option>
+          );
+        })}
       </select>
 
       {/* SELECT do nível de acesso */}

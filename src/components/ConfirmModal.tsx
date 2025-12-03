@@ -2,21 +2,27 @@
 
 import { Loader2 } from "lucide-react";
 
-type ConfirmDeleteAppUserProps = {
+type ConfirmModalProps = {
   open: boolean;
-  appName?: string;
+  title?: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
   onCancel: () => void;
   onConfirm: () => Promise<void> | void;
   loading?: boolean;
 };
 
-export default function ConfirmDeleteAppUser({
+export default function ConfirmModal({
   open,
-  appName,
+  title,
+  message,
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
   onCancel,
   onConfirm,
   loading,
-}: ConfirmDeleteAppUserProps) {
+}: ConfirmModalProps) {
   if (!open) return null;
 
   return (
@@ -26,23 +32,17 @@ export default function ConfirmDeleteAppUser({
         onClick={() => { if (!loading) onCancel(); }}
       />
       <div className="relative z-10 w-full max-w-sm rounded-md bg-[var(--color-card)] text-[var(--color-foreground)] shadow-xl border border-[var(--color-divider)] p-6">
-        <h2 className="text-sm font-semibold mb-2">
-          Confirmar exclusão
-        </h2>
-        <p className="text-xs text-gray-600 mb-4">
-          Tem certeza que deseja excluir o usuário de aplicação{" "}
-          <strong>{appName ?? ""}</strong>? Esta ação não pode ser
-          desfeita.
-        </p>
+        {title && <h2 className="text-sm font-semibold mb-2">{title}</h2>}
+        <p className="text-xs mb-4 text-[var(--color-foreground)]">{message}</p>
 
         <div className="flex justify-end gap-2">
           <button
             type="button"
             disabled={loading}
             onClick={onCancel}
-            className="px-3 py-1.5 text-xs rounded-md border border-gray-300 text-gray-700"
+            className="px-3 py-1.5 text-xs rounded-md border border-[var(--color-divider)] text-[var(--color-foreground)] bg-[var(--color-card)]"
           >
-            Cancelar
+            {cancelLabel}
           </button>
 
           <button
@@ -52,7 +52,7 @@ export default function ConfirmDeleteAppUser({
             className="inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-md bg-red-600 text-white disabled:opacity-60"
           >
             {loading && <Loader2 className="w-3 h-3 animate-spin" />}
-            Excluir
+            {confirmLabel}
           </button>
         </div>
       </div>

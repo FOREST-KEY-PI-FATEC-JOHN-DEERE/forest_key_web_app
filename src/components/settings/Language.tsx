@@ -31,7 +31,7 @@ const LanguageSettings: React.FC = () => {
         <select
           value={language}
           onChange={(e) => handleLanguageChange(e.target.value)}
-          className="px-4 py-2 border rounded-lg  focus:outline-none transition-colors"
+          className="w-full px-3 py-2 rounded-md bg-[var(--color-card)] border border-[var(--color-divider)] text-[var(--color-foreground)]"
         >
           <option value="en">English</option>
           <option value="pt">Português</option>

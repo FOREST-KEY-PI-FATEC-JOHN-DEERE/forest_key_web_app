@@ -31,7 +31,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ name, Icon, href, current = f
   if (isOpen) classes.push('px-4'); else classes.push('justify-center px-2');
 
   // base text/icon colors
-  if (!current) classes.push('text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/40');
+  if (!current) classes.push('text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/40');
 
   // when expanded and active, add extra left padding to reveal the accent bar
   if (current && isOpen) classes.push('pl-6');
@@ -115,8 +115,8 @@ const Sidebar: React.FC = () => {
   const menuItems: MenuItemType[] = [
     { nameKey: 'home', icon: FaHome, href: '/', current: false },
     { nameKey: 'app_users', icon: FaUsers, href: '/app_users', current: false },
+    { nameKey: 'groups', icon: FaUserCheck , href: '/groups', current: false },
     { nameKey: 'dashboard', icon: FaChartBar, href: '/dashboard', current: false },
-    { nameKey: 'groups', icon: FaUserCheck , href: '/groups/create', current: false },
   ];
 
 const footerItems: MenuItemType[] = [

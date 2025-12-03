@@ -23,10 +23,14 @@ export default function TableAppUsers({
 }: TableAppUsersProps) {
   const { t } = useTranslation();
   const router = useRouter();
+  const isSmall = paginatedUsers.length < 5;
+  const isVerySmall = paginatedUsers.length === 1;
+  const rowPadding = isVerySmall ? 'py-8' : (isSmall ? 'py-6' : 'py-4');
 
   return (
-    <div className="border rounded-md shadow-sm overflow-x-auto">
-      <table className="min-w-full divide-y">
+    <div className="w-full overflow-visible">
+      <div className="border rounded-md shadow-sm overflow-x-auto bg-[var(--color-card)] text-[var(--color-foreground)] border-[var(--color-divider)]">
+        <table className="min-w-full divide-y">
         <thead>
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
@@ -36,22 +40,22 @@ export default function TableAppUsers({
               {t("created_by") || "Criado por"}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-              Atualizado por
+              {t('changed_by') || 'Atualizado por'}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-              Status
+              {t('status') || 'Status'}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
               {t("created_at") || "Criado em"}
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-              Última atualização
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+              {t('last_update') || 'Última atualização'}
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
               {t("expires_at") || "Expira em"}
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">
-              Ações
+              {t('actions') || 'Ações'}
             </th>
           </tr>
         </thead>
@@ -78,7 +82,7 @@ export default function TableAppUsers({
           )}
 
           {!loading &&
-            paginatedUsers.map((u) => {
+            paginatedUsers.map((u, i) => {
               const createdAtDate = new Date(u.created_at);
               const lastUpdateDate = u.last_update
                 ? new Date(u.last_update)
@@ -91,25 +95,25 @@ export default function TableAppUsers({
                   key={u.id_app_user}
                   className={`group transition-colors ${
                     isActive
-                      ? "hover:bg-gray-50 dark:hover:bg-gray-700"
-                      : "bg-gray-50 dark:bg-gray-800/60"
+                      ? "hover:bg-[var(--color-divider)]/10 dark:hover:bg-[var(--color-divider)]/20"
+                      : "bg-[var(--color-card)]/90"
                   }`}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap`}>
                     <div className="text-sm font-medium">
                       {u.application_name}
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap text-sm`}>
                     {u.created_by || "-"}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap text-sm`}>
                     {u.changed_by || "-"}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap text-sm`}>
                     <span
                       className={`inline-flex items-center rounded-full px-2 py-[2px] text-[11px] font-semibold ${
                         isActive
@@ -117,11 +121,11 @@ export default function TableAppUsers({
                           : "bg-red-100 text-red-800 border border-red-300"
                       }`}
                     >
-                      {isActive ? "Ativo" : "Inativo"}
+                      {isActive ? (t('active') || "Ativo") : (t('inactive') || "Inativo")}
                     </span>
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap text-sm`}>
                     {createdAtDate.toLocaleString("pt-BR", {
                       day: "2-digit",
                       month: "2-digit",
@@ -131,7 +135,7 @@ export default function TableAppUsers({
                     })}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap text-sm`}>
                     {lastUpdateDate
                       ? lastUpdateDate.toLocaleString("pt-BR", {
                           day: "2-digit",
@@ -143,33 +147,30 @@ export default function TableAppUsers({
                       : "-"}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className={`px-6 ${isSmall ? 'py-6' : 'py-4'} whitespace-nowrap text-sm`}>
                     <div className="flex flex-col gap-1">
-                      <span>
-                        {expiresAtDate.toLocaleDateString("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        })}
-                      </span>
+                      <span>{expiresAtDate.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })}</span>
                       {renderExpirationBadge(expiresAtDate)}
                     </div>
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+                  <td className={`px-6 ${rowPadding} whitespace-nowrap text-right text-sm`}>
                     <AppUserRowActions
                       onView={() =>
                         router.push(`/history/${u.id_app_user}`)
                       }
                       onEdit={() => onEdit(u)}
                       onDelete={() => onDelete(u)}
+                      forceUp={!isSmall && i >= Math.max(0, paginatedUsers.length - 3)}
+                      isSmallList={isSmall}
                     />
                   </td>
                 </tr>
               );
             })}
         </tbody>
-      </table>
+        </table>
+      </div>
     </div>
   );
 }

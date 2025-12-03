@@ -5,15 +5,12 @@ import {
   getAccessGroupById,
 } from "@/services/access_group.service";
 
-interface Params {
-  params: { id: string };
-}
-
 // =========================================
 // GET → Buscar grupo por ID (necessário para Tela 2)
 // =========================================
-export async function GET(req: Request, { params }: Params) {
+export async function GET(req: Request, context: any) {
   try {
+    const { params } = await context;
     const group = await getAccessGroupById(params.id);
 
     if (!group) {
@@ -35,8 +32,9 @@ export async function GET(req: Request, { params }: Params) {
 // =========================================
 // PATCH → Atualizar nome do grupo
 // =========================================
-export async function PATCH(req: Request, { params }: Params) {
+export async function PATCH(req: Request, context: any) {
   try {
+    const { params } = await context;
     const body = await req.json();
 
     if (!body.name) {
@@ -46,7 +44,13 @@ export async function PATCH(req: Request, { params }: Params) {
       );
     }
 
-    const updated = await updateAccessGroup(params.id, { name: body.name });
+    const updated = await updateAccessGroup(params.id, {
+      name: body.name,
+      description: typeof body.description !== 'undefined' ? body.description : undefined,
+      created_by: typeof body.created_by !== 'undefined' ? body.created_by : undefined,
+      owner: typeof body.owner !== 'undefined' ? body.owner : undefined,
+      backup: typeof body.backup !== 'undefined' ? body.backup : undefined,
+    });
 
     return NextResponse.json({ success: true, data: updated });
   } catch (err: any) {
@@ -60,8 +64,9 @@ export async function PATCH(req: Request, { params }: Params) {
 // =========================================
 // DELETE → Excluir grupo
 // =========================================
-export async function DELETE(req: Request, { params }: Params) {
+export async function DELETE(req: Request, context: any) {
   try {
+    const { params } = await context;
     await deleteAccessGroup(params.id);
     return NextResponse.json({ success: true });
   } catch (err: any) {

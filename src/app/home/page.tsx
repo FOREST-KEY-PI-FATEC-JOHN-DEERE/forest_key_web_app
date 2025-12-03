@@ -28,6 +28,34 @@ const HomePage: React.FC = () => {
     async function load() {
       setLoading(true);
       try {
+        // Try to scope to the logged-in user's related app users
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          try {
+            const authUser = JSON.parse(storedUser);
+            const userId: string | undefined = authUser?.id;
+
+            if (userId) {
+              const res = await fetch('/api/app_users/mine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId }),
+              });
+
+              const json = await res.json();
+              if (!mounted) return;
+              if (json?.success) {
+                setUsers((json.data ?? []).slice(0, 5));
+                return;
+              }
+            }
+          } catch (e) {
+            // if anything goes wrong parsing localStorage or in the scoped call, fall back to global list
+            console.warn('Failed to load scoped app users, falling back', e);
+          }
+        }
+
+        // Fallback: fetch all app users
         const res = await fetch('/api/app_users');
         const json = await res.json();
         if (!mounted) return;
@@ -55,15 +83,15 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col gap-4 md:col-span-1">
             <h2 className="text-lg font-semibold">{t('indicator_preview') || 'Indicador'}</h2>
             <div className="flex flex-col gap-4">
-              <KpiCard title={t('active_keys') || 'Chaves Ativas'} value={String(users.length)} icon={FaLock} theme="info" description={t('active_keys_description') || 'Número de chaves ativas vinculadas.'} />
-              <KpiCard title={t('expiring_soon') || 'Expiram em breve'} value={'0'} icon={FaLock} theme="warning" description={t('expiring_soon_description') || 'Chaves próximas do vencimento.'} />
+              <KpiCard title={t('kpi.active_keys')} value={String(users.length)} icon={FaLock} theme="info" description={t('kpi.active_description')} />
+              <KpiCard title={t('kpi.expiring_soon')} value={'0'} icon={FaLock} theme="warning" description={t('kpi.expiring_description')} />
             </div>
           </div>
 
           {/* Middle: carousel */}
           <div className="md:col-span-1">
             <div>
-              <h2 className="text-lg font-semibold mb-3">{t('recently_changed_users') || 'Últimas alterações'}</h2>
+              <h2 className="text-lg font-semibold mb-3">{t('latest_changes') || 'Últimas alterações'}</h2>
               {loading && <div className="text-sm text-gray-500">{t('loading') || 'Carregando...'}</div>}
               {!loading && users.length === 0 && (
                 <div className="text-sm text-gray-500">{t('no_recent_changes') || 'Nenhuma alteração recente'}</div>
@@ -80,7 +108,7 @@ const HomePage: React.FC = () => {
 
         {/* Quick links always below carousel */}
         <div className="mt-4">
-          <h2 className="text-lg font-semibold mb-2">{t('quick_actions') || 'Funcionalidades'}</h2>
+          <h2 className="text-lg font-semibold mb-2">{t('functionalities') || 'Funcionalidades'}</h2>
           <QuickLinks />
         </div>
 

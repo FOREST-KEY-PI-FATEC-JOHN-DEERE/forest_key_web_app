@@ -69,10 +69,10 @@ export default function LoginForm({ onSwitchToRegister, noWrapper = false }: Aut
         localStorage.setItem('profile', JSON.stringify(data.profile));
       }
 
-      showSuccess("Login realizado!", "Sucesso");
+      showSuccess(t('login_success', 'Login realizado!'), t('success', 'Sucesso'));
       router.push("/home");
     } catch (err) {
-      showError("Erro inesperado. Tente novamente.", "Erro");
+      showError(t('login_error_unexpected', 'Erro inesperado. Tente novamente.'), t('error', 'Erro'));
     } finally {
       setLoading(false);
     }
@@ -82,12 +82,12 @@ export default function LoginForm({ onSwitchToRegister, noWrapper = false }: Aut
     <>
       <div className="text-center mb-6 space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">{t('welcome_back', 'Bem-vindo de volta')}</h1>
-        <p className="text-sm text-gray-300">{t('login_subtitle', 'Entre com sua conta para continuar')}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-300">{t('login_subtitle', 'Entre com sua conta para continuar')}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="login-email" className="text-xs font-semibold text-gray-300">{t('email', 'E-mail')}</label>
+          <label htmlFor="login-email" className="text-xs font-semibold text-gray-700 dark:text-gray-200">{t('email', 'E-mail')}</label>
           <Input
             type="email"
             id="login-email"
@@ -100,7 +100,7 @@ export default function LoginForm({ onSwitchToRegister, noWrapper = false }: Aut
         </div>
 
         <div>
-          <label htmlFor="login-password" className="text-xs font-semibold text-gray-300">{t('password', 'Senha')}</label>
+          <label htmlFor="login-password" className="text-xs font-semibold text-gray-700 dark:text-gray-200">{t('password', 'Senha')}</label>
           <Input
             type="password"
             id="login-password"

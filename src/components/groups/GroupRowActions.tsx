@@ -1,25 +1,20 @@
 "use client";
 
-import { MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
-import { useState, useRef, useLayoutEffect } from "react";
+import { MoreHorizontal, Users, Edit2, Trash2 } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import { useState, useRef, useLayoutEffect } from "react";
 import { createPortal } from 'react-dom';
 
-type AppUserRowActionsProps = {
-  onView: () => void;
+type GroupRowActionsProps = {
+  onMembers: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  showEditDelete?: boolean;
   forceUp?: boolean;
   isSmallList?: boolean;
 };
 
-export default function AppUserRowActions({
-  onView,
-  onEdit,
-  onDelete,
-  forceUp = false,
-  isSmallList = false,
-}: AppUserRowActionsProps) {
+export default function GroupRowActions({ onMembers, onEdit, onDelete, showEditDelete = true, forceUp = false, isSmallList = false }: GroupRowActionsProps) {
   const [open, setOpen] = useState(false);
   const [positionUp, setPositionUp] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -27,34 +22,33 @@ export default function AppUserRowActions({
   const [portalOpen, setPortalOpen] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [menuStyles, setMenuStyles] = useState<{ top: number; left: number; width: number }>({ top: 0, left: 0, width: isSmallList ? 192 : 160 });
-  const { t } = useTranslation();
 
-  function handleToggle(e: React.MouseEvent) {
-    e.stopPropagation();
-    setOpen((prev) => !prev);
-  }
-
+  // Render menu into a portal so it overlays the table and isn't clipped.
   useLayoutEffect(() => {
     if (!open) return;
     const btn = buttonRef.current;
     if (!btn) return;
 
     const rect = btn.getBoundingClientRect();
-    const width = isSmallList ? 192 : 160;
+    const width = isSmallList ? 192 : 160; // w-48 or w-40
 
+    // open portal and render menu offscreen to measure
     setPortalOpen(true);
     setMenuVisible(false);
+    // small timeout to wait for portal-rendered menu to mount
     const id = requestAnimationFrame(() => {
       const menu = menuRef.current;
       const menuHeight = menu ? menu.offsetHeight : 0;
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
 
+      // decide upward preference
       let up = false;
       if (forceUp) up = true;
       else if (spaceBelow < menuHeight && spaceAbove > menuHeight) up = true;
 
       const top = up ? rect.top - menuHeight - 8 : rect.bottom + 8;
+      // align menu's right edge with button's right edge
       const leftRaw = rect.right - width;
       const left = Math.min(Math.max(8, leftRaw), window.innerWidth - width - 8);
 
@@ -81,11 +75,17 @@ export default function AppUserRowActions({
     document.addEventListener('mousedown', onDoc);
     return () => document.removeEventListener('mousedown', onDoc);
   }, [portalOpen]);
+  const { t } = useTranslation();
 
-  function handleView(e: React.MouseEvent) {
+  function handleToggle(e: React.MouseEvent) {
+    e.stopPropagation();
+    setOpen((prev) => !prev);
+  }
+
+  function handleMembers(e: React.MouseEvent) {
     e.stopPropagation();
     setOpen(false);
-    onView();
+    onMembers();
   }
 
   function handleEdit(e: React.MouseEvent) {
@@ -103,11 +103,11 @@ export default function AppUserRowActions({
   return (
     <div className="relative inline-block text-left">
       <button
-        ref={buttonRef}
         type="button"
+        ref={buttonRef}
         onClick={handleToggle}
         className={`${isSmallList ? 'p-2' : 'p-1'} rounded-full hover:bg-gray-200 text-gray-600`}
-        aria-label="Actions"
+        aria-label={t('actions') || 'Actions'}
       >
         <MoreHorizontal className={`${isSmallList ? 'w-6 h-6' : 'w-5 h-5'}`} />
       </button>
@@ -121,30 +121,34 @@ export default function AppUserRowActions({
         >
           <button
             type="button"
-            onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleView(e); }}
+            onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleMembers(e); }}
             className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left hover:bg-[var(--color-divider)]/10`}
           >
-            <Eye className="w-4 h-4" />
-            {t('view_history') || 'View history'}
+            <Users className="w-4 h-4" />
+            {t('view_members') || 'View members'}
           </button>
 
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleEdit(e); }}
-            className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left hover:bg-[var(--color-divider)]/10`}
-          >
-            <Pencil className="w-4 h-4" />
-            {t('edit') || 'Edit'}
-          </button>
+          {showEditDelete && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleEdit(e); }}
+                className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left hover:bg-[var(--color-divider)]/10`}
+              >
+                <Edit2 className="w-4 h-4" />
+                {t('edit') || 'Edit'}
+              </button>
 
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleDelete(e); }}
-            className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left text-red-600 hover:bg-red-50`}
-          >
-            <Trash2 className="w-4 h-4" />
-            {t('delete') || 'Delete'}
-          </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleDelete(e); }}
+                className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left text-red-600 hover:bg-red-50`}
+              >
+                <Trash2 className="w-4 h-4" />
+                {t('delete') || 'Delete'}
+              </button>
+            </>
+          )}
         </div>,
         document.body
       )}

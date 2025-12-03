@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -18,6 +19,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 type DataPoint = { month: string; percent?: number; events?: number };
 
 export default function ComplianceChart({ source = 'compliance' }: { source?: 'compliance' | 'history' }) {
+  const { t } = useTranslation();
   const [data, setData] = useState<DataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +29,30 @@ export default function ComplianceChart({ source = 'compliance' }: { source?: 'c
     async function load() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/dashboard/monthly${source === 'history' ? '?source=history' : ''}`);
+        const stored = localStorage.getItem('user');
+        let res;
+        if (stored) {
+          try {
+            const authUser = JSON.parse(stored);
+            const userId = authUser?.id;
+            let fullName: string | null = null;
+            try {
+              const { data: profile } = await fetch('/api/users').then(r => r.json()).then(j => ({ data: j.data?.find((p: any) => p.id_user === userId) }));
+              if (profile) fullName = [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim();
+            } catch {}
+
+            res = await fetch(`/api/dashboard/monthly${source === 'history' ? '?source=history' : ''}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId, userFullName: fullName }),
+            });
+          } catch {
+            res = await fetch(`/api/dashboard/monthly${source === 'history' ? '?source=history' : ''}`);
+          }
+        } else {
+          res = await fetch(`/api/dashboard/monthly${source === 'history' ? '?source=history' : ''}`);
+        }
+
         const json = await res.json();
         if (!mounted) return;
         if (json?.success) setData(json.data || []);
@@ -71,7 +96,7 @@ export default function ComplianceChart({ source = 'compliance' }: { source?: 'c
     },
   };
 
-  if (loading) return <div className="h-64 flex items-center justify-center text-sm text-gray-500">Carregando gráfico...</div>;
+  if (loading) return <div className="h-64 flex items-center justify-center text-sm text-gray-500">{t('loading_chart') || 'Loading chart...'}</div>;
   if (error) return <div className="h-64 flex items-center justify-center text-sm text-red-500">{error}</div>;
 
   return (

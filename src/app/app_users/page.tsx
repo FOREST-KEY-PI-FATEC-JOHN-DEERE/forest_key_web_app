@@ -76,10 +76,46 @@ export default function AppUsersPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/app_users");
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || "Error fetching users");
-      setUsers(json.data);
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const authUser = JSON.parse(storedUser);
+          const userId: string | undefined = authUser.id;
+
+          // try to fetch current user's full name from profile
+          let fullName: string | null = null;
+          if (userId) {
+            const { data: profile } = await supabase
+              .from("User_Profile")
+              .select("first_name, last_name")
+              .eq("id_user", userId)
+              .maybeSingle();
+
+            if (profile) {
+              fullName = [profile.first_name, profile.last_name].filter(Boolean).join(" ").trim();
+            }
+          }
+
+          const res = await fetch("/api/app_users/mine", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: authUser.id, userFullName: fullName }),
+          });
+
+          const json = await res.json();
+          if (!json.success) throw new Error(json.error || "Error fetching users");
+          setUsers(json.data);
+          return;
+        } catch (e) {
+          console.warn("Falling back to global app users due to error", e);
+        }
+      }
+
+      // Fallback: fetch all app users
+      const res2 = await fetch("/api/app_users");
+      const json2 = await res2.json();
+      if (!json2.success) throw new Error(json2.error || "Error fetching users");
+      setUsers(json2.data);
     } catch (err: any) {
       setError(
         err.message || t("load_failed") || "Falha ao carregar usuários."
@@ -223,8 +259,7 @@ export default function AppUsersPage() {
                 massUpdateMessage.toLowerCase().includes("success")
                   ? "border-green-300 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/20 dark:text-green-400"
                   : "border-yellow-300 bg-yellow-50 text-yellow-700 dark:border-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400"
-              }`}
-          >
+                }`}>
             <button
               type="button"
               onClick={() => setMassUpdateMessage(null)}
@@ -276,11 +311,16 @@ export default function AppUsersPage() {
         onClose={() => setEditingUser(null)}
         onSubmit={async (payload) => {
           if (!editingUser) return;
+          // ensure we forward access_group fields if present in payload
+          const body = {
+            ...payload,
+            id_access_group: (payload as any).id_access_group ?? editingUser.id_access_group ?? null,
+          };
 
           const res = await fetch(`/api/app_users/${editingUser.id_app_user}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
+            body: JSON.stringify(body),
           });
 
           const json = await res.json();

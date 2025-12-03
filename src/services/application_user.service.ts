@@ -8,6 +8,7 @@ export interface IApplicationUser {
   password: string;
   created_at: string;
   created_by: string | null;
+  id_access_group?: string | null;
 
   expire_at?: string | null;
   last_update?: string | null;

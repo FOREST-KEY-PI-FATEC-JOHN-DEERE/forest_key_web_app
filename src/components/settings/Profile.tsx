@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { showSuccess, showError } from "@/utils/toast";
+import SuccessModal from "@/components/SuccessModal";
 
 interface ProfileData {
   first_name: string;
@@ -18,6 +19,9 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
   const [editedProfile, setEditedProfile] = useState<ProfileData>({ first_name: "", last_name: "", email: "" });
   const [saving, setSaving] = useState(false);
   const [idUser, setIdUser] = useState("");
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [successModalMessage, setSuccessModalMessage] = useState("");
+  const [successModalVariant, setSuccessModalVariant] = useState<'success' | 'error'>('success');
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -67,9 +71,13 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
       const result = await res.json();
       if (!result.success) throw new Error(result.error || "Failed to save remotely");
 
-      showSuccess(t("changes_saved") || "Changes saved successfully");
+      setSuccessModalVariant('success');
+      setSuccessModalMessage(t("changes_saved") || "Changes saved successfully");
+      setSuccessModalOpen(true);
     } catch (err: any) {
-      showError(err.message || "Error saving changes");
+      setSuccessModalVariant('error');
+      setSuccessModalMessage(err.message || "Error saving changes");
+      setSuccessModalOpen(true);
     } finally {
       setSaving(false);
     }
@@ -121,6 +129,14 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = () => {
           {saving ? t("saving") || "Saving..." : t("save_changes") || "Save changes"}
         </button>
       )}
+
+        <SuccessModal
+          isOpen={successModalOpen}
+          onClose={() => setSuccessModalOpen(false)}
+          message={successModalMessage}
+          showOkButton={true}
+          variant={successModalVariant}
+        />
 
     </section>
   );

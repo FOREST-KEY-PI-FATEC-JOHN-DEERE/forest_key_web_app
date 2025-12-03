@@ -1,109 +1,45 @@
 {
-  "dashboard": "Panel",
-  "users": "Usuarios",
-  "compliance_rate": "Tasa de Cumplimiento",
-  "language": "Idioma",
-  "notifications": "Notificaciones",
-  "filters": "Filtros",
-  "description": "Descripción",
-  "access": "Acceder",
-  "company_logo": "Logo de la Empresa",
-  "history": "Historial",
-  "application_id": "ID de la Aplicación",
-  "generic_application": "Aplicación Genérica",
-  "username": "Nombre de Usuario",
-  "email": "Correo Electrónico",
-  "access_password": "Contraseña de Acceso",
-  "automatic_update": "Actualización Automática",
-  "delete": "ELIMINAR",
-  "edit": "EDITAR",
-  "password_changed_by": "Contraseña cambiada por",
-  "system_caps": "SISTEMA",
-  "reason": "MOTIVO",
-  "expired_deadline": "Plazo expirado",
-  "placeholder_username": "ej: juansilva",
-  "placeholder_email": "ej: correo@empresa.com",
-  "placeholder_password": "Ingresa tu contraseña",
-  "app_users": "Usuarios de Aplicación",
-  "settings": "Configuraciones",
-  "logout": "Cerrar sesión",
-  "menu": "Menú",
-  "home": "Inicio",
-  "collapse": "Colapsar",
-  "expand": "Expandir",
-  "main_navigation": "Navegación Principal",
-  "logout_success": "Sesión cerrada con éxito.",
-  "logout_error": "Error al cerrar sesión.",
-  "create_new_user": "Crear Nuevo Usuario",
-  "edit_user": "Editar Usuario",
-  "basic_information": "Información Básica",
-  "display_name": "Nombre para Mostrar",
-  "system_name": "Nombre del Sistema",
-  "owner_group": "Grupo Propietario",
-  "access_level": "Nivel de Acceso",
-  "status": "Estado",
-  "access_credentials": "Credenciales de Acceso",
-  "read_only": "Solo Lectura",
-  "read_write": "Lectura y Escritura",
-  "administrator": "Administrador",
-  "active": "Activo",
-  "suspended": "Suspendido",
-  "placeholder_display_name": "ej: Juan Silva",
-  "placeholder_system_name": "ej: Sistema de Ejemplo",
-  "placeholder_owner_group": "ej: Equipo de Desarrollo",
-  "password_strength_none": "Sin contraseña",
-  "password_strength_weak": "Débil",
-  "password_strength_medium": "Media",
-  "password_strength_strong": "Fuerte",
-  "internal_notes": "Notas Internas",
-  "internal_notes_description": "Esta información es solo para uso interno y no será visible para el usuario final.",
-  "cancel": "Cancelar",
-  "create_user": "Crear Usuario",
-  "save_changes": "Guardar Cambios",
-  "registered_app_users": "Usuarios de Aplicación Registrados",
-  "technical_accounts_description": "Cuentas técnicas utilizadas por sistemas, integraciones y bots de proceso.",
-  "new_app_user": "Nuevo Usuario de Aplicación",
-  "back_to_list": "Volver a la Lista",
-  "internal_credentials": "Registro interno de credenciales de servicio.",
-  "accessibility": "Accesibilidad",
-  "app_user_name": "Nombre del Usuario de Aplicación",
-  "system_application": "Sistema / Aplicación",
-  "responsible_group": "Grupo Responsable",
-  "login_username": "Login / Nombre de Usuario",
-  "password_token": "Contraseña / Token",
-  "generate_secure_password": "Generar contraseña segura",
-  "encrypted_password_notice": "Esta contraseña será encriptada y NO será visible después del registro.",
-  "save_app_user": "Guardar Usuario de Aplicación",
-  "name": "Nombre",
-  "system": "Sistema",
-  "group": "Grupo",
-  "login": "Login",
-  "created_at": "Creado en",
-  "loading": "Cargando...",
-  "no_users_registered": "Aún no hay usuarios de aplicación registrados.",
-  "weak": "Débil",
-  "fair": "Regular",
-  "good": "Buena",
-  "strong": "Fuerte",
-  "very_strong": "Muy Fuerte",
-  "click_to_view_history": "Haga clic para ver el historial",
-  "load_failed": "Error al cargar los datos.",
-  "expires_in": "Expira en",
-  "days": "días",
-  "no_users_to_update": "No hay usuarios para actualizar.",
-  "mass_update_success": "¡Contraseñas actualizadas con éxito!",
-  "mass_update_error_prefix": "Error al actualizar las contraseñas: ",
-  "unknown_error": "Error desconocido.",
-  "responsible_user_id": "ID de Usuario Responsable",
-  "expires_at": "Expira en",
-  "more_actions": "Más acciones",
-  "update_all_passwords": "Actualizar todas las contraseñas",
-  "updating": "Actualizando...",
-  "id": "ID",
-  "per_page": "por página",
-  "total": "Total",
-  "records": "registros",
-  "filter_placeholder": "Filtrar por aplicación, responsable, ID o fecha...",
-  "created_by": "Creado por",
-  "show": "Mostrar"
+  "indicator_preview": "Vista de Indicadores",
+  "kpi": {
+    "active_keys": "Claves activas",
+    "active_description": "Número de claves activas vinculadas.",
+    "expiring_soon": "Expiran pronto",
+    "expiring_description": "Claves próximas al vencimiento."
+  },
+  "latest_changes": "Últimas alteraciones",
+  "recent_activity": "Actividad Reciente",
+  "recent": {
+    "login_success": "Inicio de sesión exitoso",
+    "permission_change": "Cambio de permisos",
+    "created_app_user": "Usuario de aplicación creado"
+  },
+  "go": "Ir",
+  "no_recent_changes": "No hay cambios recientes.",
+  "functionalities": "Funcionalidades"
+  ,"filter_placeholder": "Buscar por aplicación, responsable, ID o fecha..."
+  ,"create_user": "Nuevo Usuario"
+  ,"update_all_passwords": "Actualizar todas las contraseñas"
+  ,"changed_by": "Actualizado por"
+  ,"status": "Estado"
+  ,"last_update": "Última actualización"
+  ,"active": "Activo"
+  ,"inactive": "Inactivo"
+  ,"show": "Mostrar"
+  ,"per_page": "por página"
+  ,"first": "«"
+  ,"previous": "‹"
+  ,"next": "›"
+  ,"last": "»"
+  ,"records": "{{count}} registros"
+  ,"app_user_name": "Nombre de Usuario de Aplicación"
+  ,"created_by": "Creado por"
+  ,"created_at": "Creado en"
+  ,"expires_at": "Expira en"
+  ,"loading": "Cargando..."
+  ,"no_users_registered": "Ningún usuario de aplicación registrado aún."
+  ,"total": "Total"
+  ,"actions": "Acciones"
+  ,"view_history": "Ver historial"
+  ,"edit": "Editar"
+  ,"delete": "Eliminar"
 }

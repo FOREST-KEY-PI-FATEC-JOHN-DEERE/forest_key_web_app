@@ -24,7 +24,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const group = await createAccessGroup({ name: body.name });
+    const group = await createAccessGroup({
+      name: body.name,
+      description: body.description ?? null,
+      created_by: body.created_by ?? null,
+      owner: typeof body.owner !== 'undefined' ? body.owner : undefined,
+      backup: typeof body.backup !== 'undefined' ? body.backup : undefined,
+    });
 
     return NextResponse.json({ success: true, data: group });
   } catch (err: any) {

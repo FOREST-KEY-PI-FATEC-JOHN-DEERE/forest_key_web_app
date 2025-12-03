@@ -23,12 +23,12 @@ const Header: React.FC<HeaderProps> = ({ pageTitle }) => {
         <div className="flex items-center space-x-4">
           
           {/* Ícone de Acessibilidade (Pode ser um botão funcional ou apenas um ícone) */}
-          <button
+          {/* <button
             className="p-2 rounded-full transition duration-150"
             title="Opções de Acessibilidade"
           >
             <FaUniversalAccess className="h-7 w-7" />
-          </button>
+          </button> */}
           
           {/* Seletor de Idioma com a Bandeira */}
           <LanguageSwitcher />

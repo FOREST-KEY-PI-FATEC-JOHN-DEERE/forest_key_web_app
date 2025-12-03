@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next'; 
@@ -10,20 +10,27 @@ const LANGUAGES = [
 ];
 
 const LanguageSwitcher: React.FC = () => {
-  const { i18n, ready } = useTranslation(); 
+  const { i18n } = useTranslation(); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   
   const [isClient, setIsClient] = useState(false);
+  const [flagsOk, setFlagsOk] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setIsClient(true);
   }, []); 
 
+  useEffect(() => {
+    // sanity check flags availability
+    const m: Record<string, boolean> = {};
+    LANGUAGES.forEach(l => {
+      fetch(l.flagPath, { method: 'HEAD' }).then(r => { m[l.code] = r.ok; setFlagsOk({ ...m }); }).catch(() => { m[l.code] = false; setFlagsOk({ ...m }); });
+    });
+  }, []);
+
   
-  const currentLangCode = (ready && isClient) 
-    ? i18n.language.substring(0, 2) 
-    : 'pt';
+  const currentLangCode = (isClient && i18n?.language) ? i18n.language.substring(0,2) : 'pt';
     
   const currentLang = LANGUAGES.find(lang => lang.code === currentLangCode) || LANGUAGES[0];
 
@@ -44,9 +51,9 @@ const LanguageSwitcher: React.FC = () => {
     };
   }, [menuRef]);
 
-  if (!ready || !isClient) {
+    if (!isClient) {
       return <div className="p-2 h-10 w-24  rounded-lg animate-pulse" />;
-  }
+    }
 
 
   return (
@@ -56,11 +63,8 @@ const LanguageSwitcher: React.FC = () => {
         className="flex items-center space-x-2 p-2 rounded-lg transition duration-150 focus:outline-none focus:ring-2 focus:ring-principal-azul"
         title={`Idioma Atual: ${currentLang.name}`}
       >
-        <img
-          src={currentLang.flagPath}
-          alt={currentLang.name}
-          className="h-6 w-6 rounded-full object-cover shadow-sm border"
-        />
+        <img src={currentLang.flagPath} alt={currentLang.name} className="h-6 w-6 rounded-full object-cover shadow-sm border" onError={(e) => { const t = e.currentTarget as HTMLImageElement; t.onerror = null; t.src = '/images/logo.jpeg'; }} />
+        {flagsOk[currentLang.code] === false && <div className="text-xs text-red-500 ml-2">flag missing</div>}
         <span className="text-sm font-medium  hidden md:inline">
              {currentLang.code.toUpperCase()}
         </span>
@@ -78,11 +82,7 @@ const LanguageSwitcher: React.FC = () => {
               className="flex items-center w-full px-4 py-2 text-sm transition duration-150 disabled:opacity-50"
               disabled={lang.code === currentLangCode}
             >
-              <img
-                src={lang.flagPath}
-                alt={lang.name}
-                className="h-5 w-5 rounded-full object-cover shadow-sm border mr-3"
-              />
+              <img src={lang.flagPath} alt={lang.name} className="h-5 w-5 rounded-full object-cover shadow-sm border mr-3" onError={(e) => { const t = e.currentTarget as HTMLImageElement; t.onerror = null; t.src = '/images/logo.jpeg'; }} />
               {lang.name}
             </button>
           ))}

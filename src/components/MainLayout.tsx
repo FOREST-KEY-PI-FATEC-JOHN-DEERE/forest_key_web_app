@@ -21,18 +21,16 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, pageTitle }) => {
 
   return (
     <div className={`min-h-screen ${isHomePage ? '' : 'flex'}`}> 
-      
 
       {!isHomePage && <Sidebar />} 
       
       <main className={contentClasses}>
     
-        <div className="m-4  rounded-xl shadow-lg min-h-[calc(100vh-2rem)]">
+        <div className="m-4 rounded-xl shadow-lg min-h-[calc(100vh-2rem)] bg-[var(--color-card)] text-[var(--color-foreground)] border border-[var(--color-divider)]">
             
-            <div className="px-8">
+            <div className="px-8 py-6">
               <Header pageTitle={pageTitle} />
             </div>
-            <br></br>
 
             <div className="px-8 pb-8 w-full max-w-screen-xl mx-auto">
               {children}

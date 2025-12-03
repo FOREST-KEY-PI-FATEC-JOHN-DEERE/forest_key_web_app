@@ -2,15 +2,18 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Key, Users, Layout } from 'lucide-react';
+import { Key, Users, Layout, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-interface LinkItem { href: string; label: string; icon: React.ElementType; color?: string }
+interface LinkItem { href: string; keyLabel: string; icon: React.ElementType; color?: string }
 
 const QuickLinks: React.FC = () => {
+  const { t } = useTranslation();
+
   const items: LinkItem[] = [
-    { href: '/app_users', label: 'App Users', icon: Key, color: 'from-indigo-500 to-purple-500' },
-    { href: '/groups', label: 'Groups', icon: Users, color: 'from-green-400 to-teal-500' },
-    { href: '/dashboard', label: 'Dashboard', icon: Layout, color: 'from-yellow-400 to-orange-500' },
+    { href: '/app_users', keyLabel: 'app_users', icon: Key, color: 'from-indigo-600 to-violet-500' },
+    { href: '/groups', keyLabel: 'groups', icon: Users, color: 'from-emerald-500 to-teal-400' },
+    { href: '/dashboard', keyLabel: 'dashboard', icon: Layout, color: 'from-yellow-400 to-orange-500' },
   ];
 
   return (
@@ -18,14 +21,17 @@ const QuickLinks: React.FC = () => {
       {items.map((it) => {
         const Icon = it.icon;
         return (
-          <Link key={it.href} href={it.href} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-white/5 dark:bg-gray-800/60 border border-white/5 hover:bg-white/6 transition">
+          <Link key={it.href} href={it.href} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-white/3 dark:bg-gray-800/50 border border-white/5 hover:scale-[1.02] transition-transform">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-md flex items-center justify-center text-white bg-gradient-to-br ${it.color}`}>
-                <Icon className="w-5 h-5 opacity-90" />
+              <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br ${it.color} shadow-md`}> 
+                <Icon className="w-6 h-6 opacity-95" />
               </div>
-              <span className="text-sm font-medium text-gray-100">{it.label}</span>
+              <span className="text-sm font-semibold text-gray-100">{t(it.keyLabel)}</span>
             </div>
-            <span className="text-xs text-gray-400">Abrir →</span>
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <span>{t('go')}</span>
+              <ChevronRight className="w-4 h-4" />
+            </div>
           </Link>
         );
       })}

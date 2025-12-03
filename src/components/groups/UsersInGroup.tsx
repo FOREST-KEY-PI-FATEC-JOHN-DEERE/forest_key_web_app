@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2, Loader2, UserX } from "lucide-react";
 import Button from "@/components/ui/Button";
+import ConfirmModal from "@/components/ConfirmModal";
 
 interface UserInGroup {
     id_access_group_user: string;
@@ -15,9 +16,10 @@ interface UserInGroup {
 
 interface UsersInGroupProps {
     groupId: string;
+    refreshKey?: number;
 }
 
-export default function UsersInGroup({ groupId }: UsersInGroupProps) {
+export default function UsersInGroup({ groupId, refreshKey }: UsersInGroupProps) {
     const { t } = useTranslation();
     const [users, setUsers] = useState<UserInGroup[]>([]);
     const [loading, setLoading] = useState(true);
@@ -54,17 +56,25 @@ export default function UsersInGroup({ groupId }: UsersInGroupProps) {
 
     useEffect(() => {
         loadUsers();
-    }, [loadUsers]);
+    }, [loadUsers, refreshKey]);
 
     
-    const handleRemove = async (id_access_group_user: string) => {
-        if (!confirm(t("confirm_delete"))) return;
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [toRemoveId, setToRemoveId] = useState<string | null>(null);
 
+    const openConfirm = (id_access_group_user: string) => {
+        setToRemoveId(id_access_group_user);
+        setConfirmOpen(true);
+    };
+
+    const handleRemoveConfirmed = async () => {
+        if (!toRemoveId) return;
+        setConfirmOpen(false);
         setLoading(true);
 
         try {
             const res = await fetch(
-                `/api/groups/${groupId}/members/${id_access_group_user}`,
+                `/api/groups/${groupId}/members/${toRemoveId}`,
                 { method: "DELETE" }
             );
 
@@ -76,6 +86,7 @@ export default function UsersInGroup({ groupId }: UsersInGroupProps) {
             alert(err.message || t("error_removing"));
         } finally {
             setLoading(false);
+            setToRemoveId(null);
         }
     };
 
@@ -159,7 +170,7 @@ export default function UsersInGroup({ groupId }: UsersInGroupProps) {
 
                         {/* Botão Remover */}
                         <Button
-                            onClick={() => handleRemove(u.id_access_group_user)}
+                            onClick={() => openConfirm(u.id_access_group_user)}
                             intent="negative"
                             size="sm"
                             className="shrink-0"
@@ -168,6 +179,16 @@ export default function UsersInGroup({ groupId }: UsersInGroupProps) {
                         </Button>
                     </div>
                 ))}
+            <ConfirmModal
+                open={confirmOpen}
+                title={t("confirm_delete") || "Confirm deletion"}
+                message={t("confirm_delete_member_message") || "Tem certeza que deseja remover este membro do grupo?"}
+                confirmLabel={t("delete") || "Excluir"}
+                cancelLabel={t("cancel") || "Cancelar"}
+                onCancel={() => { setConfirmOpen(false); setToRemoveId(null); }}
+                onConfirm={handleRemoveConfirmed}
+                loading={loading}
+            />
         </div>
     );
 }

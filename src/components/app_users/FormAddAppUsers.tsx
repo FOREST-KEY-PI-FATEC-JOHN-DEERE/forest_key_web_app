@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowLeft, KeyRound, Info, Loader2 } from "lucide-react";
+import { KeyRound, Info, Loader2, X } from "lucide-react";
+import SuccessModal from "@/components/SuccessModal";
 import { generateStrongSecret } from "@/components/app_users/utils";
 import { supabase } from "@/utils/supabase/client";
 import type { IApplicationUser } from "@/services/application_user.service";
@@ -27,6 +28,11 @@ export default function FormAddAppUsers({
   const [feedback, setFeedback] = useState<{ ok: boolean; msg: string } | null>(
     null
   );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalVariant, setModalVariant] = useState<'success' | 'error'>('success');
+  const [groups, setGroups] = useState<Array<{ id_access_group: string; name: string }>>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadCurrentUser() {
@@ -77,6 +83,29 @@ export default function FormAddAppUsers({
     }
 
     loadCurrentUser();
+
+    (async function loadGroups() {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const authUser = JSON.parse(storedUser);
+          const groupsRes = await fetch('/api/groups/mine', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: authUser.id }),
+          });
+
+          const json = await groupsRes.json();
+          if (json.success) setGroups(json.data || []);
+        } else {
+          // No authenticated user: do not expose global groups list on users screen
+          setGroups([]);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar grupos para select', err);
+        setGroups([]);
+      }
+    })();
   }, []);
 
   function handleGenerateSecret() {
@@ -141,6 +170,7 @@ export default function FormAddAppUsers({
           application_name: applicationName,
           password: secret,
           created_by: currentUserName,
+          id_access_group: selectedGroupId,
         }),
       });
 
@@ -156,12 +186,15 @@ export default function FormAddAppUsers({
       setSecret("");
       setPasswordScore(0);
       setFeedback(null);
-      onClose();
+      // show success modal
+      setModalVariant('success');
+      setModalMessage("Usuário de aplicação criado com sucesso.");
+      setModalOpen(true);
     } catch (err: any) {
-      setFeedback({
-        ok: false,
-        msg: err.message || "Erro inesperado ao salvar.",
-      });
+      setFeedback({ ok: false, msg: err.message || "Erro inesperado ao salvar." });
+      setModalVariant('error');
+      setModalMessage(err.message || "Erro inesperado ao salvar.");
+      setModalOpen(true);
     } finally {
       setSubmitting(false);
     }
@@ -197,40 +230,30 @@ export default function FormAddAppUsers({
   }
 
   const inputClass =
-    "w-full rounded border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]";
+    "w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2F5F1F] focus:border-[#2F5F1F]";
   const labelClass = "text-sm font-medium flex items-center gap-1";
 
   if (!open) return null;
 
   return (
+    <>
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
         className="absolute inset-0 bg-black/40"
         onClick={() => !submitting && onClose()}
       />
 
-      <div className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-md border border-gray-300 shadow-xl bg-white">
+      <div className="relative z-10 w-full max-w-3xl rounded-md shadow-xl bg-[var(--color-card)] text-[var(--color-foreground)] border border-[var(--color-divider)]">
+        <div className="p-6 max-h-[85vh] overflow-y-auto">
         <header className="flex items-start justify-between px-6 pt-4 pb-3 border-b border-gray-200">
           <div>
-            <button
-              className="flex items-center text-sm"
-              disabled={submitting}
-              onClick={onClose}
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Voltar para a Lista
-            </button>
-
             <h2 className="text-[16px] font-semibold leading-tight mt-1">
               Novo Usuário de Aplicação
             </h2>
-
-            {currentUserName && (
-              <p className="text-[12px] mt-1">
-                Criado automaticamente por <strong>{currentUserName}</strong>
-              </p>
-            )}
           </div>
+          <button aria-label="close" onClick={onClose} className="ml-4 rounded-md p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-divider)]/20">
+            <X className="w-5 h-5" />
+          </button>
         </header>
 
         <section className="px-6 py-6">
@@ -282,6 +305,23 @@ export default function FormAddAppUsers({
               </div>
             </div>
 
+            <div className="space-y-2">
+              <label className={labelClass}>Vincular ao Grupo de Acesso</label>
+              <select
+                className="w-full px-3 py-2 rounded-md bg-[var(--color-card)] border border-[var(--color-divider)] text-[var(--color-foreground)]"
+                value={selectedGroupId ?? ""}
+                onChange={(e) => {
+                  const id = e.target.value || null;
+                  setSelectedGroupId(id);
+                }}
+              >
+                <option value="">-- Nenhum --</option>
+                {groups.map((g) => (
+                  <option key={g.id_access_group} value={g.id_access_group}>{g.name}</option>
+                ))}
+              </select>
+            </div>
+
             {feedback && (
               <div
                 className={`text-sm rounded border px-3 py-2 ${
@@ -296,15 +336,6 @@ export default function FormAddAppUsers({
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
               <button
-                type="button"
-                disabled={submitting}
-                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-m"
-                onClick={onClose}
-              >
-                Cancelar
-              </button>
-
-              <button
                 type="submit"
                 disabled={submitting}
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md bg-[#2F5F1F] text-white disabled:opacity-50"
@@ -315,7 +346,10 @@ export default function FormAddAppUsers({
             </div>
           </form>
         </section>
+        </div>
       </div>
     </div>
+      <SuccessModal isOpen={modalOpen} onClose={() => { setModalOpen(false); if (modalVariant === 'success') onClose(); }} message={modalMessage} showOkButton={true} variant={modalVariant} />
+    </>
   );
 }
