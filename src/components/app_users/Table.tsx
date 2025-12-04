@@ -37,7 +37,7 @@ export default function TableAppUsers({
 
   return (
     <div className="w-full overflow-visible">
-      <div className="border rounded-md shadow-sm overflow-x-auto bg-[var(--color-card)] text-[var(--color-foreground)] border-[var(--color-divider)]">
+      <div className="border rounded-md shadow-sm overflow-auto w-full max-w-full bg-[var(--color-card)] text-[var(--color-foreground)] border-[var(--color-divider)]">
         <table className="min-w-full divide-y table-auto">
           <thead>
             <tr>

@@ -9,7 +9,8 @@ import Button from '@/components/ui/Button';
 import GroupRowActions from '@/components/groups/GroupRowActions';
 import Pagination from '@/components/app_users/Pagination';
 import GroupFormModal from "@/components/groups/GroupFormModal";
-import SuccessModal from "@/components/SuccessModal";
+import dynamic from 'next/dynamic';
+const SuccessModal = dynamic(() => import('@/components/SuccessModal'), { ssr: false });
 import ConfirmModal from "@/components/ConfirmModal";
 import { useRouter } from "next/navigation";
 
@@ -306,11 +307,12 @@ export default function GroupsPage() {
           setModalOpen(false);
           await loadGroups();
           setSuccessMessage(editingGroup ? (t('group_updated') || 'Group updated') : (t('group_created') || 'Group created'));
-          setSuccessShowOk(true);
+          // show brief success modal without OK button and auto-close
+          setSuccessShowOk(false);
           setSuccessModalOpen(true);
         }}
       />
-      <SuccessModal isOpen={successModalOpen} onClose={() => setSuccessModalOpen(false)} message={successMessage} showOkButton={successShowOk} variant={'success'} />
+      <SuccessModal isOpen={successModalOpen} onClose={() => setSuccessModalOpen(false)} message={successMessage} showOkButton={successShowOk} variant={'success'} autoCloseMs={3500} />
       <ConfirmModal
         open={confirmOpen}
         title={t('confirm_delete_group') || 'Confirm delete'}

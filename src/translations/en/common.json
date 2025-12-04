@@ -150,5 +150,9 @@
   ,"confirm_delete_title": "Confirm deletion"
   ,"confirm_delete_message_prefix": "Are you sure you want to delete"
   ,"confirm_delete_message_suffix": "This action cannot be undone."
+  ,"app_user_created_message": "Application user created successfully."
+  ,"app_user_updated_message": "Application user updated successfully."
+    ,"app_user_deleted_message": "Application user deleted"
+  ,"app_user_name_placeholder": "Enter application user name"
 }
 

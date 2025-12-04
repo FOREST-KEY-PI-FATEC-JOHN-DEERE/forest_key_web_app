@@ -135,7 +135,6 @@ export default function AppUserRowActions({
           >
             <Pencil className="w-4 h-4" />
             {t('edit') || 'Edit'}
-            {t("edit") || "Edit"}
           </button>
 
           <button

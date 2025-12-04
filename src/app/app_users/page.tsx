@@ -16,6 +16,7 @@ import { supabase } from "@/utils/supabase/client";
 
 import EditAppUserModal from "@/components/app_users/EditAppUserModal";
 import ConfirmDeleteAppUser from "@/components/app_users/ConfirmDeleteAppUser";
+import SuccessModal from '@/components/SuccessModal';
 
 export default function AppUsersPage() {
   const { t } = useTranslation();
@@ -27,6 +28,8 @@ export default function AppUsersPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<AppUser | null>(null);
   const [deletingUser, setDeletingUser] = useState<AppUser | null>(null);
+  const [actionSuccessOpen, setActionSuccessOpen] = useState(false);
+  const [actionSuccessMessage, setActionSuccessMessage] = useState("");
 
   const [massUpdating, setMassUpdating] = useState(false);
   const [massUpdateMessage, setMassUpdateMessage] =
@@ -221,6 +224,8 @@ export default function AppUsersPage() {
       const json = await res.json();
       if (!json.success) throw new Error(json.error || "Erro ao desativar");
       await fetchUsers();
+      setActionSuccessMessage(t('app_user_deleted_message') || 'Application user deleted');
+      setActionSuccessOpen(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -308,7 +313,7 @@ export default function AppUsersPage() {
       <EditAppUserModal
         open={!!editingUser}
         user={editingUser}
-        onClose={() => setEditingUser(null)}
+            onClose={() => setEditingUser(null)}
         onSubmit={async (payload) => {
           if (!editingUser) return;
           // ensure we forward access_group fields if present in payload
@@ -327,8 +332,12 @@ export default function AppUsersPage() {
           if (!json.success) throw new Error(json.error || "Erro ao atualizar");
 
           handleEditSaved(json.data as AppUser);
+              // show parent-level success modal
+              setActionSuccessMessage(t('app_user_updated_message') || 'Application user updated successfully.');
+              setActionSuccessOpen(true);
         }}
-      />
+            showLocalSuccess={false}
+          />
 
       <ConfirmDeleteAppUser
         open={!!deletingUser}
@@ -336,6 +345,7 @@ export default function AppUsersPage() {
         onCancel={() => setDeletingUser(null)}
         onConfirm={handleConfirmDelete}
       />
+      <SuccessModal isOpen={actionSuccessOpen} onClose={() => setActionSuccessOpen(false)} message={actionSuccessMessage} showOkButton={false} variant={'success'} autoCloseMs={3500} />
     </MainLayout>
   );
 }

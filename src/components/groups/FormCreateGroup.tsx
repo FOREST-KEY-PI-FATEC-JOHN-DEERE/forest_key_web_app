@@ -19,10 +19,9 @@ export default function FormCreateGroup() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    setModalMessage(
-      t('group_created_message', { name: title }) || `Group "${title}" created successfully!`
-    );
+    setModalMessage(t('group_created_message', { name: title }) || `Group "${title}" created successfully!`);
 
+    // Open success modal immediately and auto-close after configured time
     setModalOpen(true);
 
     // Clear fields
@@ -116,7 +115,8 @@ export default function FormCreateGroup() {
         isOpen={modalOpen}
         onClose={handleModalOk}
         message={modalMessage}
-        showOkButton={true}
+        showOkButton={false}
+        autoCloseMs={3500}
       />
     </>
   );

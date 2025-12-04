@@ -1,4 +1,6 @@
-'use client'
+"use client"
+
+import { useEffect } from 'react';
 
 interface SuccessModalProps {
   isOpen: boolean;
@@ -6,15 +8,29 @@ interface SuccessModalProps {
   message: string;
   showOkButton?: boolean; // opcional
   variant?: 'success' | 'error';
+  autoCloseMs?: number; // se definido e showOkButton=false, fecha automaticamente
 }
 
-export default function SuccessModal({ isOpen, onClose, message, showOkButton = false, variant = 'success' }: SuccessModalProps) {
+export default function SuccessModal({ isOpen, onClose, message, showOkButton = false, variant = 'success', autoCloseMs }: SuccessModalProps) {
   if (!isOpen) return null;
 
   const isError = variant === 'error';
   const bgColor = isError ? 'bg-rose-100' : 'bg-green-200';
   const iconColor = isError ? 'text-rose-700' : 'text-green-800';
   const buttonBg = isError ? 'bg-rose-600 hover:bg-rose-700' : 'bg-green-600 hover:bg-green-700';
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    if (!showOkButton && typeof autoCloseMs === 'number' && autoCloseMs > 0) {
+      timer = setTimeout(() => {
+        onClose();
+      }, autoCloseMs);
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isOpen, autoCloseMs, showOkButton, onClose]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50 backdrop-blur-sm">

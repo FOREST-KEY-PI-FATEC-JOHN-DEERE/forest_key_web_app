@@ -18,6 +18,7 @@ type EditAppUserModalProps = {
     id_access_group?: string | null;
     password?: string; // senha opcional
   }) => Promise<void> | void;
+  showLocalSuccess?: boolean;
 };
 
 export default function EditAppUserModal({
@@ -25,6 +26,7 @@ export default function EditAppUserModal({
   user,
   onClose,
   onSubmit,
+  showLocalSuccess = true,
 }: EditAppUserModalProps) {
   const { t } = useTranslation();
 
@@ -187,7 +189,16 @@ export default function EditAppUserModal({
       }
 
       await onSubmit(payload);
-      onClose();
+      if (showLocalSuccess) {
+        setModalVariant('success');
+        setModalMessage(t('app_user_updated_message') || 'Application user updated successfully.');
+        setModalOpen(true);
+        // close edit modal; SuccessModal will auto-close
+        onClose();
+      } else {
+        // parent will handle showing success modal
+        onClose();
+      }
     } catch (err: any) {
       console.error(err);
       setFeedback({
@@ -341,7 +352,9 @@ export default function EditAppUserModal({
         </div>
       </div>
     </div>
-    <SuccessModal isOpen={modalOpen} onClose={() => { setModalOpen(false); if (modalVariant === 'success') onClose(); }} message={modalMessage} showOkButton={true} variant={modalVariant} />
+    {showLocalSuccess && (
+      <SuccessModal isOpen={modalOpen} onClose={() => { setModalOpen(false); if (modalVariant === 'success') onClose(); }} message={modalMessage} showOkButton={false} variant={modalVariant} autoCloseMs={3500} />
+    )}
     </>
   );
 }

@@ -65,28 +65,13 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ name, Icon, href, current = f
   );
 };
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ isOpen?: boolean; setIsOpen?: (v: boolean) => void }> = ({ isOpen = true, setIsOpen = () => {} }) => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState<boolean>(() => {
-    try {
-      if (typeof window === 'undefined') return true;
-      const v = localStorage.getItem('sidebar_open');
-      return v === null ? true : v === '1';
-    } catch (e) {
-      return true;
-    }
-  });
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('sidebar_open', isOpen ? '1' : '0');
-    } catch (e) {
-      // ignore
-    }
-  }, [isOpen]);
+  // local storage of sidebar open state is handled by parent (MainLayout)
 
   async function handleLogout() {
     setIsLoggingOut(true);
@@ -128,11 +113,11 @@ const footerItems: MenuItemType[] = [
   
   const sidebarClasses = [
     'shadow-xl',
-    'flex flex-col z-50 p-4',
-    sidebarWidth, 
-    'rounded-2xl mt-4 mb-4 ml-4 sticky top-4 transition-all duration-300', 
-    'min-h-[calc(100vh-2rem)]', 
-    'backdrop-blur-sm bg-[var(--color-card)]',
+    'hidden lg:flex flex-col p-4',
+    sidebarWidth,
+    'rounded-2xl transition-all duration-300',
+    'h-[calc(100vh-2rem)]',
+    'backdrop-blur-sm bg-[var(--color-card)] fixed left-4 top-4 z-50',
   ].join(' ');
   
   return (

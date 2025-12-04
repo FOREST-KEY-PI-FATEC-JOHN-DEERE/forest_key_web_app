@@ -201,7 +201,8 @@ export default function FormAddAppUsers({
       setFeedback(null);
       // show success modal
       setModalVariant('success');
-      setModalMessage("Usuário de aplicação criado com sucesso.");
+      setModalMessage(t('app_user_created_message') || 'Application user created successfully.');
+      // show immediately and do not show OK button (no site-level pop to confirm)
       setModalOpen(true);
     } catch (err: any) {
       setFeedback({ ok: false, msg: err.message || "Erro inesperado ao salvar." });
@@ -343,7 +344,7 @@ export default function FormAddAppUsers({
             </div>
 
             <div className="space-y-2">
-              <label className={labelClass}>Vincular ao Grupo de Acesso</label>
+              <label className={labelClass}>{t('link_to_group') || 'Link to Access Group'}</label>
               <select
                 className="w-full px-3 py-2 rounded-md bg-[var(--color-card)] border border-[var(--color-divider)] text-[var(--color-foreground)]"
                 value={selectedGroupId ?? ""}
@@ -352,7 +353,7 @@ export default function FormAddAppUsers({
                   setSelectedGroupId(id);
                 }}
               >
-                <option value="">-- Nenhum --</option>
+                <option value="">{t('none') || '-- None --'}</option>
                 {groups.map((g) => (
                   <option key={g.id_access_group} value={g.id_access_group}>{g.name}</option>
                 ))}
@@ -387,7 +388,7 @@ export default function FormAddAppUsers({
         </div>
       </div>
     </div>
-      <SuccessModal isOpen={modalOpen} onClose={() => { setModalOpen(false); if (modalVariant === 'success') onClose(); }} message={modalMessage} showOkButton={true} variant={modalVariant} />
+      <SuccessModal isOpen={modalOpen} onClose={() => { setModalOpen(false); if (modalVariant === 'success') onClose(); }} message={modalMessage} showOkButton={false} variant={modalVariant} autoCloseMs={3500} />
     </>
   );
 }
