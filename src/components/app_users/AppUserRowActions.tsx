@@ -9,6 +9,7 @@ type AppUserRowActionsProps = {
   onView: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  showEditDelete?: boolean;
   forceUp?: boolean;
   isSmallList?: boolean;
 };
@@ -17,6 +18,7 @@ export default function AppUserRowActions({
   onView,
   onEdit,
   onDelete,
+  showEditDelete = true,
   forceUp = false,
   isSmallList = false,
 }: AppUserRowActionsProps) {
@@ -128,23 +130,27 @@ export default function AppUserRowActions({
             {t('view_history') || 'View history'}
           </button>
 
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleEdit(e); }}
-            className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left hover:bg-[var(--color-divider)]/10`}
-          >
-            <Pencil className="w-4 h-4" />
-            {t('edit') || 'Edit'}
-          </button>
+          {showEditDelete && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleEdit(e); }}
+                className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left hover:bg-[var(--color-divider)]/10`}
+              >
+                <Pencil className="w-4 h-4" />
+                {t('edit') || 'Edit'}
+              </button>
 
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleDelete(e); }}
-            className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left text-red-600 hover:bg-red-50`}
-          >
-            <Trash2 className="w-4 h-4" />
-            {t('delete') || 'Delete'}
-          </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setOpen(false); setPortalOpen(false); setMenuVisible(false); handleDelete(e); }}
+                className={`${isSmallList ? 'px-4 py-3 text-sm' : 'px-3 py-2 text-xs'} flex w-full items-center gap-2 text-left text-red-600 hover:bg-red-50`}
+              >
+                <Trash2 className="w-4 h-4" />
+                {t('delete') || 'Delete'}
+              </button>
+            </>
+          )}
         </div>,
         document.body
       )}

@@ -6,6 +6,7 @@ import { getExpirationDate, renderExpirationBadge } from "./utils";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import AppUserRowActions from "./AppUserRowActions";
+import { useEffect, useState } from "react";
 
 interface TableAppUsersProps {
   users: AppUser[];
@@ -24,11 +25,59 @@ export default function TableAppUsers({
 }: TableAppUsersProps) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [adminMap, setAdminMap] = useState<Record<string, boolean>>({});
   const isSmall = paginatedUsers.length < 5;
   const isVerySmall = paginatedUsers.length === 1;
   const rowPadding = isVerySmall ? 'py-8' : (isSmall ? 'py-6' : 'py-4');
 
   const locale =
+    i18n.language === "pt"
+      ? "pt-BR"
+      : i18n.language === "es"
+      ? "es-ES"
+      : "en-US";
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadAdmins() {
+      try {
+        const stored = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+        const authUser = stored ? JSON.parse(stored) : null;
+        const userId: string | null = authUser?.id ?? null;
+        if (!mounted) return;
+        setCurrentUserId(userId);
+
+        if (!userId) return;
+
+        const groupIds = Array.from(new Set(paginatedUsers.map((p) => p.id_access_group).filter(Boolean) as string[]));
+        const results: Record<string, boolean> = {};
+
+        await Promise.all(groupIds.map(async (gid) => {
+          try {
+            const res = await fetch(`/api/groups/${gid}/members`);
+            const json = await res.json();
+            if (!json.success) {
+              results[gid] = false;
+              return;
+            }
+            const found = (json.data || []).find((m: any) => (m.id_user === userId || m.User_Profile?.id_user === userId) && m.admin === true);
+            results[gid] = Boolean(found);
+          } catch (err) {
+            results[gid] = false;
+          }
+        }));
+
+        if (!mounted) return;
+        setAdminMap((prev: Record<string, boolean>) => ({ ...prev, ...results }));
+      } catch (err) {
+        // ignore
+      }
+    }
+
+    loadAdmins();
+    return () => { mounted = false; };
+  }, [paginatedUsers]);
     i18n.language === "pt"
       ? "pt-BR"
       : i18n.language === "es"
@@ -113,6 +162,7 @@ export default function TableAppUsers({
                       onView={() => router.push(`/history/${u.id_app_user}`)}
                       onEdit={() => onEdit(u)}
                       onDelete={() => onDelete(u)}
+                      showEditDelete={Boolean(currentUserId && u.id_access_group && adminMap[u.id_access_group])}
                       forceUp={!isSmall && i >= Math.max(0, paginatedUsers.length - 3)}
                       isSmallList={isSmall}
                     />
