@@ -18,15 +18,15 @@ const sizeMap: Record<ButtonSize, string> = {
 };
 
 const intentMap: Record<ButtonIntent, string> = {
-  positive: 'bg-status-positivo  hover:bg-status-positivo/80 focus:ring-4 focus:ring-status-positivo/50',
-  negative: 'bg-status-negativo  hover:bg-status-negativo/80 focus:ring-4 focus:ring-status-negativo/50',
+  positive: 'bg-[color:var(--color-main-green)] text-white hover:bg-[color:var(--color-main-green-dark)] focus:ring-4 focus:ring-[color:var(--color-main-green)]/30',
+  negative: 'bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:ring-red-600/30',
   none: '',
 };
 
 const variantMap: Record<ButtonVariant, string> = {
-  primary: 'bg-jd-green-500 text-white hover:bg-jd-green-600 focus:ring-4 focus:ring-jd-green-500/30',
-  secondary: 'bg-transparent border border-jd-green-500 text-jd-green-600 hover:bg-jd-green-50',
-  outline: 'bg-transparent border border-transparent',
+  primary: 'bg-[color:var(--color-main-green)] text-white hover:bg-[color:var(--color-main-green-dark)] focus:ring-4 focus:ring-[color:var(--color-main-green)]/30',
+  secondary: 'bg-[var(--color-card)] border border-[color:var(--color-main-green)] text-[color:var(--color-main-green)] hover:bg-[var(--color-card-hover)]',
+  outline: 'bg-transparent border border-[var(--color-divider)] text-[var(--color-foreground)] hover:bg-[var(--color-card-hover)]',
 };
 
 

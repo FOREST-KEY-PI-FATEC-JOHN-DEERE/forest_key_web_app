@@ -2,8 +2,8 @@
 
 import { MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
 import { useState, useRef, useLayoutEffect } from "react";
-import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
+import { useTranslation } from "react-i18next";
 
 type AppUserRowActionsProps = {
   onView: () => void;
@@ -135,6 +135,7 @@ export default function AppUserRowActions({
           >
             <Pencil className="w-4 h-4" />
             {t('edit') || 'Edit'}
+            {t("edit") || "Edit"}
           </button>
 
           <button

@@ -4,16 +4,16 @@ const BASE_FORM_STYLES = [
   'w-full px-3 py-2 text-base',
   'rounded-md',
   // visible backgrounds and borders in light/dark
-  'bg-white dark:bg-gray-800',
-  'text-gray-900 dark:text-gray-100',
-  'border border-gray-300 dark:border-gray-700',
+  'bg-[var(--color-card)]',
+  'text-[var(--color-foreground)]',
+  'border border-[var(--color-divider)]',
   'shadow-sm',
   'transition duration-150',
-  'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-gray-700',
+  'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[var(--color-card-disabled)]',
   'focus:border-jd-green-500 focus:ring-2 focus:ring-jd-green-500/30 focus:outline-none',
   'appearance-none',
   // placeholder color
-  'placeholder-gray-400 dark:placeholder-gray-500',
+  'placeholder-[color:var(--color-text-secondary)]',
 ].join(' ');
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {

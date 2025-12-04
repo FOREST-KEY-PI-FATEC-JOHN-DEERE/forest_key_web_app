@@ -14,14 +14,14 @@ const RecentActivity: React.FC = () => {
 
   return (
     <div className="hidden md:block bg-[var(--color-card)] p-4 rounded-lg">
-      <h3 className="text-sm font-semibold mb-3">{t('recent_activity')}</h3>
+      <h3 className="text-sm font-semibold mb-3 text-[var(--color-foreground)]">{t('recent_activity')}</h3>
       <ul className="flex flex-col gap-3">
         {items.map(it => (
           <li key={it.id} className="flex items-start gap-3">
             <div className={`w-2.5 h-2.5 rounded-full mt-1 ${it.color}`} />
             <div className="flex-1">
-              <div className="text-sm text-gray-100">{t(it.textKey)}</div>
-              <div className="text-xs text-gray-400 mt-0.5">{it.time}</div>
+              <div className="text-sm text-[var(--color-foreground)]">{t(it.textKey)}</div>
+              <div className="text-xs text-[var(--color-text-secondary)] mt-0.5">{it.time}</div>
             </div>
           </li>
         ))}

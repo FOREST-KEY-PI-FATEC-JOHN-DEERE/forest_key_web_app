@@ -52,21 +52,20 @@ export default function FormAddUser() {
   return (
     <>
       <div className="flex justify-center items-center p-4 font-sans">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-10
-        ">
-          <h1 className="text-2xl font-extrabold text-gray-900 border-b pb-3 mb-6">
-            Adicionar Usuário ao Grupo AD
+        <div className="bg-[var(--color-card)] rounded-2xl shadow-2xl w-full max-w-lg p-10 border border-[var(--color-divider)]">
+          <h1 className="text-2xl font-extrabold text-[var(--color-foreground)] border-b pb-3 mb-6">
+            {"Adicionar Usuário ao Grupo AD"}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Usuário <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
+                {"Usuário"} <span className="text-red-500">*</span>
               </label>
               <select
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               >
                 <option value="">Selecione o usuário</option>
@@ -79,13 +78,13 @@ export default function FormAddUser() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nível de Acesso <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
+                {"Nível de Acesso"} <span className="text-red-500">*</span>
               </label>
               <select
                 value={selectedAccess}
                 onChange={(e) => setSelectedAccess(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               >
                 <option value="">Selecione o nível</option>
@@ -98,13 +97,13 @@ export default function FormAddUser() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-               Grupo AD <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
+               {"Grupo AD"} <span className="text-red-500">*</span>
               </label>
               <select
                 value={selectedGroup}
                 onChange={(e) => setSelectedGroup(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               >
                 <option value="">Selecione o grupo</option>
@@ -120,7 +119,7 @@ export default function FormAddUser() {
               type="submit"
               className="w-full py-3 bg-green-600  rounded-lg font-medium text-lg hover:bg-green-700 hover:scale-[1.01] transition-transform"
             >
-              Adicionar Usuário
+              {"Adicionar Usuário"}
             </button>
           </form>
         </div>

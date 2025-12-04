@@ -1,7 +1,8 @@
 "use client";
+
 import { PlusCircle, Loader2 } from "lucide-react";
 import Button from '@/components/ui/Button';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 interface SearchAndActionsProps {
   searchTerm: string;
@@ -21,6 +22,7 @@ export default function SearchAndActions({
   usersLength,
 }: SearchAndActionsProps) {
   const { t } = useTranslation();
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
       <input
@@ -32,7 +34,7 @@ export default function SearchAndActions({
       />
 
       <div className="flex items-center gap-3">
-        <Button onClick={() => setIsModalOpen(true)} size="md" className="inline-flex items-center gap-2">
+        <Button onClick={() => setIsModalOpen(true)} size="md" variant="primary" intent="positive" className="inline-flex items-center gap-2 min-w-[160px] justify-center">
           <PlusCircle className="w-4 h-4" />
           {t('create_user') || 'Novo Usuário'}
         </Button>
@@ -40,10 +42,16 @@ export default function SearchAndActions({
         <Button
           onClick={handleMassPasswordUpdate}
           size="md"
-          className="inline-flex items-center gap-2"
+          variant="secondary"
+          intent="none"
+          className="inline-flex items-center gap-2 min-w-[200px] justify-center"
           disabled={massUpdating || usersLength === 0}
         >
-          {massUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : (t('update_all_passwords') || 'Atualizar todas as senhas')}
+          {massUpdating ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            t("update_all_passwords") || "Update all passwords"
+          )}
         </Button>
       </div>
     </div>

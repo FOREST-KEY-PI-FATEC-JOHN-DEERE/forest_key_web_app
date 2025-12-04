@@ -27,11 +27,11 @@ const KpiCard: React.FC<KpiCardProps> = ({ title, value, icon: Icon, theme, desc
       </div>
 
       <div className="mt-4 flex-1 flex items-center justify-center">
-        <p className="text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-gray-100">{value}</p>
+        <p className="text-3xl lg:text-4xl font-extrabold text-[var(--color-foreground)]">{value}</p>
       </div>
 
       {description && (
-        <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">{description}</p>
+        <p className="mt-4 text-sm text-[var(--color-text-secondary)]">{description}</p>
       )}
     </div>
   );

@@ -30,8 +30,8 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ name, Icon, href, current = f
   const classes: string[] = ['flex items-center py-2.5 transition-all duration-200 relative overflow-hidden'];
   if (isOpen) classes.push('px-4'); else classes.push('justify-center px-2');
 
-  // base text/icon colors
-  if (!current) classes.push('text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700/40');
+  // base text/icon colors — use theme variables for consistent colors
+  if (!current) classes.push('text-[var(--color-foreground)] hover:bg-[var(--color-card-hover)]');
 
   // when expanded and active, add extra left padding to reveal the accent bar
   if (current && isOpen) classes.push('pl-6');
@@ -132,7 +132,7 @@ const footerItems: MenuItemType[] = [
     sidebarWidth, 
     'rounded-2xl mt-4 mb-4 ml-4 sticky top-4 transition-all duration-300', 
     'min-h-[calc(100vh-2rem)]', 
-    'backdrop-blur-sm bg-white/60 dark:bg-gray-800/60',
+    'backdrop-blur-sm bg-[var(--color-card)]',
   ].join(' ');
   
   return (

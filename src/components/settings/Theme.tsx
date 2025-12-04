@@ -25,7 +25,7 @@ const ThemeSettings: React.FC = () => {
           className={`flex items-center gap-2 px-5 py-2 rounded-lg transition-colors duration-300
             ${theme === "light"
               ? "bg-yellow-400  shadow-md hover:bg-yellow-500"
-              : " hover:bg-gray-300 dark:hover:bg-gray-500"
+              : " hover:bg-[var(--color-card-hover)]"
             }`}
         >
           <Sun size={20} />
@@ -38,7 +38,7 @@ const ThemeSettings: React.FC = () => {
           className={`flex items-center gap-2 px-5 py-2 rounded-lg transition-colors duration-300
             ${theme === "dark"
               ? "bg-blue-600  shadow-md hover:bg-blue-700"
-              : "bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-500"
+              : "bg-[var(--color-card)] text-[var(--color-foreground)] hover:bg-[var(--color-card-hover)]"
             }`}
         >
           <Moon size={20} />

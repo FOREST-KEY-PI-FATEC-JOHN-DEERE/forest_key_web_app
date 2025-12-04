@@ -55,6 +55,23 @@
   "owner_placeholder": "Ex: First_Lastname",
   "backup": "Backup",
   "backup_placeholder": "Ex: Substitute_Name",
+  "history": "History",
+  "application_id": "Application ID",
+  "generic_application": "Generic application",
+  "username": "Username",
+  "placeholder_username": "e.g. joaosilva",
+  "placeholder_email": "e.g. user@company.com",
+  "access_password": "Access password",
+  "automatic_update": "Automatic update",
+  "placeholder_password": "Enter password",
+  "password_changed_by": "Password changed by",
+  "system_caps": "SYSTEM",
+  "reason": "Reason",
+  "expired_deadline": "Expired deadline",
+  "back": "Back",
+  "application_name_label": "Application",
+  "no_history_changes": "No history changes",
+  "view_password": "View password",
   "view_members": "View members",
   "add_members": "Add members",
   "group_create_first": "Create the group first to manage members.",
@@ -119,5 +136,19 @@
   "login_error_required": "Please provide email and password.",
   "login_error_invalid_email": "Invalid email.",
   "login_error_unexpected": "Unexpected error while logging in."
+  ,"new_password_token": "New password / token"
+  ,"generate_secure_password": "Generate secure password"
+  ,"password_optional_hint": "Fill this field only if you want to change the password / token."
+  ,"edit_app_user": "Edit application user"
+  ,"link_to_group": "Link to access group"
+  ,"none": "None"
+  ,"weak": "Weak"
+  ,"fair": "Fair"
+  ,"good": "Good"
+  ,"strong": "Strong"
+  ,"very_strong": "Very Strong"
+  ,"confirm_delete_title": "Confirm deletion"
+  ,"confirm_delete_message_prefix": "Are you sure you want to delete"
+  ,"confirm_delete_message_suffix": "This action cannot be undone."
 }
 

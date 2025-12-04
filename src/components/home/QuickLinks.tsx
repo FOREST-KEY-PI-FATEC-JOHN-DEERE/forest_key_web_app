@@ -21,14 +21,14 @@ const QuickLinks: React.FC = () => {
       {items.map((it) => {
         const Icon = it.icon;
         return (
-          <Link key={it.href} href={it.href} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-white/3 dark:bg-gray-800/50 border border-white/5 hover:scale-[1.02] transition-transform">
+          <Link key={it.href} href={it.href} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-[var(--color-card)] border border-[var(--color-divider)] hover:scale-[1.02] transition-transform">
             <div className="flex items-center gap-3">
               <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-white bg-gradient-to-br ${it.color} shadow-md`}> 
                 <Icon className="w-6 h-6 opacity-95" />
               </div>
-              <span className="text-sm font-semibold text-gray-100">{t(it.keyLabel)}</span>
+              <span className="text-sm font-semibold text-[var(--color-foreground)]">{t(it.keyLabel)}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
               <span>{t('go')}</span>
               <ChevronRight className="w-4 h-4" />
             </div>

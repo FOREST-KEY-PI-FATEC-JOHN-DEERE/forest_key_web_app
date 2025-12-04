@@ -17,16 +17,17 @@
   --color-placeholder: #94A3B8;      /* Placeholder */
 
   /* Brand */
-  --color-main-green-50: #eef9ef;
-  --color-main-green-100: #dff2df;
-  --color-main-green-200: #c6e6c1;
-  --color-main-green-300: #9fd89a;
-  --color-main-green-400: #6fc86a;
-  --color-main-green-500: #4eab47;
-  --color-main-green-600: #3e8d36;
-  --color-main-green-700: #2f6c28;
-  --color-main-green-800: #234d1c;
-  --color-main-green-900: #172f11;
+  /* Brand - John Deere Green palette */
+  --color-main-green-50: #f0f7ef;
+  --color-main-green-100: #dff0d9;
+  --color-main-green-200: #bfe3b3;
+  --color-main-green-300: #8fd77b;
+  --color-main-green-400: #5fbf4b;
+  --color-main-green-500: #367C2B; /* John Deere official green */
+  --color-main-green-600: #2e6b24;
+  --color-main-green-700: #24521b;
+  --color-main-green-800: #1b3a13;
+  --color-main-green-900: #10220a;
   --color-main-green: var(--color-main-green-500);
   --color-main-green-dark: var(--color-main-green-700);
   --color-main-green-light: var(--color-main-green-200);
@@ -53,10 +54,8 @@
   --color-text-secondary: #CBD5E1;    /* Texto Secundário */
   --color-placeholder: #475569;       /* Placeholder */
 
-  --color-main-green: #228b22;        /* mantém */
-  --color-main-yellow: #E6B847;
-  --color-main-darkBlue: #1E293B;
-  --color-main-green: var(--color-main-green-300);
+  /* Use the same John Deere palette in dark mode but lean on slightly lighter shades for contrast */
+  --color-main-green: var(--color-main-green-400);
   --color-main-green-dark: var(--color-main-green-600);
   --color-main-green-light: var(--color-main-green-100);
   --jd-gradient-start: var(--color-main-green-300);

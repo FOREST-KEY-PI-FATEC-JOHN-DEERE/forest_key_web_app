@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { KeyRound, Info, Loader2, X } from "lucide-react";
 import SuccessModal from "@/components/SuccessModal";
+import { ArrowLeft, KeyRound, Info, Loader2, X } from "lucide-react";
 import { generateStrongSecret } from "@/components/app_users/utils";
 import { supabase } from "@/utils/supabase/client";
 import type { IApplicationUser } from "@/services/application_user.service";
+import { useTranslation } from "react-i18next";
 
 type EditAppUserModalProps = {
   open: boolean;
@@ -13,9 +14,9 @@ type EditAppUserModalProps = {
   onClose: () => void;
   onSubmit: (payload: {
     application_name: string;
-    password: string;
     changed_by: string;
     id_access_group?: string | null;
+    password?: string; // senha opcional
   }) => Promise<void> | void;
 };
 
@@ -25,6 +26,8 @@ export default function EditAppUserModal({
   onClose,
   onSubmit,
 }: EditAppUserModalProps) {
+  const { t } = useTranslation();
+
   const [applicationName, setApplicationName] = useState("");
   const [secret, setSecret] = useState("");
   const [passwordScore, setPasswordScore] = useState(0);
@@ -76,7 +79,7 @@ export default function EditAppUserModal({
 
         setCurrentUserName(fullName);
       } catch (err) {
-        console.error("Erro ao carregar usuário logado:", err);
+        console.error("Error loading logged user:", err);
       }
     }
 
@@ -112,6 +115,11 @@ export default function EditAppUserModal({
   }
 
   function evaluateStrength(pwd: string) {
+    if (!pwd) {
+      setPasswordScore(0);
+      return;
+    }
+
     let score = 0;
     if (pwd.length >= 12) score++;
     if (/[a-z]/.test(pwd)) score++;
@@ -127,23 +135,26 @@ export default function EditAppUserModal({
     if (!user) return;
     setFeedback(null);
 
+    // Nome continua obrigatório (não pode ficar vazio)
     if (!applicationName.trim()) {
-      setFeedback({ ok: false, msg: "Informe o nome do usuário de aplicação." });
-      return;
-    }
-
-    if (!secret.trim()) {
       setFeedback({
         ok: false,
-        msg: "Informe ou gere uma nova senha / token.",
+        msg:
+          t("app_user_error_missing_name") ||
+          "Please enter the application user name.",
       });
       return;
     }
 
-    if (passwordScore < 4) {
+    const hasPasswordChange = secret.trim().length > 0;
+
+    // Só valida força da senha se o usuário realmente quiser mudar a senha
+    if (hasPasswordChange && passwordScore < 4) {
       setFeedback({
         ok: false,
-        msg: "Senha fraca. Gere uma senha mais forte.",
+        msg:
+          t("app_user_error_weak_password") ||
+          "Weak password. Please generate a stronger one.",
       });
       return;
     }
@@ -151,7 +162,9 @@ export default function EditAppUserModal({
     if (!currentUserName) {
       setFeedback({
         ok: false,
-        msg: "Falha ao identificar o usuário logado.",
+        msg:
+          t("app_user_error_missing_current_user") ||
+          "Failed to identify the signed in user.",
       });
       return;
     }
@@ -159,21 +172,30 @@ export default function EditAppUserModal({
     setSubmitting(true);
 
     try {
-      await onSubmit({
+      const payload: {
+        application_name: string;
+        changed_by: string;
+        password?: string;
+      } = {
         application_name: applicationName,
-        password: secret,
         changed_by: currentUserName,
-        id_access_group: selectedGroupId,
-      });
-      // show success modal then close
-      setModalVariant('success');
-      setModalMessage('Usuário de aplicação atualizado com sucesso.');
-      setModalOpen(true);
+      };
+
+      // Só manda a senha se ela tiver sido preenchida
+      if (hasPasswordChange) {
+        payload.password = secret;
+      }
+
+      await onSubmit(payload);
+      onClose();
     } catch (err: any) {
       console.error(err);
       setFeedback({
         ok: false,
-        msg: err.message || "Erro inesperado ao salvar.",
+        msg:
+          err.message ||
+          (t("unknown_error") as string) ||
+          "Unexpected error while saving.",
       });
       setModalVariant('error');
       setModalMessage(err.message || "Erro inesperado ao salvar.");
@@ -202,7 +224,7 @@ export default function EditAppUserModal({
         <header className="flex items-start justify-between px-6 pt-4 pb-3 border-b border-gray-200">
           <div>
             <h2 className="text-[16px] font-semibold leading-tight mt-1">
-              Editar Usuário de Aplicação
+              {t("edit_app_user") || "Edit Application User"}
             </h2>
           </div>
           <button aria-label="close" onClick={onClose} className="ml-4 rounded-md p-2 text-[var(--color-text-secondary)] hover:bg-[var(--color-divider)]/20">
@@ -212,27 +234,35 @@ export default function EditAppUserModal({
 
         <section className="px-6 py-6">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Nome do usuário de aplicação */}
             <div className="space-y-2">
               <label className={labelClass}>
-                Nome do Usuário de Aplicação
+                {t("app_user_name") || "Application User Name"}
                 <Info className="w-4 h-4 text-gray-400" />
               </label>
 
               <input
                 className={inputClass}
-                placeholder="Insira o nome do Usuário de Aplicação"
+                placeholder={
+                  t("app_user_name_placeholder") ||
+                  "Enter the Application User name"
+                }
                 value={applicationName}
                 onChange={(e) => setApplicationName(e.target.value)}
               />
             </div>
 
+            {/* Senha / Token opcional */}
             <div className="space-y-2">
-              <label className={labelClass}>Nova Senha / Token</label>
+              <label className={labelClass}>
+                {t("new_password_token") || "New Password / Token"}
+              </label>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-medium text-gray-700 flex items-center gap-1">
-                    <KeyRound className="w-4 h-4" /> Senha
+                    <KeyRound className="w-4 h-4" />{" "}
+                    {t("access_password") || "Password"}
                   </span>
 
                   <button
@@ -241,7 +271,7 @@ export default function EditAppUserModal({
                     disabled={submitting}
                     className="text-[11px] font-semibold text-[#2F5F1F] underline"
                   >
-                    Gerar senha segura
+                    {t("generate_secure_password") || "Generate secure password"}
                   </button>
                 </div>
 
@@ -255,13 +285,20 @@ export default function EditAppUserModal({
                     evaluateStrength(e.target.value);
                   }}
                 />
-              </div>
 
-              <PasswordStrengthBar passwordScore={passwordScore} />
+                <p className="text-[11px] text-gray-500">
+                  {t("password_optional_hint") ||
+                    "Fill this field only if you want to change the password / token."}
+                </p>
+
+                {secret.trim().length > 0 && (
+                  <PasswordStrengthBar passwordScore={passwordScore} />
+                )}
+              </div>
             </div>
 
             <div className="space-y-2">
-              <label className={labelClass}>Vincular ao Grupo de Acesso</label>
+              <label className={labelClass}>{t('link_to_group') || 'Link to Access Group'}</label>
               <select
                 className="w-full px-3 py-2 rounded-md bg-[var(--color-card)] border border-[var(--color-divider)] text-[var(--color-foreground)]"
                 value={selectedGroupId ?? ""}
@@ -270,7 +307,7 @@ export default function EditAppUserModal({
                   setSelectedGroupId(id);
                 }}
               >
-                <option value="">-- Nenhum --</option>
+                <option value="">{t('none') || '-- None --'}</option>
                 {groups.map((g) => (
                   <option key={g.id_access_group} value={g.id_access_group}>{g.name}</option>
                 ))}
@@ -293,10 +330,10 @@ export default function EditAppUserModal({
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md bg-[#2F5F1F] text-white disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-md bg-[color:var(--color-main-green)] text-white disabled:opacity-50"
               >
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Salvar alterações
+                {t("save_changes") || "Save changes"}
               </button>
             </div>
           </form>
@@ -310,6 +347,15 @@ export default function EditAppUserModal({
 }
 
 function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
+  const { t } = useTranslation();
+
+  const labels = [
+    t("weak") || "Weak",
+    t("fair") || "Fair",
+    t("good") || "Good",
+    t("strong") || "Strong",
+    t("very_strong") || "Very Strong",
+  ];
   const colors = [
     "bg-red-500",
     "bg-orange-500",
@@ -317,7 +363,9 @@ function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
     "bg-green-500",
     "bg-green-700",
   ];
-  const labels = ["Fraca", "Razoável", "Boa", "Forte", "Muito Forte"];
+
+  const label =
+    passwordScore === 0 ? labels[0] : labels[passwordScore - 1] ?? labels[0];
 
   return (
     <div className="flex items-center gap-2 mt-1">
@@ -331,9 +379,7 @@ function PasswordStrengthBar({ passwordScore }: { passwordScore: number }) {
           />
         ))}
       </div>
-      <span className="text-[10px] uppercase tracking-wide">
-        {passwordScore === 0 ? "Fraca" : labels[passwordScore - 1]}
-      </span>
+      <span className="text-[10px] uppercase tracking-wide">{label}</span>
     </div>
   );
 }

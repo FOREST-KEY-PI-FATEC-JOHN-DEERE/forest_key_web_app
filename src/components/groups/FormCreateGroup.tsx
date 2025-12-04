@@ -40,14 +40,14 @@ export default function FormCreateGroup() {
   return (
     <>
       <div className="flex justify-center items-center p-4 font-sans">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-10">
+        <div className="bg-[var(--color-card)] rounded-2xl shadow-2xl w-full max-w-lg p-10 border border-[var(--color-divider)]">
           <h1 className="text-2xl font-extrabold text-gray-900 border-b pb-3 mb-6">
             {t('create_group') || 'Create group'}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
                 {t('group_name')} <span className="text-red-500">*</span>
               </label>
               <input
@@ -55,13 +55,13 @@ export default function FormCreateGroup() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t('group_name_placeholder') || 'Ex: Group - A'}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
                 {t('description')} <span className="text-red-500">*</span>
               </label>
               <input
@@ -69,13 +69,13 @@ export default function FormCreateGroup() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={t('group_description_placeholder') || 'Describe the permissions and scope of the group.'}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
                 {t('owner')} <span className="text-red-500">*</span>
               </label>
               <input
@@ -83,13 +83,13 @@ export default function FormCreateGroup() {
                 value={owner}
                 onChange={(e) => setOwner(e.target.value)}
                 placeholder={t('owner_placeholder') || 'Ex: First_Lastname'}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--color-foreground)] mb-2">
                 {t('backup')} <span className="text-red-500">*</span>
               </label>
               <input
@@ -97,7 +97,7 @@ export default function FormCreateGroup() {
                 value={backup}
                 onChange={(e) => setBackup(e.target.value)}
                 placeholder={t('backup_placeholder') || 'Ex: Substitute_Name'}
-                className="w-full p-3 rounded-lg border border-gray-300 bg-white  text-xs focus:ring-green-600 focus:border-green-600"
+                className="w-full p-3 rounded-lg border border-[var(--color-divider)] bg-[var(--color-card)] text-xs focus:ring-green-600 focus:border-green-600"
                 required
               />
             </div>
